@@ -1,0 +1,60 @@
+<template>
+  <base-question :index="index" :title="question.title" :detail="question.detail">
+    <group gutter="0" label-align="left" slot="content">
+        <datetime title="点击选择" :min-year="1949" :max-year="(new Date()).getFullYear()-1" :default-selected-value="defaultSelectedValue" v-model="currentValue"></datetime>
+    </group>
+  </base-question>
+</template>
+<script>
+import BaseQuestion from './Base'
+import { Group, Datetime } from 'vux'
+export default {
+  components: {
+    BaseQuestion,
+    Group,
+    Datetime
+  },
+  props: {
+    index: Number,
+    defaultSelectedValue: {
+      type: String,
+      default: '1990-01-01'
+    },
+    question: {
+      type: Object,
+      default() {
+        return {
+          type: 'datetime'
+        };
+      },
+      required: true,
+      validator(val) {
+        return val.type === 'datetime';
+      }
+    },
+    value: String
+  },
+  watch: {
+    value(newVal) {
+      this.currentValue = newVal;
+    },
+    currentValue(newVal) {
+      this.$emit('on-change', newVal);
+      this.$emit('input', newVal);
+    }
+  },
+  data() {
+    return {
+      currentValue: this.value
+    };
+  },
+  methods: {
+    validate() {
+      return this.value !== '';
+    }
+  }
+}
+</script>
+<style scoped>
+
+</style>
