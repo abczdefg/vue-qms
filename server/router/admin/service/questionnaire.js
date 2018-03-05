@@ -46,6 +46,7 @@ module.exports.updateQuestionnaire = (data) => {
     });
     // 更新问题数据
     let question = data.question.map((item, i) => {
+      item.questionnaire_id = data.id;
       item.display_order = i + 1;
       return Model.Question.convert(item);
     });
