@@ -1,7 +1,7 @@
 import axios from 'axios';
 import router from '../router';
 import { Message } from 'element-ui'
-axios.defaults.baseURL = 'http://localhost:8084/admin';
+axios.defaults.baseURL = `${BASE_URL}/admin`;
 axios.defaults.withCredentials = true;
 axios.interceptors.response.use(
   response => response,
