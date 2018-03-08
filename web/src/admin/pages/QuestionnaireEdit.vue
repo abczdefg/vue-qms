@@ -25,15 +25,16 @@
               <i class="el-icon-delete"></i>
             </draggable>
             <draggable class="questionnaire-question-list" :class="{dragging: dragging}" v-model="questionnaireForm.question" :options="dragQuestionOptions" @start="dragStart" @end="dragEnd">
-              <qnr-question
-                :class="{draggable:!disableDraggable}"
+              <component
                 v-for="(item, index) in questionnaireForm.question"
+                :is="`qnr-${item.type}`"
+                :class="{draggable:!disableDraggable}"
                 :key="index"
                 :data="item"
                 v-on:update:data="data=>updateQuestion(index, data)"
                 @delete="deleteQuestion(index)"
               >
-              </qnr-question>
+              </component>
             </draggable>
           </div>
           <el-form-item class="questionnaire-random" prop="random" label-width="80px" label="随机化">
@@ -51,11 +52,13 @@
 <script>
 import Draggable from 'vuedraggable'
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '../api';
-import Question from '../components/question/Question.vue';
+import { QnrRadio, QnrCheckbox, QnrMatrixRadio } from '../components/question/index.js';
 import { questionData } from '../data/question.js';
 export default {
   components: {
-    'qnr-question': Question,
+    QnrRadio,
+    QnrCheckbox,
+    QnrMatrixRadio,
     Draggable
   },
   data() {

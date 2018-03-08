@@ -15,7 +15,10 @@ export default {
     Datetime
   },
   props: {
-    index: Number,
+    index: {
+      type: Number,
+      required: true
+    },
     defaultSelectedValue: {
       type: String,
       default: '1990-01-01'
@@ -50,7 +53,7 @@ export default {
   },
   methods: {
     validate() {
-      return this.value !== '';
+      return this.value !== '' ? true : `题目${this.index}未完成`;
     }
   }
 }

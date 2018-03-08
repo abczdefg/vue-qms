@@ -21,10 +21,12 @@ module.exports.getQuestionnaireById = async (id) => {
 };
 module.exports.submitQuestionnaire = (data) => {
   return sequelize.transaction(async (transaction) => {
-    let { ip, questionnaire_id, answer} = data;
+    let { ip, questionnaire_id, answer, start_time, end_time } = data;
     let result = await Model.Result.create({
       ip,
-      questionnaire_id
+      questionnaire_id,
+      start_time,
+      end_time
     }, {
       transaction
     });

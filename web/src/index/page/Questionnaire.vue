@@ -3,7 +3,7 @@
     <x-header class="header-container" :left-options="{showBack: false}" title="调查问卷"></x-header>
     <div class="page-container">
       <template v-if="indexPage">
-        <div class="page-index page-content">
+        <div class="page-index page-content" v-if="questionnaireData">
           <p class="page-index-title">{{questionnaireData.title}}</p>
           <p class="page-index-introduction" v-html="questionnaireData.introduction"></p>
           <x-button class="page-button page-index-button" type="default" :plain="true" :mini="true" @click.native="startQnr">开始</x-button>
@@ -14,10 +14,10 @@
           <template v-for="(pageItem, pageIndex) in questionnaireData.page">
             <template v-if="currentPage === pageIndex">
               <div class="page-introduction">
-                <p>第{{chineseNumber}}部分</p>
+                <p>{{partText}}</p>
               </div>
               <template v-for="(item, index) in pageItem">
-                <qnr-question :ref="`question-${pageIndex}`" :key="item.title" :question="item" :index="index + 1" v-model="recordData[pageIndex][index].value"></qnr-question>
+                <compoent :is="`qnr-${item.type}`" :ref="`question_${pageIndex}`" :question="item" :index="index + 1" v-model="recordData[pageIndex][index].value"></compoent>
               </template>
               <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
             </template>
@@ -48,53 +48,15 @@ export default {
     QnrDatetime,
     QnrPicker,
     QnrAddress,
-    QnrMatrixRadio,
-    QnrQuestion: {
-      render(h) {
-        let self = this;
-        let component;
-        switch(self.question.type) {
-          case 'radio':
-           component = QnrRadio;
-          break;
-          case 'checkbox':
-           component = QnrCheckbox;
-          break;
-          case 'datetime':
-           component = QnrDatetime;
-          break;
-          case 'picker':
-           component = QnrPicker;
-          break;
-          case 'address':
-           component = QnrAddress;
-          break;
-          case 'matrix-radio':
-           component = QnrMatrixRadio;
-          break;
-        }
-        return h(component, {
-          props: {
-            question: self.question,
-            index: self.index,
-            value: self.value // value是自定义组件属性
-          },
-          on: {
-            input: function (newVal) {
-              self.$emit('input', newVal);
-            }
-          }
-        });
-      },
-      props: ['index','value','question']
-    }
+    QnrMatrixRadio
   },
   mounted() {
     this.getQuestionnaire(this.$route.params.id);
   },
   computed: {
-    chineseNumber() {
-      return ['零', '一', '二', '三', '四', '五', '六', '七'][this.currentPage + 1];
+    partText() {
+      const zh = ['零', '一', '二', '三', '四', '五', '六', '七'];
+      return `第${zh[this.currentPage + 1]}部分`;
     }
   },
   watch: {
@@ -111,21 +73,20 @@ export default {
       indexPage: true,
       currentPage: 0,
       recordData: '',
-      questionnaireData: {},
+      questionnaireData: null,
       submitData: null
     };
   },
   methods: {
     getQuestionnaire(id) {
       getQuestionnaire({id}).then(
-        res => {
-          let { data } = res;
+        ({ data }) => {
           data.page = [data.question];
           this.questionnaireData = data;
           this.recordData = this.createModel();
         }
       ).catch(
-        err => this.$message.error(`获取问卷失败：${err.message}`)
+        ({ message }) => this.$message.error(`获取问卷失败：${message}`)
       )
     },
     createModel() {
@@ -154,40 +115,12 @@ export default {
       });
     },
     validatePage() {
-      let validateQuestion = ({type, value}) => {
-        switch(type) {
-          case 'radio':
-          case 'datetime':
-            return value !== '';
-          case 'checkbox':
-          case 'picker':
-          case 'address':
-            return value.length > 0;
-          case 'matrix-radio':
-            return value.indexOf(null) === -1;
-        }
-        return false;
-      };
-      let createErrorMsg = ({ number }) => {
-        // switch(type) {
-        //   case 'radio':
-        //   case 'datetime':
-        //   case 'checkbox':
-        //   case 'picker':
-        //   case 'address':
-        //     return `题目${number}未完成`;
-        //   case 'matrix-radio':
-        //     return `题目${number}-${data.index}未完成`;
-        // }
-        return `题目${number}未完成`;
-      };
       let valueMap = this.recordData[this.currentPage];
+      let $questionList = [...this.$refs[`question_${this.currentPage}`]];
       for(let [i, val] of Object.entries(valueMap)) {
-        if(validateQuestion(val) !== true) {
-          this.$vux.toast.text(createErrorMsg({
-            type: val.type,
-            number: parseInt(i, 10) + 1
-          }));
+        let ret = $questionList[i].validate();
+        if(ret !== true) {
+          this.$vux.toast.text(ret);
           return false;
         }
       }
@@ -195,6 +128,7 @@ export default {
     },
     startQnr() {
       this.indexPage = false;
+      this.time.startTime = (new Date()).getTime();
     },
     nextPage() {
       if(this.validatePage()) {
@@ -204,13 +138,13 @@ export default {
           (async () => {
             try {
               this.handleSubmitData();
-              let ret = await submitQuestionnaire(this.submitData);
+              await submitQuestionnaire(this.submitData);
               this.$vux.toast.show({
                 text: '问卷提交成功'
               });
               this.currentPage++;
             } catch(e) {
-              console.log(e)
+              console.dir(e)
               this.$vux.toast.show({
                 text: '问卷提交失败',
                 type: 'cancel'
@@ -222,6 +156,8 @@ export default {
     },
     handleSubmitData() {
       this.submitData = {
+        start_time: this.time.startTime,
+        end_time: (new Date()).getTime(),
         questionnaire_id: this.$route.params.id,
         answer: Array.prototype.concat.apply([], this.recordData).map(item => item.value)
       };

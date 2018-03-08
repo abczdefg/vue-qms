@@ -7,22 +7,22 @@ import qnrCheckbox from './Checkbox.vue';
 import qnrMatrixRadio from './MatrixRadio.vue';
 export default {
   components: {
-    'qnr-radio': qnrRadio,
-    'qnr-checkbox': qnrCheckbox,
-    'qnr-matrix-radio': qnrMatrixRadio,
+    'qnr-radio': QnrRadio,
+    'qnr-checkbox': QnrCheckbox,
+    'qnr-matrix-radio': QnrMatrixRadio,
     'qnr-question': {
       render(h) {
         let self = this;
         let component;
         switch (this.data.type) {
           case 'radio':
-            component = qnrRadio;
+            component = QnrRadio;
             break;
           case 'checkbox':
-            component = qnrCheckbox;
+            component = QnrCheckbox;
             break;
           case 'matrix-radio':
-            component = qnrMatrixRadio;
+            component = QnrMatrixRadio;
             break;
         }
         return h(component, {

@@ -18,7 +18,10 @@ export default {
     Card
   },
   props: {
-    index: Number,
+    index: {
+      type: Number,
+      required: true
+    },
     title: {
       type: String,
       required: true

@@ -15,7 +15,10 @@ export default {
     XAddress
   },
   props: {
-    index: Number,
+    index: {
+      type: Number,
+      required: true
+    },
     question: {
       type: Object,
       default() {
@@ -76,7 +79,7 @@ export default {
       return true;
     },
     validate() {
-      return this.value.length > 0;
+      return this.value.length > 0 ? true : `题目${this.index}未完成`;
     }
   }
 }

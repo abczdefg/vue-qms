@@ -16,6 +16,14 @@ let Result = sequelize.define('result', {
     validate: {
       isIP: true
     }
+  },
+  start_time: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+  end_time: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 }, {
   freezeTableName: true,

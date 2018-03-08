@@ -27,7 +27,10 @@ export default {
     BaseQuestion
   },
   props: {
-    index: Number,
+    index: {
+      type: Number,
+      required: true
+    },
     question: {
       type: Object,
       default() {
@@ -69,8 +72,9 @@ export default {
   methods: {
     validate() {
       for(let i = 0; i < this.question.subquestion.length; i++) {
+        // i根据sub的长度遍历
         if(this.currentValue[i] === null || this.currentValue[i] === undefined) {
-          return i;
+          return `题目${this.index}-${i + 1}未完成`;
         }
       }
       return true;
