@@ -23,7 +23,7 @@
     </template>
 
     <template slot="editor">
-      <el-form :model="editorData" ref="editorData" label-position="left" label-width="60px">
+      <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
         <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
           <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
         </el-form-item>
@@ -133,7 +133,6 @@ table.matrix-radio-table {
   font-size: 14px;
   vertical-align: middle;
   text-align: center;
-  margin-bottom: 10px;
 }
 
 table.matrix-radio-table th {

@@ -95,4 +95,7 @@ export default {
   color: #606266;
   font-size: 14px;
 }
+.question-detail {
+  margin-bottom: 10px;
+}
 </style>

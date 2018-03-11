@@ -9,7 +9,7 @@
       </div>
     </template>
     <template slot="editor">
-      <el-form :model="editorData" ref="editorData" label-position="left" label-width="60px">
+      <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
         <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
           <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
         </el-form-item>
@@ -88,6 +88,9 @@ export default {
 <style>
 .question-checkbox-item {
   margin-bottom: 10px;
+}
+.question-checkbox-item:last-child {
+  margin-bottom: 0;
 }
 .choice-input .el-input {
   width: 60%;

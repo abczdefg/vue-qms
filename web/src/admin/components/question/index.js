@@ -3,8 +3,10 @@
 import QnrRadio from './Radio.vue'
 import QnrCheckbox from './Checkbox.vue'
 import QnrMatrixRadio from './MatrixRadio.vue'
+import QnrPicker from './Picker.vue'
 export {
   QnrRadio,
   QnrCheckbox,
-  QnrMatrixRadio
+  QnrMatrixRadio,
+  QnrPicker
 }
