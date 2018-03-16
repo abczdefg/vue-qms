@@ -28,8 +28,8 @@ server.use(cookieSession({
 server.use(express.static(path.join(__dirname, '../dist')));
 
 //设置路由
-server.use('/admin', require('./router/admin/index')());
 server.use('/', require('./router/web/index')());
+server.use('/admin', require('./router/admin/index')());
 
 // catch 404 and forward to error handler
 server.use((req, res, next) => {

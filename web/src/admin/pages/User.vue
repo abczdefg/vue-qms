@@ -122,12 +122,12 @@ export default {
         if (valid) {
           addUser(this.userForm).then(
             res => {
-              this.editorVisible = false
+              this.editorVisible = false;
               this.$message.success(`添加用户成功`);
               this.getUserData();
             }
           ).catch(
-            err => this.$message.error(`添加用户失败：${err.message}`)
+            err => {this.$message.error(`添加用户失败：${err.message}`)}
           )
         } else {
           return false;

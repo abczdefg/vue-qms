@@ -1,9 +1,9 @@
 const express = require('express');
 const Service = require('../service');
 let router = express.Router();
-
+let { hasPrivilege } = Service.Rbac;
 module.exports = () => {
-  router.get('/users', async (req, res) => {
+  router.get('/users', hasPrivilege('user'), async (req, res) => {
     try {
       let ret = await Service.User.getUsers();
       res.status(200).send({
@@ -19,7 +19,7 @@ module.exports = () => {
   router.post('/users', async (req, res, next) => {
     try {
       let username = req.body.username;
-      let password = common.md5(req.body.password + common.MD5_SUFFIX);
+      let password = Service.Md5.md5(req.body.password);
       await Service.User.addUser({
         'username': username,
         'password': password

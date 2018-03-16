@@ -7,8 +7,8 @@ export default {
   login(state, userData) {
     state.userData = userData;
   },
-  generateRoutes(state, role) {
-    state.routes = filterRoutesByRole(route, role);
+  generateRoutes(state, privilege) {
+    state.routes = filterRoutesByRole(route, privilege);
   },
   addRoutes(state) {
     state.addRoutes = true;
@@ -24,15 +24,15 @@ export default {
   }
 }
 
-function filterRoutesByRole(route, role) {
+function filterRoutesByRole(route, privilege = []) {
   let ret = [];
   for(let [index, value] of Object.entries(route)) {
     let meta = value.meta;
-    if(!meta || !Array.isArray(meta.role) || value.meta.role.includes(role)) {
+    if(!meta || !meta.privilege || privilege.includes(meta.privilege)) {
       ret[index] = value;
     }
     if(Array.isArray(value.children)) {
-      ret[index].children = filterRoutesByRole(value.children, role);
+      ret[index].children = filterRoutesByRole(value.children, privilege);
     }
   }
   return ret;

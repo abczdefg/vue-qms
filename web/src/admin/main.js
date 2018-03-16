@@ -17,7 +17,7 @@ const whiteList = ['/login', '/404'];
 router.beforeEach((to, from, next) => {
   let userData = sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user'));
   if(userData) {
-    store.dispatch('generateRoutes', userData.role).then(res => {
+    store.dispatch('generateRoutes', userData.privilege).then(res => {
       if(!store.state.addRoutes) {
         router.addRoutes(store.state.routes);
         store.dispatch('addRoutes');

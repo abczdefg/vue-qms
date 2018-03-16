@@ -1,12 +1,11 @@
 const express = require('express');
-const common = require('../../util/common.js');
 const Service = require('../service');
 module.exports = () => {
   let router = express.Router();
   router.post('/login', async (req, res) => {
     try {
       let username = req.body.username;
-      let password = common.md5(req.body.password + common.MD5_SUFFIX);
+      let password = Service.Md5.md5(req.body.password);
       let user = await Service.User.getUserByName(username);
       if (user === null) {
         // 账号不存在
@@ -17,14 +16,13 @@ module.exports = () => {
           res.status(500).send({ code: 500, data: {}, message: 'password error' });
         } else {
           // 登录成功
-          req.session['userId'] = user.id;
-          req.session['roleId'] = user.role.id;
-          req.session['privilege'] = user.role.privilege;
+          Service.Login.saveLoginStatus(req.session, user);
           res.status(200).send({
             code: 200,
             data: {
               username: user.username,
-              role: user.role.name
+              role: user.role.name,
+              privilege: user.role.privilege
             },
             message: 'success'
           });
@@ -36,7 +34,7 @@ module.exports = () => {
     }
   });
   router.get('/logout', (req, res) => {
-    req.session = null;
+    Service.Login.clearLoginStatus(req.session);
     res.status(200).send({ code: 200, message: 'success' });
   });
   return router;

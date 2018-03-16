@@ -6,18 +6,13 @@ axios.defaults.withCredentials = true;
 axios.interceptors.response.use(
   response => response,
   error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 400:
-        case 401:
-          Message.error('登录过时，请重新登录');
-          router.replace({name: 'login'});
-          return;
-        default:
-          return Promise.reject(error.response.data);
-      }
+    switch (error.response.status) {
+      case 400:
+      case 401:
+        Message.error('登录过时，请重新登录');
+        router.replace({name: 'login'});
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response.data);
   }
 );
 export const startLogin = params => {

@@ -21,7 +21,7 @@ const asyncRouter = [{
     component: Home,
     meta: {
       requiresAuth: true,
-      role: ['超级管理员', '管理员']
+      privilege: 'questionnaire'
     }
   }, {
     path: '/questionnaire',
@@ -29,7 +29,7 @@ const asyncRouter = [{
     component: Questionnaire,
     meta: {
       requiresAuth: true,
-      role: ['超级管理员', '管理员']
+      privilege: 'questionnaire'
     }
   }, {
     path: '/questionnaire/:action',
@@ -37,7 +37,7 @@ const asyncRouter = [{
     component: QuestionnaireEdit,
     meta: {
       requiresAuth: true,
-      role: ['超级管理员', '管理员']
+      privilege: 'questionnaire'
     }
   }, {
     path: '/questionnaire/:action/:id',
@@ -45,7 +45,7 @@ const asyncRouter = [{
     component: QuestionnaireEdit,
     meta: {
       requiresAuth: true,
-      role: ['超级管理员', '管理员']
+      privilege: 'questionnaire'
     }
   }, {
     path: '/user',
@@ -53,7 +53,7 @@ const asyncRouter = [{
     component: User,
     meta: {
       requiresAuth: true,
-      role: ['超级管理员']
+      privilege: 'user'
     }
   }]
 }, {

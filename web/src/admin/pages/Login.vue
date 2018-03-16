@@ -50,7 +50,7 @@
             }).then(res => {
               this.logining = false;
               let { message, code, data } = res;
-              this.$store.dispatch('login', data).then(res => this.$router.push({ path: '/' }));
+              this.$store.dispatch('login', data).then(res => this.$router.replace({ path: '/' }));
             }).catch(res => {
               this.logining = false;
               this.$message.error(`登录失败：${res.message}`);
