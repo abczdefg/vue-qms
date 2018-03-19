@@ -36,7 +36,7 @@
 </template>
 <script>
 import { XHeader, ViewBox, XButton } from 'vux'
-import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio } from '../components/question'
+import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '../components/question'
 import { getQuestionnaire, submitQuestionnaire } from '../api'
 export default {
   components: {
@@ -48,7 +48,8 @@ export default {
     QnrDatetime,
     QnrPicker,
     QnrAddress,
-    QnrMatrixRadio
+    QnrMatrixRadio,
+    QnrFillblank
   },
   mounted() {
     this.getQuestionnaire(this.$route.params.id);
@@ -106,6 +107,9 @@ export default {
               break;
             case 'matrix-radio':
               value = new Array(questionItem.subquestion.length).fill(null);
+              break;
+            case 'fillblank':
+              value = new Array(questionItem.blank.length).fill(null);
               break;
             default:
               break;

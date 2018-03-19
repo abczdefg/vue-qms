@@ -44,5 +44,9 @@ export const questionData = {
     "type": "picker",
     "defaultSelectedValue": [""],
     "list": [["选项1", "选项2"]]
+  },
+  "fillblank": {
+    "title": "填空题",
+    "type": "fillblank"
   }
 }

@@ -6,6 +6,7 @@ import QnrDatetime from './Datetime.vue'
 import QnrPicker from './Picker.vue'
 import QnrAddress from './Address.vue'
 import QnrMatrixRadio from './MatrixRadio.vue'
+import QnrFillblank from './Fillblank.vue'
 
 export {
   QnrRadio,
@@ -13,5 +14,6 @@ export {
   QnrDatetime,
   QnrPicker,
   QnrAddress,
-  QnrMatrixRadio
+  QnrMatrixRadio,
+  QnrFillblank
 }

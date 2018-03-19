@@ -24,6 +24,9 @@ export default {
       isEditing: false
     }
   },
+  destroyed() {
+    this.$store.dispatch('updateEditStatus', false);
+  },
   watch: {
     isEditing(newVal, oldVal) {
       this.$store.dispatch('updateEditStatus', newVal);

@@ -2,7 +2,7 @@
   <card class="question-card">
     <div class="card-header" slot="header">
       <span class="question-number" v-if="index > 0">{{index}}</span>
-      <span class="question-title">{{title}}</span>
+      <span class="question-title" v-html="title"></span>
       <div class="question-detail" v-if="detail" v-html="detail"></div>
     </div>
     <div class="card-content" slot="content">

@@ -52,7 +52,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '../api';
-import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker } from '../components/question/index.js';
+import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank } from '../components/question/index.js';
 import { questionData } from '../data/question.js';
 export default {
   components: {
@@ -60,6 +60,7 @@ export default {
     QnrCheckbox,
     QnrMatrixRadio,
     QnrPicker,
+    QnrFillblank,
     Draggable
   },
   data() {
