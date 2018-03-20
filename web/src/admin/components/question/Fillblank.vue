@@ -30,9 +30,20 @@ export default {
     data: {}
   },
   data() {
+    let contentValidator = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('内容不能为空'));
+      } else {
+        let reg = /(<span[^>]*id=".+?"[^>]*?>.*?<\/span>)/g;
+        if(!reg.test(value)) {
+          callback(new Error('至少要有一个填空'));
+        }
+      }
+      callback();
+    }
     return {
       questionRules: { required: true, message: '题目不能为空', trigger: 'blur' },
-      contentRules: { required: true, message: '内容不能为空', trigger: 'blur' },
+      contentRules: { required: true, validator: contentValidator, trigger: 'blur' },
       editorData: {},
       lastEditRange: ''
     }
@@ -56,7 +67,8 @@ export default {
       }
     },
     handleBlur(e) {
-      let blankText = this.transformBlankText(e.target.innerHTML);
+      let blankText = this.transformBlankText(e.target.innerText);
+      console.log(e.target.innerText);
       this.setEditorData(blankText);
       this.$refs['title-item'].validate('blur');
     },
@@ -70,13 +82,13 @@ export default {
       }
       document.execCommand("insertText", false, text);
     },
-    transformBlankText: function(text) {
+    transformBlankText(text) {
       let i = 0;
       text = text.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, '').replace(/<[^>]+?>/g, '').replace(/\s+/g, ' ').replace(/ /g, ' ').replace(/>/g, ' ');
       text = text.replace(/(_{2,})/g, ($0, $1) => `<span id="blank-${i++}" class="blank">${$1}</span>`);
       return text;
     },
-    setEditorData: function(html) {
+    setEditorData(html) {
       let reg = /<span[^>]*id="(.+?)"[^>]*?>/g;
       let blank = [];
       let result;
