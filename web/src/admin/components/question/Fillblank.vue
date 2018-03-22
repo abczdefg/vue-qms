@@ -68,7 +68,6 @@ export default {
     },
     handleBlur(e) {
       let blankText = this.transformBlankText(e.target.innerText);
-      console.log(e.target.innerText);
       this.setEditorData(blankText);
       this.$refs['title-item'].validate('blur');
     },

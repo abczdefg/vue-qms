@@ -13,38 +13,19 @@
 <script>
   import qnrHeader from '../components/Header.vue';
   import qnrSidebar from '../components/Sidebar.vue';
+  import menu from '../data/menu.js';
   export default {
     components: {
       qnrHeader, qnrSidebar
     },
     computed: {
       menuItems() {
-        let userData = JSON.parse(sessionStorage.getItem('user'));
-        return this.menu.filter(route => route.role.indexOf(userData.role) !== -1);
+        let userData = this.$store.state.userData;
+        return menu.filter(route => route.role.includes(userData.role));
       }
     },
     data() {
       return {
-        menu: [
-          {
-            icon: 'el-icon-menu',
-            index: '/home',
-            title: '首页',
-            role: ['超级管理员', '管理员']
-          },
-          {
-            icon: 'el-icon-tickets',
-            index: '/questionnaire',
-            title: '问卷管理',
-            role: ['超级管理员', '管理员']
-          },
-          {
-            icon: 'el-icon-service',
-            index: '/user',
-            title: '用户管理',
-            role: ['超级管理员']
-          }
-        ]
       }
     }
   }

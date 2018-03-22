@@ -16,14 +16,16 @@ module.exports.getUserByName = (username) => {
         as: 'privilege'
       }]
     }]
-  })
-  .then(res => {
-    res = res.get({plain:true});
-    res.role = res.role[0];
-    res.role.privilege = res.role.privilege.map(item => item.name);
-    return Promise.resolve(res);
-  })
-  .catch(err => Promise.reject(err))
+  }).then(
+    user => {
+      if(user !== null) {
+        user = user.get({plain:true});
+        user.privilege = user.role[0].privilege.map(item => item.name);
+        user.role = user.role[0].name;
+      }
+      return Promise.resolve(user)
+    }
+  ).catch(err => Promise.reject(err));
 };
 
 module.exports.getUsers = () => {
@@ -31,9 +33,23 @@ module.exports.getUsers = () => {
     type: sequelize.QueryTypes.SELECT
   });
 }
-module.exports.addUser = (data) => {
-  return Model.User.create({
-    'username': data.username,
-    'password': data.password
+module.exports.addUser = ({username, password, role}) => {
+  return sequelize.transaction(async (t) => {
+    let ret = await Model.User.create({username, password}, {
+      transaction: t
+    });
+    await Model.UserRole.create({
+      user_id: ret.id,
+      role_id: role
+    }, {
+      transaction: t
+    });
+  });
+}
+module.exports.deleteUserById = (id) => {
+  return sequelize.query(`delete a, b from user a left join user_role b on a.id = b.user_id where a.id = :id`, {
+    replacements: {
+      id: id
+    }
   });
 }

@@ -6,6 +6,10 @@ export default {
     sessionStorage.setItem('user', JSON.stringify(userData));
     commit('login', userData);
   },
+  logout({commit}) {
+    sessionStorage.removeItem('user');
+    commit('logout');
+  },
   generateRoutes({commit}, role) {
     commit('generateRoutes', role);
   },

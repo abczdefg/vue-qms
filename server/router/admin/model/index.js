@@ -6,9 +6,10 @@ const UserRole = require('./userRole.js');
 const Privilege = require('./privilege.js');
 const RolePrivilege = require('./rolePrivilege.js');
 module.exports = {
-  Role: Role,
-  User: User,
-  Question: Question,
-  Questionnaire: Questionnaire,
-  Privilege: Privilege
+  Role,
+  User,
+  Question,
+  Questionnaire,
+  Privilege,
+  UserRole
 }

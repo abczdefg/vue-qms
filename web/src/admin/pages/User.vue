@@ -17,7 +17,7 @@
       <el-table-column header-align="center" prop="role" label="用户组"></el-table-column>
       <el-table-column header-align="center" align="center" label="操作" width="75">
         <template slot-scope="scope">
-          <el-button size="mini" type="danger"><i class="el-icon-delete"></i></el-button>
+          <el-button size="mini" type="danger" @click="deleteUser(scope.$index, scope.row)"><i class="el-icon-delete"></i></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getUsers, addUser, getRoles } from '../api';
+import { getUsers, addUser, getRoles, deleteUser } from '../api';
 export default {
   data() {
     let validatePassword = (rule, value, callback) => {
@@ -113,12 +113,27 @@ export default {
         err => this.$message.error(`获取用户组列表失败：${err.message}`)
       )
     },
+    deleteUser(index, row) {
+      console.log('??')
+      this.$confirm('确认删除用户？').then(
+        res => {
+          deleteUser({ id: row.id }).then(
+            res => {
+              this.$message.success('删除成功');
+              this.getUserData();
+            }
+          ).catch(
+            err => this.$message.error(`删除用户失败：${err.message}`)
+          )
+      }).catch(
+        cancel => ''
+      );
+    },
     createUser() {
       this.editorVisible = true;
     },
     submitForm() {
       this.$refs['userForm'].validate(valid => {
-        let { action, id } = this.$route.params;
         if (valid) {
           addUser(this.userForm).then(
             res => {

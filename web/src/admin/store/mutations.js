@@ -7,6 +7,9 @@ export default {
   login(state, userData) {
     state.userData = userData;
   },
+  logout(state) {
+    state.userData = null;
+  },
   generateRoutes(state, privilege) {
     state.routes = filterRoutesByRole(route, privilege);
   },

@@ -55,6 +55,11 @@ export const addUser = params => {
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
+export const deleteUser = params => {
+  return axios.delete(`/users/${params.id}`)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
 export const getRoles = params => {
   return axios.get(`/roles`, params)
   .then(res => Promise.resolve(res.data))

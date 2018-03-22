@@ -22,7 +22,7 @@
     },
     computed: {
       username() {
-        let userData = sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user'));
+        let userData = this.$store.state.userData;
         return userData.username || this.name;
       }
     },
@@ -30,7 +30,7 @@
       handleCommand(command) {
         switch (command) {
           case 'logout':
-            sessionStorage.removeItem('user');
+            this.$store.dispatch('logout');
             this.$router.replace('/login');
             break;
           default:

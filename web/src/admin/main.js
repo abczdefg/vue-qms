@@ -9,29 +9,29 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.config.productionTip = false;
+Vue.use(ElementUI);
 
 // 动态加载路由
 const whiteList = ['/login', '/404'];
 router.beforeEach((to, from, next) => {
-  let userData = sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user'));
+  let userData = store.state.userData;
   if(userData) {
-    store.dispatch('generateRoutes', userData.privilege).then(res => {
-      if(!store.state.addRoutes) {
+    if(!store.state.addRoutes) {
+      store.dispatch('generateRoutes', userData.privilege).then(res => {
         router.addRoutes(store.state.routes);
         store.dispatch('addRoutes');
         next({...to});
-      } else {
-        next();
-      }
-    });
-  } else {
-    if(whiteList.indexOf(to.path) === -1) {
-      ElementUI.Message.error('登录过时，请重新登录');
-      next({name: 'login'});
+      });
     } else {
       next();
+    }
+  } else {
+    if(whiteList.includes(to.path)) {
+      next();
+    } else {
+      ElementUI.Message.error('请先登录');
+      next({name: 'login'});
     }
   }
 });

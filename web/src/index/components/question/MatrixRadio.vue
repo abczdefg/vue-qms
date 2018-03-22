@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     validate() {
-      for(let i = 0; i < this.question.subquestion.length; i++) {
+      for(let i = 0 , len = this.question.subquestion.length; i < len; i++) {
         // i根据sub的长度遍历
         if(this.currentValue[i] === null || this.currentValue[i] === undefined) {
           return `题目${this.index}-${i + 1}未完成`;
@@ -123,12 +123,12 @@ export default {
 
 .matrix-choice .matrix-choice-label {
   position: absolute;
-  top: 4px;
+  top: 0;
   transform: translate(-50%, -100%);
   width: 100px;
   line-height: 12px;
-  color: #9e9e9e;
-  font-size: 8px;
+  color: #706d6d;
+  font-size: 15px;
   visibility: hidden;
 }
 

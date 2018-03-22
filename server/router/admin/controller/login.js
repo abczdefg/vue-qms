@@ -21,8 +21,8 @@ module.exports = () => {
             code: 200,
             data: {
               username: user.username,
-              role: user.role.name,
-              privilege: user.role.privilege
+              role: user.role,
+              privilege: user.privilege
             },
             message: 'success'
           });
