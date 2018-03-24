@@ -5,9 +5,9 @@ import ElementUI from 'element-ui'
 import 'reset-css/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.css'
-import App from './App'
-import router from './router'
-import store from './store'
+import App from '@admin/App'
+import router from '@admin/router'
+import store from '@admin/store'
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

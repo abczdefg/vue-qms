@@ -6,7 +6,7 @@
   </base-question>
 </template>
 <script>
-import BaseQuestion from './Base'
+import BaseQuestion from '@index/components/question/Base.vue'
 import { Group, XAddress, ChinaAddressV4Data, Value2nameFilter, Name2valueFilter } from 'vux'
 export default {
   components: {

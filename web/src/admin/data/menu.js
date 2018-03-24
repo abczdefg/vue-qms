@@ -12,7 +12,7 @@ export default [
     role: ['超级管理员', '管理员']
   },
   {
-    icon: 'el-icon-service',
+    icon: 'fa fa-user',
     index: '/user',
     title: '用户管理',
     role: ['超级管理员']

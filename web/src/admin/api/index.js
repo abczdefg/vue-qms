@@ -1,5 +1,5 @@
 import axios from 'axios';
-import router from '../router';
+import router from '@admin/router';
 import { Message } from 'element-ui'
 axios.defaults.baseURL = `${BASE_URL}/admin`;
 axios.defaults.withCredentials = true;
@@ -62,6 +62,11 @@ export const deleteUser = params => {
 }
 export const getRoles = params => {
   return axios.get(`/roles`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
+export const updateUserPassword = params => {
+  return axios.put(`/users/${params.id}/password`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }

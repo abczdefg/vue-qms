@@ -2,9 +2,7 @@
   <qnr-question :data="data"></qnr-question>
 </template>
 <script>
-import qnrRadio from './Radio.vue';
-import qnrCheckbox from './Checkbox.vue';
-import qnrMatrixRadio from './MatrixRadio.vue';
+import { qnrRadio, qnrCheckbox, qnrMatrixRadio } from '@admin/components/question';
 export default {
   components: {
     'qnr-radio': QnrRadio,

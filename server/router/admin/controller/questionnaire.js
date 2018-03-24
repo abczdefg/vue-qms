@@ -1,8 +1,10 @@
 const express = require('express');
 const Service = require('../service');
+let { hasPrivilege } = Service.Rbac;
 
 module.exports = () => {
   let router = express.Router();
+  router.get('/questionnaires', hasPrivilege('questionnaire'));
   router.get('/questionnaires', async (req, res) => {
     try {
       let ret = await Service.Questionnaire.getQuestionnaires();

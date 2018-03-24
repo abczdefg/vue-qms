@@ -1,5 +1,4 @@
-import route from '../router/asyncRouter.js'
-
+import route from '@admin/router/asyncRouter.js'
 export default {
 	updateEditStatus(state, isEditing) {
 		state.isEditing = isEditing;

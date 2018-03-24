@@ -36,8 +36,8 @@
 </template>
 <script>
 import { XHeader, ViewBox, XButton } from 'vux'
-import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '../components/question'
-import { getQuestionnaire, submitQuestionnaire } from '../api'
+import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
+import { getQuestionnaire, submitQuestionnaire } from '@index/api'
 export default {
   components: {
     XHeader,

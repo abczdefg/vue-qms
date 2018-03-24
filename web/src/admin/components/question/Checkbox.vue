@@ -25,7 +25,7 @@
   </qnr-base>
 </template>
 <script>
-import QnrBase from './Base.vue'
+import QnrBase from '@admin/components/question/Base.vue'
 export default {
   components: {
     QnrBase

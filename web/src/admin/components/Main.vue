@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  import qnrHeader from '../components/Header.vue';
-  import qnrSidebar from '../components/Sidebar.vue';
-  import menu from '../data/menu.js';
+  import qnrHeader from '@admin/components/Header.vue';
+  import qnrSidebar from '@admin/components/Sidebar.vue';
+  import menu from '@admin/data/menu.js';
   export default {
     components: {
       qnrHeader, qnrSidebar

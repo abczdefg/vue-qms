@@ -11,7 +11,7 @@
   </base-question>
 </template>
 <script>
-import BaseQuestion from './Base'
+import BaseQuestion from '@index/components/question/Base.vue'
 export default {
   name: 'qnr-fill-blank',
   components: {

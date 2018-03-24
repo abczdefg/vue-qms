@@ -5,11 +5,11 @@ let { hasPrivilege } = Service.Rbac;
 module.exports = () => {
   router.get('/users', hasPrivilege('user'), async (req, res) => {
     try {
-      let ret = await Service.User.getUsers();
+      let users = await Service.User.getUsers();
       res.status(200).send({
         code: 200,
         message: 'success',
-        data: ret
+        data: users
       });
     } catch(e) {
       console.error(e);
@@ -27,6 +27,28 @@ module.exports = () => {
         await Service.User.addUser({ username, password, role });
         res.status(200).send({ code: 200, message: 'success' });
       }
+    } catch(e) {
+      console.error(e);
+      res.status(500).send({ code: 500, message: 'database error' });
+    }
+  });
+  router.put('/users/:id/password', async (req, res, next) => {
+    try {
+      let id = parseInt(req.params.id, 10);
+      let { oldPassword, newPassword } = req.body;
+      oldPassword = Service.Md5.md5(oldPassword);
+      newPassword = Service.Md5.md5(newPassword);
+      // 判断是否当前用户
+      if(id !== Service.Login.getUserIdFromSession(req.session)) {
+        return res.status(500).send({ code: 500, message: 'Unmatched user.' });
+      }
+      // 检查密码是否正确
+      let checkPassword = await Service.User.checkUserPassword({id, password: oldPassword});
+      if(checkPassword === null) {
+        return res.status(500).send({ code: 500, message: 'Wrong old password.' });
+      }
+      await Service.User.updateUserPassword({id, password: newPassword});
+      res.status(200).send({ code: 200, message: 'success' });
     } catch(e) {
       console.error(e);
       res.status(500).send({ code: 500, message: 'database error' });

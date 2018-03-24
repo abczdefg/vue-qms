@@ -21,7 +21,7 @@
     * `document.execCommand("insertText")`插入内容
     * [参考文章](http://www.zhangxinxu.com/wordpress/2016/01/contenteditable-plaintext-only/)
 
-* 利用 webpack 给生产环境和发布环境配置不同的接口地址，就可以在js中读取process.env.BASE_URL (不知为啥里面还有双引号)
+* 利用 webpack 给生产环境和发布环境配置不同的接口地址，就可以在js中读取process.env.BASE_URL (不知为啥里面还有双引号，可能是`JSON.parse`)
 ```
 new webpack.DefinePlugin({
   'process.env': require('../config/dev.env'),
@@ -29,6 +29,8 @@ new webpack.DefinePlugin({
 })
 ```
 * `webpack 3`自带`uglifyjs`出现问题，手动安装
+
+* `webpack`中使用`alias`，可以在`alias`前加上`~`符号，视作依赖。比如用于`background: url('~@/assets/logo.png')`
 
 * 在entry中添加vendors，提取公共依赖，切换页面时可以从缓存读取
 

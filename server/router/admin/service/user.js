@@ -53,3 +53,20 @@ module.exports.deleteUserById = (id) => {
     }
   });
 }
+module.exports.checkUserPassword = ({id, password}) => {
+  return Model.User.findOne({
+    where: {
+      id,
+      password
+    },
+  });
+}
+module.exports.updateUserPassword = ({id, password}) => {
+  return Model.User.update({
+    password
+  }, {
+    where: {
+      id
+    }
+  });
+}

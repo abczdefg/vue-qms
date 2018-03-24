@@ -40,14 +40,14 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editorVisible=false">取消</el-button>
-        <el-button type="primary" @click="submitForm">保存</el-button>
+        <el-button type="primary" @click="submitAddUser">保存</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getUsers, addUser, getRoles, deleteUser } from '../api';
+import { getUsers, addUser, getRoles, deleteUser } from '@admin/api';
 export default {
   data() {
     let validatePassword = (rule, value, callback) => {
@@ -114,7 +114,6 @@ export default {
       )
     },
     deleteUser(index, row) {
-      console.log('??')
       this.$confirm('确认删除用户？').then(
         res => {
           deleteUser({ id: row.id }).then(
@@ -132,9 +131,9 @@ export default {
     createUser() {
       this.editorVisible = true;
     },
-    submitForm() {
-      this.$refs['userForm'].validate(valid => {
-        if (valid) {
+    submitAddUser() {
+      this.$refs['userForm'].validate().then(
+        valid => {
           addUser(this.userForm).then(
             res => {
               this.editorVisible = false;
@@ -142,12 +141,10 @@ export default {
               this.getUserData();
             }
           ).catch(
-            err => {this.$message.error(`添加用户失败：${err.message}`)}
+            err => this.$message.error(`添加用户失败：${err.message}`)
           )
-        } else {
-          return false;
         }
-      });
+      ).then(err => err);
     }
   }
 }

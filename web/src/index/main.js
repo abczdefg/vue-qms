@@ -3,8 +3,8 @@
 import Vue from 'vue'
 import 'reset-css/reset.css'
 import '@index/assets/iconfont/iconfont.css'
-import App from './App'
-import router from './router'
+import App from '@index/App'
+import router from '@index/router'
 import { AlertPlugin, ToastPlugin } from 'vux'
 Vue.use(AlertPlugin)
 Vue.use(ToastPlugin)

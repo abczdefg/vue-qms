@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { startLogin } from '../api';
+  import { startLogin } from '@admin/api';
   export default {
     data() {
       return {
@@ -39,10 +39,8 @@
     },
     methods: {
       login() {
-        this.$refs.loginForm.validate(valid => {
-          if (!valid) {
-            return false;
-          } else {
+        this.$refs.loginForm.validate().then(
+          valid => {
             this.logining = true;
             startLogin({
               username: this.loginForm.account,
@@ -56,7 +54,7 @@
               this.$message.error(`登录失败：${res.message}`);
             });
           }
-        });
+        ).catch(err => err);
       }
     }
   }

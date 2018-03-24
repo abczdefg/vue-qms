@@ -51,9 +51,9 @@
 </template>
 <script>
 import Draggable from 'vuedraggable'
-import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '../api';
-import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank } from '../components/question/index.js';
-import { questionData } from '../data/question.js';
+import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '@admin/api';
+import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank } from '@admin/components/question/index.js';
+import { questionData } from '@admin/data/question.js';
 export default {
   components: {
     QnrRadio,
@@ -174,6 +174,19 @@ export default {
           }
         }
       });
+      this.$refs[formName].validate().then(
+        valid => {
+          this.questionnaireForm.id = this.$route.params.id;
+          if(this.$route.params.action === 'edit') {
+            this.questionnaireForm.update_time = new Date();
+            this.editQuestionnaire();
+          } else if(this.$route.params.action === 'add') {
+            this.questionnaireForm.create_time = new Date();
+            this.questionnaireForm.update_time = new Date();
+            this.addQuestionnaire();
+          }
+        }
+      ).catch(err => err);
     },
     cancelQuestionnaire() {
       this.$router.replace({name: "questionnaire"});

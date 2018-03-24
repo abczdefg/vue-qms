@@ -22,7 +22,7 @@
 </template>
 <script>
 import { XHeader, ViewBox , FormPreview } from 'vux'
-import { getQuestionnaires, getQuestionnaire } from '../api';
+import { getQuestionnaires, getQuestionnaire } from '@index/api';
 export default {
   components: {
     XHeader,

@@ -81,4 +81,11 @@
   .sidebar .el-menu:not(.el-menu--collapse) {
     width: 200px;
   }
+  .sidebar .fa {
+    margin-right: 5px;
+    width: 24px;
+    text-align: center;
+    font-size: 18px;
+    vertical-align: middle;
+  }
 </style>

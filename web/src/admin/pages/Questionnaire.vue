@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { getQuestionnaires, deleteQuestionnaire } from '../api';
+import { getQuestionnaires, deleteQuestionnaire } from '@admin/api';
 export default {
   data() {
     return {
