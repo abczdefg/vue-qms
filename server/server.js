@@ -25,7 +25,10 @@ server.use(cookieSession({
 // server.set('view engine', 'jade');
 
 //静态文件
-server.use(express.static(path.join(__dirname, '../dist')));
+server.use('/', express.static(path.join(__dirname, '../dist')));
+server.use('/admin', express.static(path.join(__dirname, '../dist'), {
+  index: "admin.html"
+}));
 
 //设置路由
 server.use('/', require('./router/web/index')());

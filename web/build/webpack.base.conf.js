@@ -38,10 +38,6 @@ const webpackConfig = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
-      // {
-      //     test: /\.css$/,
-      //     loader: 'style-loader!css-loader'
-      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
