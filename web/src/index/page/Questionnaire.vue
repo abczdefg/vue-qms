@@ -26,9 +26,11 @@
       </template>
       <template v-else>
         <div class="page-end page-content">
-          <div class="page-introduction">
+          <!-- <div class="page-introduction">
             <p>感谢参与！</p>
-          </div>
+          </div> -->
+          <img class="end-logo" src="~@index/assets/img/end.png"/>
+          <p class="end-text">问卷到此结束，感谢您的参与！</p>
         </div>
       </template>
     </div>
@@ -232,25 +234,9 @@ export default {
 .page-content.page-end {
   padding-left: 24px;
   padding-right: 24px;
+  text-align: center;
 }
-.page-content .character-result-container p,
-.page-container .character-introduction p {
-  line-height: 20px;
-  margin: 10px 0;
-  font-size: 14px;
-}
-.page-container .character-result-container,
-.page-container .radar-container {
-  margin-bottom: 20px;
-}
-.page-container .character-result-container .character-result {
-  color: red;
-}
-.page-container .radar-container >>> .echarts {
-  width: auto;
-  height: 215px;
-}
-.page-container .character-introduction p b {
-  font-weight: bold;
+.page-end .end-logo {
+  margin: 100px 0;
 }
 </style>
