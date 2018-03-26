@@ -2,7 +2,13 @@ const sequelize = require('../../util/db.js');
 const Model = require('../model')
 const Service = require('./index');
 module.exports.getQuestionnaires = () => {
-  return Model.Questionnaire.findAll();
+  return Model.Questionnaire.findAll({
+    where: {
+      publish: {
+        $eq: true
+      }
+    }
+  });
 };
 module.exports.getQuestionnaireById = async (id) => {
   let questionnaire = await Model.Questionnaire.findOne({

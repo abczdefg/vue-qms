@@ -37,9 +37,9 @@
               </component>
             </draggable>
           </div>
-          <el-form-item class="questionnaire-random" prop="random" label-width="80px" label="随机化">
+          <!-- <el-form-item class="questionnaire-random" prop="random" label-width="80px" label="随机化">
             <el-switch v-model="questionnaireForm.random" :active-value="true" :inactive-value="false"></el-switch>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item class="questionnaire-button">
             <el-button type="primary" @click="saveQuestionnaire('questionnaireForm')">保存问卷</el-button>
             <el-button type="danger" @click="cancelQuestionnaire">取消编辑</el-button>
@@ -161,19 +161,6 @@ export default {
       if(this.checkEditing()) {
         return;
       }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.questionnaireForm.id = this.$route.params.id;
-          if(this.$route.params.action === 'edit') {
-            this.questionnaireForm.update_time = new Date();
-            this.editQuestionnaire();
-          } else if(this.$route.params.action === 'add') {
-            this.questionnaireForm.create_time = new Date();
-            this.questionnaireForm.update_time = new Date();
-            this.addQuestionnaire();
-          }
-        }
-      });
       this.$refs[formName].validate().then(
         valid => {
           this.questionnaireForm.id = this.$route.params.id;
@@ -181,6 +168,7 @@ export default {
             this.questionnaireForm.update_time = new Date();
             this.editQuestionnaire();
           } else if(this.$route.params.action === 'add') {
+            this.questionnaireForm.publish = false;
             this.questionnaireForm.create_time = new Date();
             this.questionnaireForm.update_time = new Date();
             this.addQuestionnaire();

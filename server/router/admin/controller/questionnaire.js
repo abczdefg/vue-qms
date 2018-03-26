@@ -58,5 +58,14 @@ module.exports = () => {
       res.status(500).send({ code: 500, message: 'database error' });
     }
   });
+  router.put('/questionnaires/:id/publish', async (req, res) => {
+    try {
+      await Service.Questionnaire.publishQuestionnaire(req.body);
+      res.status(200).send({ code: 200, message: 'success' });
+    } catch(e) {
+      console.error(e);
+      res.status(500).send({ code: 500, message: 'database error' });
+    }
+  });
   return router;
 };

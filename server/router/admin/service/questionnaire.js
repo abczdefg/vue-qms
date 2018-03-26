@@ -68,6 +68,16 @@ module.exports.updateQuestionnaire = (data) => {
   });
 };
 
+module.exports.publishQuestionnaire = ({id, publish}) => {
+  return Model.Questionnaire.update({
+    publish
+  }, {
+    where: {
+      id
+    }
+  });
+};
+
 module.exports.deleteQuestionnaireById = (id) => {
   return sequelize.query(`delete a, b from questionnaire a left join question b on a.id = b.questionnaire_id where a.id = :id`, {
     replacements: {

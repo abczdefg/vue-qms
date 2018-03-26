@@ -29,7 +29,7 @@ module.exports.getUserByName = (username) => {
 };
 
 module.exports.getUsers = () => {
-  return sequelize.query(`select user.id, user.username, role.name as role from user left join user_role on user.id = user_role.user_id left join role on user_role.role_id = role.id`, {
+  return sequelize.query(`select user.id, user.username, date_format(user.create_time, '%Y-%m-%d %H:%i:%S') as create_time, role.name as role from user left join user_role on user.id = user_role.user_id left join role on user_role.role_id = role.id`, {
     type: sequelize.QueryTypes.SELECT
   });
 }

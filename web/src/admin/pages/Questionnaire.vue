@@ -11,32 +11,24 @@
         <el-button type="primary" @click="createQuestionnaire">添加问卷</el-button>
       </el-form-item>
     </el-form>
-    <!-- <el-form :inline="true" :model="formInline">
-      <el-form-item>
-        <el-select v-model="formInline.region" placeholder="活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="formInline.searchText" placeholder="审批人"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="search">搜索</el-button>
-      </el-form-item>
-    </el-form> -->
     <el-table :data="questionnaireData" border style="width:100%">
       <el-table-column header-align="center" type="index" width="40"></el-table-column>
       <el-table-column header-align="center" prop="title" label="标题"></el-table-column>
       <el-table-column header-align="center" prop="introduction" label="介绍"></el-table-column>
-      <el-table-column header-align="center" prop="random" label="随机" width="60" :formatter="formatRandom"></el-table-column>
+      <!-- <el-table-column header-align="center" prop="random" label="随机" width="60" :formatter="formatRandom"></el-table-column> -->
       <el-table-column header-align="center" prop="create_time" label="创建时间"></el-table-column>
       <el-table-column header-align="center" prop="update_time" label="修改时间"></el-table-column>
-      <el-table-column header-align="center" align="center" label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editQuestionnaire(scope.$index, scope.row)"><i class="el-icon-edit"></i></el-button>
-          <el-button size="mini" type="danger" @click="deleteQuestionnaire(scope.$index, scope.row)"><i class="el-icon-delete"></i></el-button>
-        </template>
+      <el-table-column header-align="center" prop="publish" label="发布" width="60" :formatter="formatPublish"></el-table-column>
+      <el-table-column header-align="center" align="center" label="操作" width="80">
+        <el-dropdown slot-scope="scope" trigger="click" placement="bottom" @command="handleQuestionnaireCommand">
+          <el-button size="mini" icon="el-icon-more-outline"></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-if="scope.row.publish" :command="`unpublish:${scope.row.id}`">取消发布</el-dropdown-item>
+            <el-dropdown-item v-else :command="`publish:${scope.row.id}`">发布</el-dropdown-item>
+            <el-dropdown-item :command="`edit:${scope.row.id}`">修改</el-dropdown-item>
+            <el-dropdown-item :command="`delete:${scope.row.id}`">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-table-column>
     </el-table>
   </div>
@@ -45,7 +37,7 @@
 </template>
 
 <script>
-import { getQuestionnaires, deleteQuestionnaire } from '@admin/api';
+import { getQuestionnaires, deleteQuestionnaire, publishQuestionnaire } from '@admin/api';
 export default {
   data() {
     return {
@@ -57,10 +49,10 @@ export default {
     }
   },
   mounted() {
-    this.getUserData();
+    this.getQuestionnaires ();
   },
   methods: {
-    getUserData() {
+    getQuestionnaires () {
       getQuestionnaires().then(
         res => {
           this.questionnaireData = res.data;
@@ -72,16 +64,27 @@ export default {
     createQuestionnaire() {
       this.$router.push({path: `/questionnaire/add`});
     },
-    editQuestionnaire(index, row) {
-      this.$router.push({path: `/questionnaire/edit/${row.id}`});
+    editQuestionnaire(id) {
+      this.$router.push({path: `/questionnaire/edit/${id}`});
     },
-    deleteQuestionnaire(index, row) {
+    publishQuestionnaire({id, publish}) {
+      let msg = publish ? '' : '取消';
+      publishQuestionnaire({id, publish}).then(
+        res => {
+          this.$message.success(`${msg}发布问卷成功`);
+          this.getQuestionnaires();
+        }
+      ).catch(
+        err => this.$message.error(`${msg}发布问卷失败：${err.message}`)
+      );
+    },
+    deleteQuestionnaire(id) {
       this.$confirm('确认删除问卷？').then(
         res => {
-          deleteQuestionnaire({ id: row.id }).then(
+          deleteQuestionnaire({ id }).then(
             res => {
               this.$message.success('删除成功');
-              this.getUserData();
+              this.getQuestionnaires();
             }
           ).catch(
             err => this.$message.error(`删除问卷失败：${err.message}`)
@@ -92,6 +95,29 @@ export default {
     },
     formatRandom(row, column, cellValue) {
       return cellValue ? '是' : '否';
+    },
+    formatPublish(row, column, cellValue) {
+      return cellValue ? '是' : '否';
+    },
+    handleQuestionnaireCommand(arg) {
+      let [command, id] = arg.split(':');
+      switch (command) {
+        case 'edit':
+          this.editQuestionnaire(id);
+          break;
+        case 'delete':
+          this.deleteQuestionnaire(id);
+          break;
+        case 'publish':
+        case 'unpublish':
+          this.publishQuestionnaire({
+            id,
+            publish: command === 'publish'
+          });
+          break;
+        default:
+          break;
+      }
     }
   }
 }
@@ -99,5 +125,8 @@ export default {
 <style>
   .crumbs {
     margin-bottom: 24px;
+  }
+  .table-more-button {
+
   }
 </style>

@@ -15,10 +15,14 @@
       <el-table-column header-align="center" type="index" width="40"></el-table-column>
       <el-table-column header-align="center" prop="username" label="用户名"></el-table-column>
       <el-table-column header-align="center" prop="role" label="用户组"></el-table-column>
-      <el-table-column header-align="center" align="center" label="操作" width="75">
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="deleteUser(scope.$index, scope.row)"><i class="el-icon-delete"></i></el-button>
-        </template>
+      <el-table-column header-align="center" prop="create_time" label="创建时间"></el-table-column>
+      <el-table-column header-align="center" align="center" label="操作" width="80">
+        <el-dropdown slot-scope="scope" trigger="click" placement="bottom" @command="handleUserCommand">
+          <el-button size="mini" icon="el-icon-more-outline"></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="`delete:${scope.row.id}`">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-table-column>
     </el-table>
     <el-dialog title="创建用户" :visible.sync="editorVisible">
@@ -113,10 +117,10 @@ export default {
         err => this.$message.error(`获取用户组列表失败：${err.message}`)
       )
     },
-    deleteUser(index, row) {
+    deleteUser(id) {
       this.$confirm('确认删除用户？').then(
         res => {
-          deleteUser({ id: row.id }).then(
+          deleteUser({ id }).then(
             res => {
               this.$message.success('删除成功');
               this.getUserData();
@@ -134,6 +138,7 @@ export default {
     submitAddUser() {
       this.$refs['userForm'].validate().then(
         valid => {
+          this.questionnaireForm.create_time = new Date();
           addUser(this.userForm).then(
             res => {
               this.editorVisible = false;
@@ -145,6 +150,16 @@ export default {
           )
         }
       ).then(err => err);
+    },
+    handleUserCommand(arg) {
+      let [command, id] = arg.split(':');
+      switch (command) {
+        case 'delete':
+          this.deleteUser(id);
+          break;
+        default:
+          break;
+      }
     }
   }
 }

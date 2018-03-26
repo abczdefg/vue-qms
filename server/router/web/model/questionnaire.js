@@ -20,6 +20,10 @@ let Questionnaire = sequelize.define('questionnaire', {
     type: Sequelize.BOOLEAN,
     allowNull: false
   },
+  publish: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false
+  },
   create_time: {
     type: Sequelize.DATE,
     allowNull: false,

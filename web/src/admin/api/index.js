@@ -40,6 +40,11 @@ export const deleteQuestionnaire = params => {
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
+export const publishQuestionnaire = params => {
+  return axios.put(`/questionnaires/${params.id}/publish`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
 export const addQuestionnaire = params => {
   return axios.post(`/questionnaires`, params)
   .then(res => Promise.resolve(res.data))
