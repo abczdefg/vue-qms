@@ -1,10 +1,10 @@
 const express = require('express');
-const Service = require('../service');
+const services = require('../service');
 let router = express.Router();
 module.exports = () => {
   router.get('/roles', async (req, res) => {
     try {
-      let ret = await Service.Role.getRoles();
+      let ret = await services.Role.getRoles();
       res.status(200).send({
         code: 200,
         message: 'success',

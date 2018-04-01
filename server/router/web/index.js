@@ -1,4 +1,5 @@
 const express = require('express');
+const controllers = require('./controller');
 let router = express.Router();
 module.exports = () => {
   router.all('*', function(req, res, next) {
@@ -8,7 +9,9 @@ module.exports = () => {
     res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
     next();
   });
-  router.use('/', require('./controller/questionnaire')());
+  for(let [key, fn] of Object.entries(controllers)) {
+    router.use('/', fn());
+  }
   return router;
 };
 

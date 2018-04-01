@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db');
+const sequelize = require('../../../utils/db');
 let Role = sequelize.define('role', {
   id: {
     type: Sequelize.INTEGER,

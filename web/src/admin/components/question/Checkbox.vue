@@ -1,12 +1,7 @@
 <template>
   <qnr-base>
     <template slot="content">
-      <div class="question-title">{{data.title}}</div>
-      <div class="question-detail">
-        <div class="question-checkbox-item" v-for="item in data.choice">
-          <el-checkbox :label="item.content"></el-checkbox>
-        </div>
-      </div>
+      <qnr-content :data="data"></qnr-content>
     </template>
     <template slot="editor">
       <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
@@ -26,9 +21,11 @@
 </template>
 <script>
 import QnrBase from '@admin/components/question/Base.vue'
+import QnrContent from '@admin/components/question/checkbox/Content.vue'
 export default {
   components: {
-    QnrBase
+    QnrBase,
+    QnrContent
   },
   props: {
     data: {}
@@ -86,12 +83,6 @@ export default {
 }
 </script>
 <style>
-.question-checkbox-item {
-  margin-bottom: 10px;
-}
-.question-checkbox-item:last-child {
-  margin-bottom: 0;
-}
 .choice-input .el-input {
   width: 60%;
 }

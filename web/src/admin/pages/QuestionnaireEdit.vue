@@ -8,7 +8,7 @@
     </div>
     <div class="question-edit-content">
       <ul class="question-type-container">
-        <li class="question-type-item" v-for="(item, i) in questionType" :key="item.value" @click="addQuestion(item.type)">
+        <li class="question-type-item" v-for="(item, type) in questionManager" :key="type" @click="addQuestion(type)">
           <el-button plain class="question-type-button">{{item.title}}</el-button>
         </li>
       </ul>
@@ -52,8 +52,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '@admin/api';
-import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank } from '@admin/components/question/index.js';
-import { questionData } from '@admin/data/question.js';
+import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank, questionManager } from '@admin/components/question/index.js';
 export default {
   components: {
     QnrRadio,
@@ -66,8 +65,8 @@ export default {
   data() {
     return {
       questionnaireForm: {
-        title: '我是标题',
-        introduction: '这是一段问卷的介绍。',
+        title: '',
+        introduction: '',
         question: [],
         random: false
       },
@@ -79,16 +78,7 @@ export default {
           { required: true, message: '请输入问卷介绍', trigger: 'blur' }
         ]
       },
-      questionType: (() => {
-        let ret = [];
-        for(let [type, data] of Object.entries(questionData)) {
-          ret.push({
-            title: data.title,
-            type: data.type
-          });
-        }
-        return ret;
-      })(),
+      questionManager: questionManager,
       dragging: false,
       dragDeleteOptions: {
         disabled: this.disableDraggable,
@@ -106,11 +96,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.$store.dispatch('hideSidebar');
+  created() {
     if(this.$route.params.action === 'edit') {
       this.getQuestionnaire(this.$route.params.id);
     }
+  },
+  mounted() {
+    this.$store.dispatch('hideSidebar');
   },
   destroyed() {
     this.$store.dispatch('showSidebar');
@@ -141,7 +133,8 @@ export default {
       if(this.checkEditing()) {
         return;
       }
-      this.questionnaireForm.question.push(questionData[type]);
+      this.questionnaireForm.question.push(questionManager[type]);
+      // this.questionnaireForm.question.push({ type });
       this.$nextTick(() => this.scrollToBottom());
     },
     deleteQuestion(index) {

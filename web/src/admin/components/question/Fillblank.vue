@@ -1,10 +1,7 @@
 <template>
   <qnr-base>
     <template slot="content">
-      <div class="question-title">{{data.title}}</div>
-      <div class="question-detail">
-        <div class="fillblank-content" v-html="data.content"></div>
-      </div>
+      <qnr-content :data="data"></qnr-content>
     </template>
     <template slot="editor">
       <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
@@ -22,9 +19,11 @@
 </template>
 <script>
 import QnrBase from '@admin/components/question/Base.vue'
+import QnrContent from '@admin/components/question/fillblank/Content.vue'
 export default {
   components: {
-    QnrBase
+    QnrBase,
+    QnrContent
   },
   props: {
     data: {}

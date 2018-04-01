@@ -1,5 +1,5 @@
-const sequelize = require('../../util/db.js');
-const Model = require('../model');
+const sequelize = require('../../../utils/db.js');
+const models = require('../../../model');
 module.exports.getRoles = () => {
-  return Model.Role.findAll();
+  return models.Role.findAll();
 };

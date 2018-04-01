@@ -1,68 +1,115 @@
-const sequelize = require('../../util/db.js');
-const Model = require('../model');
-module.exports.getUserByName = (username) => {
-  return Model.User.findOne({
+const sequelize = require('../../../utils/db.js');
+const utils = require('../../../utils');
+const models = require('../../../model');
+module.exports.getUserByName = async (username) => {
+  let user = await models.User.findOne({
     where: {
-      'username': username
+      username,
+      delete_time: null
     },
-    include: [{
-      model: Model.Role,
-      through: { attributes: [] },
-      as: 'role',
-      include: [{
-        model: Model.Privilege,
-        attributes: ['name'],
-        through: { attributes: [] },
-        as: 'privilege'
-      }]
-    }]
-  }).then(
-    user => {
-      if(user !== null) {
-        user = user.get({plain:true});
-        user.privilege = user.role[0].privilege.map(item => item.name);
-        user.role = user.role[0].name;
-      }
-      return Promise.resolve(user)
+    attributes: {
+      includes: ['id', 'username', 'password', 'create_time']
     }
-  ).catch(err => Promise.reject(err));
+  });
+  if(user === null) {
+    return Promise.resolve(user);
+  }
+  user = utils.toPlain(user);
+  let userRole = await models.UserRole.findOne({
+    where: {
+      user_id: user.id
+    }
+  });
+  userRole = utils.toPlain(userRole);
+
+  let role =  await models.Role.findOne({
+    where: {
+      id: userRole.role_id
+    }
+  });
+  role = utils.toPlain(role);
+
+  let rolePrivilege =  await models.RolePrivilege.findAll({
+    where: {
+      role_id: role.id
+    }
+  });
+  rolePrivilege = utils.toPlain(rolePrivilege);
+
+  let privilege =  await models.Privilege.findAll({
+    where: {
+      id: {
+        $in: rolePrivilege.map(item => item.privilege_id)
+      }
+    }
+  });
+  privilege = utils.toPlain(privilege);
+
+  user.role = role.name;
+  user.privilege = privilege.map(item => item.name);
+
+  return user;
 };
 
-module.exports.getUsers = () => {
-  return sequelize.query(`select user.id, user.username, date_format(user.create_time, '%Y-%m-%d %H:%i:%S') as create_time, role.name as role from user left join user_role on user.id = user_role.user_id left join role on user_role.role_id = role.id`, {
-    type: sequelize.QueryTypes.SELECT
+module.exports.getUsers = async () => {
+  let users = await models.User.findAll({
+    where: {
+      delete_time: null
+    },
+    attributes: {
+      includes: ['id', 'username', 'password', 'create_time']
+    },
+    include: [{
+      model: models.Role,
+      as: 'role',
+      through: {
+        attributes: ['name']
+      }
+    }]
+  });
+  return utils.toPlain(users).map(item => {
+    return {
+      id: item.id,
+      username: item.username,
+      create_time: item.create_time,
+      role: item.role[0].name,
+    };
   });
 }
-module.exports.addUser = ({username, password, role}) => {
-  return sequelize.transaction(async (t) => {
-    let ret = await Model.User.create({username, password}, {
-      transaction: t
-    });
-    await Model.UserRole.create({
-      user_id: ret.id,
-      role_id: role
-    }, {
-      transaction: t
-    });
+module.exports.addUser = async ({username, password, role}) => {
+  let user = await models.User.create({
+    username,
+    password,
+    create_time: new Date()
+  });
+  await models.UserRole.create({
+    user_id: user.id,
+    role_id: role
   });
 }
-module.exports.deleteUserById = (id) => {
-  return sequelize.query(`delete a, b from user a left join user_role b on a.id = b.user_id where a.id = :id`, {
-    replacements: {
-      id: id
+module.exports.deleteUserById = async (id) => {
+  return models.User.update({
+    delete_time: new Date()
+  }, {
+    where: {
+      id,
+      name: {
+        $not: 'admin'
+      }
     }
   });
 }
-module.exports.checkUserPassword = ({id, password}) => {
-  return Model.User.findOne({
+module.exports.checkUserPassword = async ({id, password}) => {
+  return models.User.findOne({
     where: {
       id,
-      password
+      password,
+      delete_time: null
     },
   });
 }
-module.exports.updateUserPassword = ({id, password}) => {
-  return Model.User.update({
+module.exports.updateUserPassword = async ({id, password}) => {
+  return models.User.update({
     password
   }, {
     where: {

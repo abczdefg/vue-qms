@@ -54,4 +54,5 @@ let sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passwor
   operatorsAliases,
   timezone: '+08:00'
 });
+sequelize.Sequelize = Sequelize;
 module.exports = sequelize;

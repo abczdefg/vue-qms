@@ -1,12 +1,7 @@
 <template>
   <qnr-base>
     <template slot="content">
-      <div class="question-title">{{data.title}}</div>
-      <div class="question-detail">
-        <el-select :value="data.defaultSelectedValue[0]" placeholder="请选择">
-          <el-option v-for="(item, i) in data.list[0]" :key="i" :label="item" :value="i"></el-option>
-        </el-select>
-      </div>
+      <qnr-content :data="data"></qnr-content>
     </template>
     <template slot="editor">
       <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
@@ -42,9 +37,11 @@
 </template>
 <script>
 import QnrBase from '@admin/components/question/Base.vue'
+import QnrContent from '@admin/components/question/picker/Content.vue'
 export default {
   components: {
-    QnrBase
+    QnrBase,
+    QnrContent
   },
   props: {
     data: {}
@@ -102,9 +99,6 @@ export default {
 
 </script>
 <style>
-.question-radio-item {
-  margin-bottom: 10px;
-}
 .choice-input .el-input {
   width: 60%;
 }

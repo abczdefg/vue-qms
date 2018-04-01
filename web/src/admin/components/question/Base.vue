@@ -1,11 +1,9 @@
 <template>
   <div class="questionnaire-question-container">
     <div class="question-container" v-if="!isEditing">
-      <div class="question-content">
-        <slot name="content"></slot>
-        <div class="question-control">
-          <el-button class="question-control-btn" type="white" icon="el-icon-edit" size="mini" @click="showEditor">编辑</el-button>
-        </div>
+      <slot name="content"></slot>
+      <div class="question-control">
+        <el-button class="question-control-btn" type="white" icon="el-icon-edit" size="mini" @click="showEditor">编辑</el-button>
       </div>
     </div>
     <div class="editor-container" v-else>

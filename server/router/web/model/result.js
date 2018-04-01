@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db.js')
+const sequelize = require('../utils/db.js')
 let Result = sequelize.define('result', {
   id: {
     type: Sequelize.INTEGER,

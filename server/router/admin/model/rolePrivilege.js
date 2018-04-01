@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db');
+const sequelize = require('../../../utils/db');
 const Privilege = require('./privilege.js');
 const Role = require('./role.js');
 let RolePrivilege = sequelize.define('rolePrivilege', {

@@ -1,77 +1,72 @@
-import axios from 'axios';
-import router from '@admin/router';
-import { Message } from 'element-ui'
-axios.defaults.baseURL = `${BASE_URL}/admin`;
-axios.defaults.withCredentials = true;
-axios.interceptors.response.use(
-  response => response,
-  error => {
-    switch (error.response.status) {
-      case 400:
-      case 401:
-        Message.error('登录过时，请重新登录');
-        router.replace({name: 'login'});
-    }
-    return Promise.reject(error.response.data);
-  }
-);
+import ajax from '@admin/utils/ajax';
+
 export const startLogin = params => {
-  return axios.post(`/login`, params)
+  return ajax.post(`/login`, params)
   .then(res => Promise.resolve(res.data))
   .catch(res => Promise.reject(res))
 }
 export const getQuestionnaires = params => {
-  return axios.get(`/questionnaires`, params)
+  return ajax.get(`/questionnaires`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const getQuestionnaire = params => {
-  return axios.get(`/questionnaires/${params.id}`)
+  return ajax.get(`/questionnaires/${params.id}`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const updateQuestionnaire = params => {
-  return axios.put(`/questionnaires/${params.id}`, params)
+  return ajax.put(`/questionnaires/${params.id}`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const deleteQuestionnaire = params => {
-  return axios.delete(`/questionnaires/${params.id}`)
+  return ajax.delete(`/questionnaires/${params.id}`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const publishQuestionnaire = params => {
-  return axios.put(`/questionnaires/${params.id}/publish`, params)
+  return ajax.put(`/questionnaires/${params.id}/publish`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const addQuestionnaire = params => {
-  return axios.post(`/questionnaires`, params)
+  return ajax.post(`/questionnaires`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const getUsers = params => {
-  return axios.get(`/users`, params)
+  return ajax.get(`/users`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const addUser = params => {
-  return axios.post(`/users`, params)
+  return ajax.post(`/users`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const deleteUser = params => {
-  return axios.delete(`/users/${params.id}`)
+  return ajax.delete(`/users/${params.id}`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const getRoles = params => {
-  return axios.get(`/roles`, params)
+  return ajax.get(`/roles`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const updateUserPassword = params => {
-  return axios.put(`/users/${params.id}/password`, params)
+  return ajax.put(`/users/${params.id}/password`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
+export const getResults = params => {
+  return ajax.get(`/results`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
+export const getResultsByQuestionnaireId = params => {
+  return ajax.get(`/questionnaires/${params.id}/results`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }

@@ -3,6 +3,7 @@ import Home from '@admin/pages/Home.vue'
 import User from '@admin/pages/User.vue'
 import Questionnaire from '@admin/pages/Questionnaire.vue'
 import QuestionnaireEdit from '@admin/pages/QuestionnaireEdit.vue'
+import Result from '@admin/pages/Result.vue'
 import NotFound from '@admin/pages/404.vue'
 const asyncRouter = [{
   path: '/',
@@ -32,7 +33,7 @@ const asyncRouter = [{
       privilege: 'questionnaire'
     }
   }, {
-    path: '/questionnaire/:action',
+    path: '/questionnaire/detail/:action',
     name: 'questionnaireAdd',
     component: QuestionnaireEdit,
     meta: {
@@ -40,9 +41,17 @@ const asyncRouter = [{
       privilege: 'questionnaire'
     }
   }, {
-    path: '/questionnaire/:action/:id',
+    path: '/questionnaire/:id/detail/:action',
     name: 'questionnaireEdit',
     component: QuestionnaireEdit,
+    meta: {
+      requiresAuth: true,
+      privilege: 'questionnaire'
+    }
+  }, {
+    path: '/questionnaire/:id/result',
+    name: 'Result',
+    component: Result,
     meta: {
       requiresAuth: true,
       privilege: 'questionnaire'

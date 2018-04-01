@@ -39,7 +39,7 @@
 <script>
 import { XHeader, ViewBox, XButton } from 'vux'
 import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
-import { getQuestionnaire, submitQuestionnaire } from '@index/api'
+import { getQuestionnaire, addResult } from '@index/api'
 export default {
   components: {
     XHeader,
@@ -89,7 +89,13 @@ export default {
           this.recordData = this.createModel();
         }
       ).catch(
-        ({ message }) => this.$message.error(`获取问卷失败：${message}`)
+        ({ code, message }) => {
+          console.log(code)
+          if(code === 500) {
+            return this.$router.replace({name: 'List'});
+          }
+          this.$message.error(`获取问卷失败：${message}`)
+        }
       )
     },
     createModel() {
@@ -144,7 +150,7 @@ export default {
           (async () => {
             try {
               this.handleSubmitData();
-              await submitQuestionnaire(this.submitData);
+              await addResult(this.submitData);
               this.$vux.toast.show({
                 text: '问卷提交成功'
               });

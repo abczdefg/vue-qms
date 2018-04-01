@@ -1,54 +1,41 @@
-const sequelize = require('../../util/db.js');
-const Model = require('../model')
-const Service = require('./index');
+const sequelize = require('../../../utils/db.js');
+const utils = require('../../../utils');
+const models = require('../../../model');
+
 module.exports.getQuestionnaires = () => {
-  return Model.Questionnaire.findAll({
+  return models.Questionnaire.findAll({
     where: {
-      publish: {
-        $eq: true
-      }
+      publish: true,
+      delete_time: null
+    },
+    attributes: {
+      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
     }
   });
 };
 module.exports.getQuestionnaireById = async (id) => {
-  let questionnaire = await Model.Questionnaire.findOne({
+  let questionnaire = await models.Questionnaire.findOne({
     where: {
-      'id': id
+      id,
+      publish: true,
+      delete_time: null
     },
-    include: [{
-      model: Model.Question,
-      as: 'question',
-    }],
-    order: [[Model.Question, 'display_order', 'ASC']]
+    attributes: {
+      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
+    }
   });
-  questionnaire = questionnaire.get({plain:true});
-  questionnaire.question = questionnaire.question.map(item => Model.Question.serialize(item));
+  let question = await models.Question.findAll({
+    where: {
+     questionnaire_id: id,
+     delete_time: null
+    },
+    order: [['display_order', 'ASC']],
+    attributes: {
+      include: ['id', 'questionnaire_id', 'title', 'type', 'display_order', 'other']
+    }
+  })
+  questionnaire = utils.toPlain(questionnaire);
+  question = utils.toPlain(question);
+  questionnaire.question = question.map(item => models.Question.serialize(item));
   return questionnaire;
 };
-module.exports.submitQuestionnaire = (data) => {
-  return sequelize.transaction(async (transaction) => {
-    let { ip, questionnaire_id, answer, start_time, end_time } = data;
-    let result = await Model.Result.create({
-      ip,
-      questionnaire_id,
-      start_time,
-      end_time
-    }, {
-      transaction
-    });
-    let answerArr = handleAnswer(answer).map((item, i) => {
-      return {
-        result_id: result.id,
-        question_id: i + 1,
-        answer: item
-      };
-    })
-    await Model.Answer.bulkCreate(answerArr, {
-      transaction
-    });
-  });
-};
-
-function handleAnswer(answerArr) {
-  return answerArr.map(item => Array.isArray(item) ? item.join(',') : item);
-}

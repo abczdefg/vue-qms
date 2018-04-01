@@ -1,19 +1,19 @@
-import axios from 'axios';
-axios.defaults.baseURL = BASE_URL;
+import ajax from '@index/utils/ajax';
 
 export const getQuestionnaires = params => {
-  return axios.get(`/questionnaires`)
+  return ajax.get(`/questionnaires`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
 export const getQuestionnaire = params => {
-  return axios.get(`/questionnaires/${params.id}`)
+  return ajax.get(`/questionnaires/${params.id}`)
   .then(res => Promise.resolve(res.data))
-  .catch(err => Promise.reject(err))
+  // .catch(err => Promise.reject(err))
+  .catch(err => {console.dir(err);return Promise.reject(err)})
 }
 
-export const submitQuestionnaire = params => {
-  return axios.post(`/questionnaires`, params)
+export const addResult = params => {
+  return ajax.post(`/results`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }

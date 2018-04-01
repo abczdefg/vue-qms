@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db');
+const sequelize = require('../../../utils/db');
 const moment = require('moment');
 const Question = require('./question.js');
 let Questionnaire = sequelize.define('questionnaire', {
@@ -33,6 +33,14 @@ let Questionnaire = sequelize.define('questionnaire', {
     }
   },
   update_time: {
+    type: Sequelize.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
+    get() {
+      return moment(this.getDataValue('update_time')).format('YYYY-MM-DD HH:mm:ss');
+    }
+  },
+  delete_time: {
     type: Sequelize.DATE,
     allowNull: false,
     defaultValue: Sequelize.NOW,

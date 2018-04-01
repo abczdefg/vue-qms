@@ -1,27 +1,8 @@
 <template>
   <qnr-base>
     <template slot="content">
-      <div class="question-title">{{data.title}}</div>
-      <div class="question-detail">
-        <table class="matrix-radio-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th v-for="(column, j) in data.choice">{{column.content}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, i) in data.subquestion">
-              <th scope="row">{{row.content}}</th>
-              <td v-for="(column, j) in data.choice">
-                <input type="radio" disabled>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <qnr-content :data="data"></qnr-content>
     </template>
-
     <template slot="editor">
       <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
         <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
@@ -47,9 +28,11 @@
 </template>
 <script>
 import QnrBase from './Base.vue'
+import QnrContent from '@admin/components/question/matrix-radio/Content.vue'
 export default {
   components: {
-    QnrBase
+    QnrBase,
+    QnrContent
   },
   props: {
     data: {}
@@ -124,30 +107,7 @@ export default {
 
 </script>
 <style>
-table.matrix-radio-table {
-  font-size: 11px;
-  color: #333333;
-  border-width: 1px;
-  border-color: #dcdfe6;
-  border-collapse: collapse;
-  font-size: 14px;
-  vertical-align: middle;
-  text-align: center;
+.choice-input .el-input {
+  width: 60%;
 }
-
-table.matrix-radio-table th {
-  border-width: 1px;
-  padding: 14px;
-  border-style: solid;
-  border-color: #dcdfe6;
-  font-weight: normal;
-}
-
-table.matrix-radio-table td {
-  border-width: 1px;
-  padding: 14px;
-  border-style: solid;
-  border-color: #dcdfe6;
-}
-
 </style>

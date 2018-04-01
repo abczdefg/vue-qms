@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db');
+const sequelize = require('../utils/db');
 const moment = require('moment');
 const Question = require('./question.js');
 let Questionnaire = sequelize.define('questionnaire', {

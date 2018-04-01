@@ -1,5 +1,4 @@
-const sequelize = require('../../util/db.js');
-const Model = require('../model');
+const models = require('../../../model');
 module.exports.hasPrivilege = (resource) => {
   return (req, res, next) => {
     if(req.session.privilege.includes(resource)) {

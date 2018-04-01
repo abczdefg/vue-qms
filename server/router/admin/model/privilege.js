@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = require('../../util/db');
+const sequelize = require('../../../utils/db');
 let Privilege = sequelize.define('privilege', {
   id: {
     type: Sequelize.INTEGER,

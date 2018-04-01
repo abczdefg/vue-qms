@@ -1,4 +1,2 @@
-const Questionnaire = require('./questionnaire.js');
-module.exports = {
-  Questionnaire: Questionnaire
-}
+const utils = require('../../../utils');
+module.exports = utils.loadModule(__dirname);

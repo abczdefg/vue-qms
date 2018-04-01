@@ -1,5 +1,6 @@
 const express = require('express');
-const Service = require('./service');
+const controllers = require('./controller');
+const services = require('./service');
 let router = express.Router();
 module.exports = () => {
   router.all('*', function(req, res, next) {
@@ -11,7 +12,7 @@ module.exports = () => {
   });
   router.all('*', function(req, res, next) {
     if(req.method.toUpperCase() !== 'OPTIONS') {
-      if (!Service.Login.checkLogin(req.session) && req.url !== '/login' && req.url !== '/logout') {
+      if (!services.Login.checkLogin(req.session) && req.url !== '/login' && req.url !== '/logout') {
         res.status(400).send({ code: 400, data: {}, message: 'Unauthorized' });
       } else {
         next();
@@ -20,10 +21,9 @@ module.exports = () => {
       next();
     }
   });
-  router.use('/', require('./controller/login')());
-  router.use('/', require('./controller/questionnaire')());
-  router.use('/', require('./controller/user')());
-  router.use('/', require('./controller/role')());
+  for(let [key, fn] of Object.entries(controllers)) {
+    router.use('/', fn());
+  }
   return router;
 };
 

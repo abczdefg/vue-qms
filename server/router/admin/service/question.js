@@ -1,6 +1,6 @@
-const Question = require('../model/question.js');
+const models = require('../../../model');
 module.exports.getQuestionsByQuestionnaireId = (questionnaireId) => {
-  return Question.findAll({
+  return models.Question.findAll({
      where: {
        'questionnaire_id': questionnaireId
      },

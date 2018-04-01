@@ -26,6 +26,7 @@
             <el-dropdown-item v-if="scope.row.publish" :command="`unpublish:${scope.row.id}`">取消发布</el-dropdown-item>
             <el-dropdown-item v-else :command="`publish:${scope.row.id}`">发布</el-dropdown-item>
             <el-dropdown-item :command="`edit:${scope.row.id}`">修改</el-dropdown-item>
+            <el-dropdown-item :command="`result:${scope.row.id}`">统计</el-dropdown-item>
             <el-dropdown-item :command="`delete:${scope.row.id}`">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -62,10 +63,10 @@ export default {
       )
     },
     createQuestionnaire() {
-      this.$router.push({path: `/questionnaire/add`});
+      this.$router.push({path: `/questionnaire/detail/add`});
     },
     editQuestionnaire(id) {
-      this.$router.push({path: `/questionnaire/edit/${id}`});
+      this.$router.push({path: `/questionnaire/${id}/detail/edit`});
     },
     publishQuestionnaire({id, publish}) {
       let msg = publish ? '' : '取消';
@@ -114,6 +115,9 @@ export default {
             id,
             publish: command === 'publish'
           });
+          break;
+        case 'result':
+          this.$router.push({path: `/questionnaire/${id}/result`});
           break;
         default:
           break;
