@@ -106,7 +106,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .choice-input .el-input {
   width: 60%;
 }

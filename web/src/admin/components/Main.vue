@@ -30,7 +30,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
   .main-container {
     /*min-width: 1024px;*/
     height: 100%;

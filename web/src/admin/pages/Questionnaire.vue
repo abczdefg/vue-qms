@@ -126,7 +126,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
   .crumbs {
     margin-bottom: 24px;
   }

@@ -26,7 +26,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .question-radio-item {
   margin-bottom: 10px;
 }

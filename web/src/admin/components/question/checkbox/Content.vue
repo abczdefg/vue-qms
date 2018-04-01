@@ -26,7 +26,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .question-checkbox-item {
   margin-bottom: 10px;
 }

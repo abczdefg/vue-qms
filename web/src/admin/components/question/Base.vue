@@ -59,7 +59,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .questionnaire-question-container {
   position: relative;
   padding: 30px 10px;

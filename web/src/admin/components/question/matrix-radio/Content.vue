@@ -39,7 +39,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 table.matrix-radio-table {
   font-size: 11px;
   color: #333333;

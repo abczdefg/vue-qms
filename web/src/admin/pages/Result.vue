@@ -143,7 +143,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .question-list {
   margin: 20px 0;
   display: flex;
@@ -151,5 +151,9 @@ export default {
 }
 .question-list .question-number {
   margin-right: 5px;
+}
+.result-container >>> .el-dialog__body {
+  height: 58vh;
+  overflow-y: auto;
 }
 </style>

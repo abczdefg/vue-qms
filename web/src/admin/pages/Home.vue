@@ -84,7 +84,7 @@
   }
 
 </script>
-<style>
+<style scoped>
 .panel-group {
   margin-top: 18px;
 }

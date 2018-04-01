@@ -100,7 +100,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .question-detail .fillblank-content {
   font-size: 14px;
   line-height: 16px;
