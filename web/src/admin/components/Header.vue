@@ -32,7 +32,7 @@
   </el-header>
 </template>
 <script>
-  import { updateUserPassword } from '@admin/api';
+  import { updateUserPassword, logout } from '@admin/api';
   export default {
     data() {
       let validatePassword = (rule, value, callback) => {
@@ -107,8 +107,13 @@
         this.updatePasswordVisible = false;
       },
       logout() {
-        this.$store.dispatch('logout');
-        this.$router.replace('/login');
+        logout().then(
+          res => {
+            this.$message.success('退出成功');
+            this.$store.dispatch('logout');
+            this.$router.replace('/login');
+          }
+        ).catch(err => err);
       },
       submitUpdatePassword() {
         this.$refs['passwordForm'].validate().then(

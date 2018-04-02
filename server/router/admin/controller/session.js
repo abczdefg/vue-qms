@@ -2,7 +2,7 @@ const express = require('express');
 const services = require('../service');
 module.exports = () => {
   let router = express.Router();
-  router.post('/login', async (req, res) => {
+  router.post('/session', async (req, res) => {
     try {
       let username = req.body.username;
       let password = services.Md5.md5(req.body.password);
@@ -16,7 +16,7 @@ module.exports = () => {
           res.status(500).send({ code: 500, data: {}, message: 'Password error' });
         } else {
           // 登录成功
-          services.Login.saveLoginStatus(req.session, user);
+          services.Session.addSession(req.session, user);
           res.status(200).send({
             code: 200,
             data: {
@@ -34,9 +34,13 @@ module.exports = () => {
       res.status(500).send({ code: 500, message: 'Database error' });
     }
   });
-  router.get('/logout', (req, res) => {
-    services.Login.clearLoginStatus(req.session);
-    res.status(200).send({ code: 200, message: 'Success' });
+  router.delete('/session', (req, res) => {
+    if(services.Session.checkSession(req.session)) {
+      services.Session.deleteSession(req.session);
+      res.status(200).send({ code: 200, data: {}, message: 'Logout Success' });
+    } else {
+      res.status(401).send({ code: 401, message: 'Unauthorized' });
+    }
   });
   return router;
 };

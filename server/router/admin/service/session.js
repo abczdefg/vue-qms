@@ -1,14 +1,14 @@
 const sequelize = require('../../../utils/db.js');
 const models = require('../../../model');
-module.exports.checkLogin = (session) => {
-  return session['userId'];
+module.exports.checkSession = (session) => {
+  return /\d+/.test(session['userId']);
 };
-module.exports.saveLoginStatus = (session, {id, role, privilege}) => {
+module.exports.addSession = (session, {id, role, privilege}) => {
   session['userId'] = id;
   session['role'] = role;
   session['privilege'] = privilege;
 };
-module.exports.clearLoginStatus = (session) => {
+module.exports.deleteSession = (session) => {
   session = null;
 };
 module.exports.getUserIdFromSession = (session) => {

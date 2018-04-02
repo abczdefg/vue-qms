@@ -1,7 +1,12 @@
 import ajax from '@admin/utils/ajax';
 
-export const startLogin = params => {
-  return ajax.post(`/login`, params)
+export const login = params => {
+  return ajax.post(`/session`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(res => Promise.reject(res))
+}
+export const logout = params => {
+  return ajax.delete(`/session`, params)
   .then(res => Promise.resolve(res.data))
   .catch(res => Promise.reject(res))
 }

@@ -12,8 +12,8 @@ module.exports = () => {
   });
   router.all('*', function(req, res, next) {
     if(req.method.toUpperCase() !== 'OPTIONS') {
-      if (!services.Login.checkLogin(req.session) && req.url !== '/login' && req.url !== '/logout') {
-        res.status(400).send({ code: 400, data: {}, message: 'Unauthorized' });
+      if (!services.Session.checkSession(req.session) && req.url !== '/session') {
+        res.status(401).send({ code: 401, message: 'Unauthorized' });
       } else {
         next();
       }

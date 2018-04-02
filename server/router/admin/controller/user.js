@@ -39,7 +39,7 @@ module.exports = () => {
       oldPassword = services.Md5.md5(oldPassword);
       newPassword = services.Md5.md5(newPassword);
       // 判断是否当前用户
-      if(id !== services.Login.getUserIdFromSession(req.session)) {
+      if(id !== services.Session.getUserIdFromSession(req.session)) {
         return res.status(500).send({ code: 500, message: 'Unmatched user.' });
       }
       // 检查密码是否正确

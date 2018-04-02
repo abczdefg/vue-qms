@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { startLogin } from '@admin/api';
+  import { login } from '@admin/api';
   export default {
     data() {
       return {
@@ -42,7 +42,7 @@
         this.$refs.loginForm.validate().then(
           valid => {
             this.logining = true;
-            startLogin({
+            login({
               username: this.loginForm.account,
               password: this.loginForm.checkPass
             }).then(res => {
