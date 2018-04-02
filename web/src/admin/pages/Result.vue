@@ -4,6 +4,7 @@
       <el-form-item>
         <el-button type="danger" icon="el-icon-back" @click="backToQuestionnaireList">返回</el-button>
         <el-button type="primary" icon="el-icon-tickets" @click="detailVisible = true">问卷详情</el-button>
+        <el-button type="success" icon="el-icon-download" @click="downloadExcel">导出excel</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="results" border style="width:100%" max-height="400">
@@ -11,6 +12,7 @@
       <el-table-column v-for="(item, i) in columns" :key="`${item.prop}_${i}`" header-align="center" :prop="item.prop" :label="item.label" :title="item.title" :width="item.width" :renderHeader="renderHeader"></el-table-column>
     </el-table>
     <el-dialog title="问卷详情" :visible.sync="detailVisible">
+      <div class="questionnaire-title">ID：{{questionnaireData.id}}</div>
       <div class="questionnaire-title">标题：{{questionnaireData.title}}</div>
       <div class="questionnaire-introduction">介绍：{{questionnaireData.introduction}}</div>
       <div class="questionnaire-update-time">最后更新时间：{{questionnaireData.update_time}}</div>
@@ -29,12 +31,14 @@
 </template>
 
 <script>
+import { formatDate } from '@admin/utils/date';
 import { getResultsByQuestionnaireId } from '@admin/api';
 import QnrRadioContent from '@admin/components/question/radio/Content.vue';
 import QnrFillblankContent from '@admin/components/question/fillblank/Content.vue';
 import QnrCheckboxContent from '@admin/components/question/checkbox/Content.vue';
 import QnrPickerContent from '@admin/components/question/picker/Content.vue';
 import QnrMatrixRadioContent from '@admin/components/question/matrix-radio/Content.vue';
+import XLSX from 'xlsx';
 export default {
   components: {
     QnrRadioContent,
@@ -98,6 +102,31 @@ export default {
         return column;
       }
       return getColumn(this.questionnaireData.question);
+    },
+    xlsxHeader() {
+      // columns格式
+      // [
+      //  {prop: "ip", label: "IP地址"},
+      //  {prop: "start_time", label: "开始时间", width: 160},
+      //  {prop: "end_time", label: "完成时间", width: 160},
+      //  {prop: "answer_0", label: "1. 多选题", title: "多选题"},
+      //  {prop: "answer_1", label: "2. 矩阵题", title: "矩阵题"}
+      // ]
+      return this.columns.map(v => v.label);
+    },
+    xlsxBody() {
+      // results格式
+      // [
+      //   {answer_0, answer_1, answer_2, answer_3, answer_4, end_time, id, ip, questionnaire_id, start_time}
+      // ]
+      let body = this.results.map(line => {
+        let tmp = {};
+        for(let val of this.columns) {
+          tmp[val.label] = line[val.prop] || '';
+        }
+        return tmp;
+      });
+      return body;
     }
   },
   methods: {
@@ -139,6 +168,50 @@ export default {
     },
     backToQuestionnaireList() {
       this.$router.push({name: 'questionnaire'})
+    },
+    downloadExcel() {
+      let header = this.xlsxHeader;
+      let body = this.xlsxBody;
+      let s2ab = (s) => {
+        // 字符串转字符流
+        let buf = new ArrayBuffer(s.length);
+        let view = new Uint8Array(buf);
+        for (let i = 0; i !== s.length; ++i) {
+          view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
+      };
+      const workbook = {
+        SheetNames: ['Sheet1'],
+        Sheets: {},
+        Props: {}
+      };
+      //通过json_to_sheet转成单页(Sheet)数据
+      workbook.Sheets['Sheet1'] = XLSX.utils.json_to_sheet(body, { header });
+      let blob = new Blob([
+        s2ab(
+          XLSX.write(workbook, {
+            bookType: 'xlsx',
+            bookSST: false,
+            type: 'binary'
+          })
+        )
+      ], {
+        type: "application/octet-stream"
+      });
+      this.saveFile(blob);
+    },
+    saveFile(blob, filename) {
+      let link = document.createElement('a');
+      link.download = filename || `问卷${this.$route.params.id}_${formatDate(new Date())}_统计结果.xlsx`;
+      link.href = URL.createObjectURL(blob); //绑定a标签
+      document.body.appendChild(link);
+      link.click(); //模拟点击实现下载
+      setTimeout(() => {
+        //延时释放
+        URL.revokeObjectURL(blob); //用URL.revokeObjectURL()来释放这个object URL
+        document.body.removeChild(link);
+      }, 100);
     }
   }
 }
