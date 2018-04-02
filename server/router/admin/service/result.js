@@ -11,27 +11,15 @@ module.exports.getResults = async () => {
   return results;
 };
 module.exports.getResultsByQuestionnaireId = async (id) => {
-  let questionnaire = await models.Questionnaire.findOne({
-    where: {
-      id,
-      delete_time: null
-    },
-    attributes: {
-      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
-    }
-  });
   let question = await models.Question.findAll({
     where: {
       questionnaire_id: id
     },
     order: [['display_order', 'ASC']],
     attributes: {
-      include: ['id', 'questionnaire_id', 'title', 'type', 'display_order', 'other']
+      include: ['id']
     }
   });
-  questionnaire = utils.toPlain(questionnaire);
-  question = utils.toPlain(question);
-  questionnaire.question = question.map(item => models.Question.serialize(item));
   let questionIdOrder = question.map(item => item.id);
   let results = await models.Result.findAll({
     where: {
@@ -46,5 +34,5 @@ module.exports.getResultsByQuestionnaireId = async (id) => {
       as: 'answer',
     }]
   });
-  return { questionnaire, results };
+  return results;
 };

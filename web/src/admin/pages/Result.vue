@@ -32,7 +32,7 @@
 
 <script>
 import { formatDate } from '@admin/utils/date';
-import { getResultsByQuestionnaireId } from '@admin/api';
+import { getQuestionnaire, getResultsByQuestionnaireId } from '@admin/api';
 import QnrRadioContent from '@admin/components/question/radio/Content.vue';
 import QnrFillblankContent from '@admin/components/question/fillblank/Content.vue';
 import QnrCheckboxContent from '@admin/components/question/checkbox/Content.vue';
@@ -55,7 +55,9 @@ export default {
     }
   },
   created() {
-    this.getResultsByQuestionnaireId(this.$route.params.id);
+    let questionnaireId = this.$route.params.id;
+    this.getQuestionnaire(questionnaireId);
+    this.getResultsByQuestionnaireId(questionnaireId);
     this.$store.dispatch('hideSidebar');
   },
   beforeDestroy() {
@@ -130,13 +132,16 @@ export default {
     }
   },
   methods: {
+    getQuestionnaire(id) {
+      getQuestionnaire({id}).then(
+        res => this.questionnaireData = res.data
+      ).catch(
+        err => this.$message.error(`获取问卷失败：${err.message}`)
+      )
+    },
     getResultsByQuestionnaireId(id) {
       getResultsByQuestionnaireId({id}).then(
-        res => {
-          let { results, questionnaire } = res.data;
-          this.questionnaireData = questionnaire;
-          this.resultData = results;
-        }
+        res => this.resultData = res.data
       ).catch(
         err => this.$message.error(`获取问卷结果失败：${err.message}`)
       )
