@@ -12,8 +12,8 @@
           <el-button plain class="question-type-button">{{item.title}}</el-button>
         </li>
       </ul>
-      <div class="questionnaire-form">
-        <el-form :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
+      <div class="questionnaire-form-container">
+        <el-form class="questionnaire-form" :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
           <el-form-item class="questionnaire-title" prop="title">
             <el-input v-model="questionnaireForm.title" placeholder="请输入问卷标题"></el-input>
           </el-form-item>
@@ -40,11 +40,11 @@
           <!-- <el-form-item class="questionnaire-random" prop="random" label-width="80px" label="随机化">
             <el-switch v-model="questionnaireForm.random" :active-value="true" :inactive-value="false"></el-switch>
           </el-form-item> -->
-          <el-form-item class="questionnaire-button">
-            <el-button type="primary" @click="saveQuestionnaire('questionnaireForm')">保存问卷</el-button>
-            <el-button type="danger" @click="cancelQuestionnaire">取消编辑</el-button>
-          </el-form-item>
         </el-form>
+        <div class="questionnaire-button">
+          <el-button type="primary" @click="saveQuestionnaire('questionnaireForm')">保存问卷</el-button>
+          <el-button type="danger" @click="cancelQuestionnaire">取消编辑</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -202,8 +202,8 @@ export default {
       this.dragging = false;
     },
     scrollToBottom() {
-      let inH = document.querySelector('.questionnaire-form > form').offsetHeight;
-      document.querySelector('.questionnaire-form').scrollTop = inH;
+      let inH = document.querySelector('.questionnaire-form').offsetHeight;
+      document.querySelector('.questionnaire-form-container').scrollTop = inH;
     }
   }
 }
@@ -235,18 +235,16 @@ export default {
 .question-type-container .question-type-button {
   width: 100%;
 }
-.questionnaire-form {
+.questionnaire-form-container {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.questionnaire-form {
+  padding: 0 10px;
   overflow-y: auto;
+  padding-bottom: 10px;
 }
-.questionnaire-title,
-.questionnaire-introduction,
-.questionnaire-random,
-.questionnaire-button {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 .questionnaire-title input::-ms-input-placeholder {
   text-align: center;
 }
@@ -290,5 +288,8 @@ export default {
 .questionnaire-question-list .question-delete-block i {
   display: inline-block;
   vertical-align: middle;
+}
+.questionnaire-button {
+  padding: 10px 10px 0;
 }
 </style>

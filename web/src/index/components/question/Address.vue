@@ -32,7 +32,10 @@ export default {
         return val.type === 'address';
       }
     },
-    value: Array
+    value: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
     value(newVal, oldVal) {

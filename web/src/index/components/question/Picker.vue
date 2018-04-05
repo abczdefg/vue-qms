@@ -32,7 +32,10 @@ export default {
         return val.type === 'picker' && Array.isArray(val.list);
       }
     },
-    value: Array
+    value: {
+      type: Array,
+      default: () => []
+    }
   },
   created() {
     if(this.value.length > 0) {

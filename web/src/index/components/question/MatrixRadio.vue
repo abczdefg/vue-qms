@@ -45,7 +45,10 @@ export default {
         return val.type === 'matrix-radio' && Array.isArray(val.choice) && Array.isArray(val.subquestion);
       }
     },
-    value: Array
+    value: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
     value(newVal) {

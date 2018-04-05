@@ -32,7 +32,10 @@ export default {
         return val.type === 'checkbox' && Array.isArray(val.choice);
       }
     },
-    value: Array
+    value: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
     value(newVal) {

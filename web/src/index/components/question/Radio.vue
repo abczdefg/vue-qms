@@ -61,7 +61,9 @@ export default {
   },
   methods: {
     validate() {
-      return this.value !== '' ? true : `题目${this.index}未完成`;
+      const value = this.value;
+      const index = this.index;
+      return ((typeof value === 'string' || typeof value === 'number') && value !== '') ? true : `题目${index}未完成`;
     }
   }
 }

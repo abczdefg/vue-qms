@@ -11,24 +11,15 @@
       </template>
       <template v-else-if="!indexPage && currentPage < questionnaireData.page.length">
         <div class="page-content">
-          <template v-for="(pageItem, pageIndex) in questionnaireData.page">
-            <template v-if="currentPage === pageIndex">
-              <div class="page-introduction">
-                <p>{{partText}}</p>
-              </div>
-              <template v-for="(item, index) in pageItem">
-                <compoent :is="`qnr-${item.type}`" :ref="`question_${pageIndex}`" :question="item" :index="index + 1" v-model="recordData[pageIndex][index].value"></compoent>
-              </template>
-              <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
-            </template>
-          </template>
+          <div class="page-introduction">
+            <p>{{partText}}</p>
+          </div>
+          <qnr-page ref="questionPage" :page-data="questionnaireData.page[currentPage]" v-model="recordData[currentPage]"></qnr-page>
+          <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
         </div>
       </template>
       <template v-else>
         <div class="page-end page-content">
-          <!-- <div class="page-introduction">
-            <p>感谢参与！</p>
-          </div> -->
           <img class="end-logo" src="~@index/assets/img/end.png"/>
           <p class="end-text">问卷到此结束，感谢您的参与！</p>
         </div>
@@ -38,28 +29,25 @@
 </template>
 <script>
 import { XHeader, ViewBox, XButton } from 'vux'
-import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
+import { Picker } from 'vux'
+// import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
+import QnrPage from '@index/components/question/QuestionPage.vue'
 import { getQuestionnaire, addResult } from '@index/api'
 export default {
   components: {
     XHeader,
     ViewBox,
     XButton,
-    QnrRadio,
-    QnrCheckbox,
-    QnrDatetime,
-    QnrPicker,
-    QnrAddress,
-    QnrMatrixRadio,
-    QnrFillblank
+    QnrPage,
+    Picker
   },
   mounted() {
     this.getQuestionnaire(this.$route.params.id);
   },
   computed: {
     partText() {
-      const zh = ['零', '一', '二', '三', '四', '五', '六', '七'];
-      return `第${zh[this.currentPage + 1]}部分`;
+      const num = this.currentPage + 1;
+      return `第${num}部分`;
     }
   },
   watch: {
@@ -77,7 +65,7 @@ export default {
       currentPage: 0,
       recordData: '',
       questionnaireData: null,
-      submitData: null
+      submitData: null,
     };
   },
   methods: {
@@ -86,6 +74,31 @@ export default {
         ({ data }) => {
           data.page = [data.question];
           this.questionnaireData = data;
+
+          /////////////////
+          this.questionnaireData.page = [
+            [{
+              "title": "第一页 ",
+              "type": "radio",
+              "choice": [{
+                "content": "非常不幸福"
+              }]
+            }, {
+              "title": "第一页2",
+              "type": "radio",
+              "choice": [{
+                "content": "非常不幸福"
+              }]
+            }], [{
+              "title": "第二页 ",
+              "type": "radio",
+              "choice": [{
+                "content": "非常不幸福"
+              }]
+            }
+            ]
+          ]
+          /////////////////
           this.recordData = this.createModel();
         }
       ).catch(
@@ -122,21 +135,12 @@ export default {
             default:
               break;
           }
-          return { type, value };
+          return value;
         })
       });
     },
     validatePage() {
-      let valueMap = this.recordData[this.currentPage];
-      let $questionList = [...this.$refs[`question_${this.currentPage}`]];
-      for(let [i, val] of Object.entries(valueMap)) {
-        let ret = $questionList[i].validate();
-        if(ret !== true) {
-          this.$vux.toast.text(ret);
-          return false;
-        }
-      }
-      return true;
+      return this.$refs.questionPage.validate();
     },
     startQnr() {
       this.indexPage = false;
@@ -150,11 +154,12 @@ export default {
           (async () => {
             try {
               this.handleSubmitData();
-              await addResult(this.submitData);
-              this.$vux.toast.show({
-                text: '问卷提交成功'
-              });
-              this.currentPage++;
+              console.log(this.submitData)
+              // await addResult(this.submitData);
+              // this.$vux.toast.show({
+              //   text: '问卷提交成功'
+              // });
+              // this.currentPage++;
             } catch(e) {
               console.dir(e)
               this.$vux.toast.show({
@@ -176,6 +181,9 @@ export default {
     },
     scrollToTop() {
       this.$refs.viewBox.scrollTo(0);
+    },
+    convertRoman(num) {
+
     }
   }
 }
@@ -224,6 +232,7 @@ export default {
 .page-container .page-introduction {
   border: 1px dotted #efeff4;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .page-container .page-introduction p {
@@ -232,7 +241,7 @@ export default {
   line-height: 28px;
   letter-spacing: 1px;
 }
-.page-container >>> .page-button {
+.page-container .page-button {
   background-color: #ffffff;
   border-color: #cccccc;
   font-size: 16px;

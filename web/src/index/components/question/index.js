@@ -15,5 +15,5 @@ export {
   QnrPicker,
   QnrAddress,
   QnrMatrixRadio,
-  QnrFillblank
+  QnrFillblank,
 }

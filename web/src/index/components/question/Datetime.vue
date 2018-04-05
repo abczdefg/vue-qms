@@ -35,7 +35,10 @@ export default {
         return val.type === 'datetime';
       }
     },
-    value: String
+    value: {
+      type: String,
+      default: ''
+    }
   },
   watch: {
     value(newVal) {

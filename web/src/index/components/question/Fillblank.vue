@@ -35,7 +35,10 @@ export default {
         return val.type === 'fillblank' && Array.isArray(val.blank);
       }
     },
-    value: Array
+    value: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
     value(newVal) {

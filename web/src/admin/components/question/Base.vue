@@ -63,14 +63,12 @@ export default {
 .questionnaire-question-container {
   position: relative;
   padding: 30px 10px;
-  border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #ffffff;
+  border: 1px solid #ffffff;
 }
 
 .questionnaire-question-container.editing,
 .questionnaire-question-container:hover {
-  border-top-color: #e0e0e0;
-  border-bottom-color: #e0e0e0;
+  border-color: #e0e0e0;
   background: #fafafa;
 }
 .questionnaire-question-container.draggable {
@@ -90,13 +88,5 @@ export default {
 }
 .questionnaire-question-container:hover .question-control {
   visibility: visible;
-}
-.question-title {
-  margin-bottom: 10px;
-  color: #606266;
-  font-size: 14px;
-}
-.question-detail {
-  margin-bottom: 10px;
 }
 </style>
