@@ -1,5 +1,5 @@
 const express = require('express');
-const services = require('../service');
+const services = require('../../../service');
 let router = express.Router();
 module.exports = () => {
   router.get('/roles', async (req, res) => {

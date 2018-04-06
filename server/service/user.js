@@ -1,6 +1,6 @@
-const sequelize = require('../../../utils/db.js');
-const utils = require('../../../utils');
-const models = require('../../../model');
+const sequelize = require('../utils/db.js');
+const utils = require('../utils');
+const models = require('../model');
 module.exports.getUserByName = async (username) => {
   let user = await models.User.findOne({
     where: {
@@ -113,7 +113,15 @@ module.exports.updateUserPassword = async ({id, password}) => {
     password
   }, {
     where: {
-      id
+      id,
+      delete_time: null
+    }
+  });
+}
+module.exports.getUsersCount = async () => {
+  return models.User.count({
+    where: {
+      delete_time: null
     }
   });
 }

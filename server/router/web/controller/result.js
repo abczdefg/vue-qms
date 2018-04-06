@@ -1,5 +1,5 @@
 const express = require('express');
-const services = require('../service');
+const services = require('../../../service');
 const utils = require('../../../utils');
 
 module.exports = () => {

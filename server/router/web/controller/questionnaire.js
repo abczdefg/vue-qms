@@ -1,11 +1,11 @@
 const express = require('express');
-const services = require('../service');
+const services = require('../../../service');
 
 module.exports = () => {
   let router = express.Router();
   router.get('/questionnaires', async (req, res) => {
     try {
-      let ret = await services.Questionnaire.getQuestionnaires();
+      let ret = await services.Questionnaire.getPublishedQuestionnaires();
       res.status(200).send({
         code: 200,
         message: 'success',

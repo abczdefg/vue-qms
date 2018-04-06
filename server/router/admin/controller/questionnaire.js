@@ -1,10 +1,10 @@
 const express = require('express');
-const services = require('../service');
+const services = require('../../../service');
 let { hasPrivilege } = services.Rbac;
 
 module.exports = () => {
   let router = express.Router();
-  router.get('/questionnaires', hasPrivilege('questionnaire'));
+  router.all('/questionnaires/*', hasPrivilege('questionnaire'));
   router.get('/questionnaires', async (req, res) => {
     try {
       let ret = await services.Questionnaire.getQuestionnaires();
@@ -12,6 +12,21 @@ module.exports = () => {
         code: 200,
         message: 'success',
         data: ret
+      });
+    } catch(e) {
+      console.error(e);
+      res.status(500).send({ code: 500, message: 'database error' });
+    }
+  });
+  router.get('/questionnaires/count', async (req, res) => {
+    try {
+      let total = await services.Questionnaire.getQuestionnairesCount();
+      res.status(200).send({
+        code: 200,
+        message: 'success',
+        data: {
+          total
+        }
       });
     } catch(e) {
       console.error(e);

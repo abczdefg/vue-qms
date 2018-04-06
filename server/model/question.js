@@ -22,7 +22,7 @@ let Question = sequelize.define('question', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  other: {
+  extra: {
     type: Sequelize.TEXT('medium'),
     allowNull: false
   },

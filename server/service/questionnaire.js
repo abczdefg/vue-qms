@@ -1,9 +1,20 @@
-const sequelize = require('../../../utils/db.js');
-const utils = require('../../../utils');
-const models = require('../../../model');
+const sequelize = require('../utils/db.js');
+const utils = require('../utils');
+const models = require('../model');
 module.exports.getQuestionnaires = async () => {
   return models.Questionnaire.findAll({
     where: {
+      delete_time: null
+    },
+    attributes: {
+      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
+    }
+  });
+};
+module.exports.getPublishedQuestionnaires = () => {
+  return models.Questionnaire.findAll({
+    where: {
+      publish: true,
       delete_time: null
     },
     attributes: {
@@ -94,3 +105,11 @@ module.exports.deleteQuestionnaireById = async (id) => {
     }
   });
 };
+
+module.exports.getQuestionnairesCount = async () => {
+  return models.Questionnaire.count({
+    where: {
+      delete_time: null
+    }
+  });
+}

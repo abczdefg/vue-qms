@@ -1,5 +1,5 @@
 const express = require('express');
-const services = require('../service');
+const services = require('../../../service');
 let router = express.Router();
 let { hasPrivilege } = services.Rbac;
 module.exports = () => {
@@ -10,6 +10,21 @@ module.exports = () => {
         code: 200,
         message: 'success',
         data: users
+      });
+    } catch(e) {
+      console.error(e);
+      res.status(500).send({ code: 500, message: 'database error' });
+    }
+  });
+  router.get('/users/count', async (req, res) => {
+    try {
+      let total = await services.User.getUsersCount();
+      res.status(200).send({
+        code: 200,
+        message: 'success',
+        data: {
+          total
+        }
       });
     } catch(e) {
       console.error(e);

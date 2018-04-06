@@ -1,6 +1,6 @@
 const express = require('express');
 const controllers = require('./controller');
-const services = require('./service');
+const services = require('../../service');
 let router = express.Router();
 module.exports = () => {
   router.all('*', function(req, res, next) {

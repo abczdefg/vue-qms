@@ -1,2 +1,2 @@
-const utils = require('../../../utils');
+const utils = require('../utils');
 module.exports = utils.loadModule(__dirname);

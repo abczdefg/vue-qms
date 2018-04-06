@@ -9,7 +9,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">问卷数目</div>
-            <count-to class="card-panel-num" :startVal="0" :endVal="questionnaireCount" :duration="2000"></count-to>
+            <count-to class="card-panel-num" :startVal="0" :endVal="questionnairesCount" :duration="2000"></count-to>
           </div>
         </div>
       </el-col>
@@ -20,7 +20,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">答卷数目</div>
-            <count-to class="card-panel-num" :startVal="0" :endVal="resultCount" :duration="2000"></count-to>
+            <count-to class="card-panel-num" :startVal="0" :endVal="resultsCount" :duration="2000"></count-to>
           </div>
         </div>
       </el-col>
@@ -31,7 +31,7 @@
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">用户数目</div>
-            <count-to class="card-panel-num" :startVal="0" :endVal="userCount" :duration="2000"></count-to>
+            <count-to class="card-panel-num" :startVal="0" :endVal="usersCount" :duration="2000"></count-to>
           </div>
         </div>
       </el-col>
@@ -41,42 +41,42 @@
 
 <script>
   import CountTo from 'vue-count-to';
-  import { getQuestionnaires, getResults, getUsers } from '@admin/api';
+  import { getQuestionnairesCount, getResultsCount, getUsersCount } from '@admin/api';
   export default {
     components: {
       CountTo
     },
     created() {
-      this.getQuestionnaireCount();
-      this.getResultCount();
-      this.getUserCount();
+      this.getQuestionnairesCount();
+      this.getResultsCount();
+      this.getUsersCount();
     },
     data() {
       return {
-        questionnaireCount: 0,
-        resultCount: 0,
-        userCount: 0
+        questionnairesCount: 0,
+        resultsCount: 0,
+        usersCount: 0
       }
     },
     methods: {
-      getQuestionnaireCount() {
-        getQuestionnaires().then(
+      getQuestionnairesCount() {
+        getQuestionnairesCount().then(
           res => {
-            this.questionnaireCount = res.data.length;
+            this.questionnairesCount = res.data.total;
           }
         ).catch(err => err);
       },
-      getResultCount() {
-        getResults().then(
+      getResultsCount() {
+        getResultsCount().then(
           res => {
-            this.resultCount = res.data.length;
+            this.resultsCount = res.data.total;
           }
         ).catch(err => err);
       },
-      getUserCount() {
-        getUsers().then(
+      getUsersCount() {
+        getUsersCount().then(
           res => {
-            this.userCount = res.data.length;
+            this.usersCount = res.data.total;
           }
         ).catch(err => err);
       },

@@ -65,13 +65,23 @@ export const updateUserPassword = params => {
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
-export const getResults = params => {
-  return ajax.get(`/results`, params)
+export const getResultsByQuestionnaireId = params => {
+  return ajax.get(`/questionnaires/${params.id}/results`)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
-export const getResultsByQuestionnaireId = params => {
-  return ajax.get(`/questionnaires/${params.id}/results`)
+export const getQuestionnairesCount = params => {
+  return ajax.get(`/questionnaires/count`)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
+export const getResultsCount = params => {
+  return ajax.get(`/results/count`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
+export const getUsersCount = params => {
+  return ajax.get(`/users/count`, params)
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
