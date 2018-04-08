@@ -38,18 +38,17 @@ module.exports.getQuestionnaireById = async (id) => {
     },
     order: [['display_order', 'ASC']],
     attributes: {
-      include: ['id', 'questionnaire_id', 'title', 'type', 'display_order', 'other']
+      include: ['id', 'questionnaire_id', 'title', 'type', 'display_order', 'extra']
     }
   });
   questionnaire = utils.toPlain(questionnaire);
-  question = utils.toPlain(question);
-  questionnaire.question = question.map(item => models.Question.serialize(item));
+  questionnaire.question = utils.toPlain(question).map(v => models.Question.serialize(v));
   return questionnaire;
 };
 module.exports.addQuestionnaire = async (data) => {
-  let ret = await models.Questionnaire.create(data);
+  let questionnaire = await models.Questionnaire.create(data);
   let question = data.question.map((item, i) => {
-    item.questionnaire_id = ret.id;
+    item.questionnaire_id = questionnaire.id;
     item.display_order = i + 1;
     return models.Question.convert(item);
   });

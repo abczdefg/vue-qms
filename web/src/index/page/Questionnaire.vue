@@ -12,7 +12,7 @@
       <template v-else-if="!indexPage && currentPage < questionnaireData.page.length">
         <div class="page-content">
           <div class="page-introduction">
-            <p>{{partText}}</p>
+            <p>{{pageText}}</p>
           </div>
           <qnr-page ref="questionPage" :page-data="questionnaireData.page[currentPage]" v-model="recordData[currentPage]"></qnr-page>
           <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
@@ -32,7 +32,7 @@ import { XHeader, ViewBox, XButton } from 'vux'
 import { Picker } from 'vux'
 // import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
 import QnrPage from '@index/components/question/QuestionPage.vue'
-import { getQuestionnaire, addResult } from '@index/api'
+import { getQuestionnaireById, addResult } from '@index/api'
 export default {
   components: {
     XHeader,
@@ -42,10 +42,10 @@ export default {
     Picker
   },
   mounted() {
-    this.getQuestionnaire(this.$route.params.id);
+    this.getQuestionnaireById(this.$route.params.id);
   },
   computed: {
-    partText() {
+    pageText() {
       const num = this.currentPage + 1;
       return `第${num}部分`;
     }
@@ -69,45 +69,44 @@ export default {
     };
   },
   methods: {
-    getQuestionnaire(id) {
-      getQuestionnaire({id}).then(
+    getQuestionnaireById(id) {
+      getQuestionnaireById({id}).then(
         ({ data }) => {
           data.page = [data.question];
           this.questionnaireData = data;
 
           /////////////////
-          this.questionnaireData.page = [
-            [{
-              "title": "第一页 ",
-              "type": "radio",
-              "choice": [{
-                "content": "非常不幸福"
-              }]
-            }, {
-              "title": "第一页2",
-              "type": "radio",
-              "choice": [{
-                "content": "非常不幸福"
-              }]
-            }], [{
-              "title": "第二页 ",
-              "type": "radio",
-              "choice": [{
-                "content": "非常不幸福"
-              }]
-            }
-            ]
-          ]
+          // this.questionnaireData.page = [
+          //   [{
+          //     "title": "第一页 ",
+          //     "type": "radio",
+          //     "choice": [{
+          //       "content": "非常不幸福"
+          //     }]
+          //   }, {
+          //     "title": "第一页2",
+          //     "type": "radio",
+          //     "choice": [{
+          //       "content": "非常不幸福"
+          //     }]
+          //   }], [{
+          //     "title": "第二页 ",
+          //     "type": "radio",
+          //     "choice": [{
+          //       "content": "非常不幸福"
+          //     }]
+          //   }
+          //   ]
+          // ]
           /////////////////
           this.recordData = this.createModel();
         }
       ).catch(
         ({ code, message }) => {
-          console.log(code)
           if(code === 500) {
             return this.$router.replace({name: 'List'});
           }
-          this.$message.error(`获取问卷失败：${message}`)
+          this.$vux.toast.text(`获取问卷失败：${message}`, 'bottom');
         }
       )
     },

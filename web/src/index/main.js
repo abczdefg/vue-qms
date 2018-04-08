@@ -5,8 +5,7 @@ import 'reset-css/reset.css'
 import '@index/assets/iconfont/iconfont.css'
 import App from '@index/App'
 import router from '@index/router'
-import { AlertPlugin, ToastPlugin } from 'vux'
-Vue.use(AlertPlugin)
+import { ToastPlugin } from 'vux'
 Vue.use(ToastPlugin)
 Vue.config.productionTip = false
 

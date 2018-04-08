@@ -5,11 +5,10 @@ export const getQuestionnaires = params => {
   .then(res => Promise.resolve(res.data))
   .catch(err => Promise.reject(err))
 }
-export const getQuestionnaire = params => {
+export const getQuestionnaireById = params => {
   return ajax.get(`/questionnaires/${params.id}`)
   .then(res => Promise.resolve(res.data))
-  // .catch(err => Promise.reject(err))
-  .catch(err => {console.dir(err);return Promise.reject(err)})
+  .catch(err => Promise.reject(err))
 }
 
 export const addResult = params => {

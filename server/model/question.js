@@ -39,21 +39,21 @@ let Question = sequelize.define('question', {
   tableName: 'question',
   timestamps: false
 });
-Question.convert = (data) => {
-  let other = {};
+Question.convert = function(data) {
+  let extra = {};
   let exclude = ['title', 'type', 'display_order', 'id', 'delete_time'];
   let include = ['defaultSelectedValue', 'list', 'choice', 'subquestion', 'content', 'blank'];
   for(let [key, value] of Object.entries(data)) {
     if(include.includes(key)) {
-      other[key] = data[key];
+      extra[key] = value;
     }
   }
-  data.other = JSON.stringify(other);
+  data.extra = JSON.stringify(extra);
   return data;
 };
-Question.serialize = (data) => {
-  let questionnaire = JSON.parse(data.other);
-  delete data.other;
+Question.serialize = function(data) {
+  let questionnaire = JSON.parse(data.extra);
+  delete data.extra;
   return Object.assign(questionnaire, data);
 };
 module.exports = Question;
