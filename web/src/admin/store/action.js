@@ -13,9 +13,6 @@ export default {
   generateRoutes({commit}, role) {
     commit('generateRoutes', role);
   },
-  addRoutes({commit}) {
-    commit('addRoutes');
-  },
   toggleSidebar({commit}) {
     commit('toggleSidebar');
   },

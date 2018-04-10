@@ -1,4 +1,4 @@
-import route from '@admin/router/asyncRouter.js'
+import { asyncRouter } from '@admin/router'
 export default {
 	updateEditStatus(state, isEditing) {
 		state.isEditing = isEditing;
@@ -10,10 +10,7 @@ export default {
     state.userData = null;
   },
   generateRoutes(state, privilege) {
-    state.routes = filterRoutesByRole(route, privilege);
-  },
-  addRoutes(state) {
-    state.addRoutes = true;
+    state.routes = filterRoutes(asyncRouter, privilege);
   },
   toggleSidebar(state) {
     state.showSidebar = !state.showSidebar;
@@ -26,16 +23,15 @@ export default {
   }
 }
 
-function filterRoutesByRole(route, privilege = []) {
-  let ret = [];
-  for(let [index, value] of Object.entries(route)) {
-    let meta = value.meta;
-    if(!meta || !meta.privilege || privilege.includes(meta.privilege)) {
-      ret[index] = value;
+function filterRoutes(routes, privilege = []) {
+  return routes.filter(route => {
+    if(Array.isArray(route.children)) {
+      route.children = filterRoutes(route.children, privilege);
+      return true;
     }
-    if(Array.isArray(value.children)) {
-      ret[index].children = filterRoutesByRole(value.children, privilege);
+    if(!route.meta || !route.meta.privilege || privilege.includes(route.meta.privilege)) {
+      return true;
     }
-  }
-  return ret;
+    return false;
+  });
 }

@@ -79,7 +79,7 @@
             this.usersCount = res.data.total;
           }
         ).catch(err => err);
-      },
+      }
     }
   }
 

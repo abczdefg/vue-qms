@@ -1,25 +1,26 @@
 import Vue from 'vue'
-import router from '@admin/router'
+import router, { defaultRouter } from '@admin/router'
 import store from '@admin/store'
 import { Message, Loading } from 'element-ui'
 
 let loading;
-const whiteList = ['/login', '/404'];
 router.beforeEach((to, from, next) => {
+  // 1. 判断登录
+  // 2. 判断路由是否生成（相当于权限控制）
+
   // loading = Loading.service({ fullscreen: true });
   let userData = store.state.userData;
   if(userData) {
-    if(!store.state.addRoutes) {
+    if(store.state.routes.length === 0) {
       store.dispatch('generateRoutes', userData.privilege).then(res => {
         router.addRoutes(store.state.routes);
-        store.dispatch('addRoutes');
         next({...to});
       });
     } else {
       next();
     }
   } else {
-    if(whiteList.includes(to.path)) {
+    if(defaultRouter.some(v => v.path === to.path)) {
       next();
     } else {
       Message.error('请先登录');
