@@ -64,6 +64,7 @@ export default {
   position: relative;
   padding: 30px 10px;
   border: 1px solid #ffffff;
+  background: #ffffff;
 }
 
 .questionnaire-question-container.editing,

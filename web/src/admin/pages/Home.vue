@@ -1,8 +1,13 @@
 <template>
   <div class="main-container">
-    <p>欢迎使用问卷管理系统</p>
+    <el-carousel class="index-slider" height="300px">
+      <el-carousel-item v-for="(item, i) in sliders" :key="i">
+        <h3>{{ item.text }}</h3>
+      </el-carousel-item>
+    </el-carousel>
+    <!-- <h3>欢迎使用问卷管理系统</h3> -->
     <el-row class="panel-group" :gutter="40">
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <el-col :xs="12" :sm="6" :lg="6" class="card-panel-col">
         <div class='card-panel'>
           <div class="card-panel-icon-wrapper">
             <i class="card-panel-icon fa fa-file-o"></i>
@@ -13,7 +18,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <el-col :xs="12" :sm="6" :lg="6" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper">
             <i class="card-panel-icon fa fa-file-text-o"></i>
@@ -24,7 +29,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <el-col :xs="12" :sm="6" :lg="6" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper">
             <i class="card-panel-icon fa fa-user-o"></i>
@@ -55,7 +60,14 @@
       return {
         questionnairesCount: 0,
         resultsCount: 0,
-        usersCount: 0
+        usersCount: 0,
+        sliders: [{
+          text: '欢迎使用问卷管理系统'
+        }, {
+          text: '自定义多种类型题目'
+        }, {
+          text: '导出Excel处理数据'
+        }]
       }
     },
     methods: {
@@ -85,6 +97,16 @@
 
 </script>
 <style scoped>
+.index-slider {
+  background: url('~@admin/assets/index_sliders_bg.jpg') no-repeat center center;
+  background-size: cover;
+}
+.index-slider h3 {
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 300px;
+  text-align: center;
+}
 .panel-group {
   margin-top: 18px;
 }
@@ -92,8 +114,7 @@
   margin-bottom: 32px;
 }
 .card-panel {
-  height: 108px;
-  cursor: pointer;
+  height: 90px;
   font-size: 12px;
   position: relative;
   overflow: hidden;

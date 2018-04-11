@@ -117,8 +117,6 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   border: 1px solid #dcdfe6;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
   color: #606266;
   display: inline-block;
   line-height: 1;

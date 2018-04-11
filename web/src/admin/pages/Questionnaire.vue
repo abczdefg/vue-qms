@@ -1,11 +1,5 @@
 <template>
   <div class="table">
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>问卷管理</el-breadcrumb-item>
-        <el-breadcrumb-item>问卷列表</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="createQuestionnaire">添加问卷</el-button>
@@ -18,7 +12,11 @@
       <!-- <el-table-column header-align="center" prop="random" label="随机" width="60" :formatter="formatRandom"></el-table-column> -->
       <el-table-column header-align="center" prop="create_time" label="创建时间"></el-table-column>
       <el-table-column header-align="center" prop="update_time" label="修改时间"></el-table-column>
-      <el-table-column header-align="center" prop="publish" label="发布" width="60" :formatter="formatPublish"></el-table-column>
+      <el-table-column header-align="center" prop="publish" label="发布状态" width="80" :formatter="formatPublish">
+        <template slot-scope="scope">
+          <el-tag size="small" :type="scope.row.publish ? `success` : `danger`">{{ formatPublish(scope.row.publish) }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column header-align="center" align="center" label="操作" width="80">
         <el-dropdown slot-scope="scope" trigger="click" placement="bottom" @command="handleQuestionnaireCommand">
           <el-button size="mini" icon="el-icon-more-outline"></el-button>
@@ -97,8 +95,8 @@ export default {
     formatRandom(row, column, cellValue) {
       return cellValue ? '是' : '否';
     },
-    formatPublish(row, column, cellValue) {
-      return cellValue ? '是' : '否';
+    formatPublish(cellValue) {
+      return cellValue ? '已发布' : '未发布';
     },
     handleQuestionnaireCommand(arg) {
       let [command, id] = arg.split(':');
@@ -127,9 +125,6 @@ export default {
 }
 </script>
 <style scoped>
-  .crumbs {
-    margin-bottom: 24px;
-  }
   .table-more-button {
 
   }

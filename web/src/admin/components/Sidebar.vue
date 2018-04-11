@@ -57,29 +57,24 @@
 
 <style scoped>
   .sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
     border-right: solid 1px #e6e6e6;
   }
   .sidebar .sidebar-toggle {
     padding: 0 20px;
-    height: 60px;
+    height: 56px;
+    line-height: 56px;
     font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
     cursor: pointer;
   }
   .sidebar .sidebar-toggle:hover {
     background-color: #ecf5ff;
   }
   .sidebar >>> .el-menu {
-    /*flex: 1;*/
     border-right: 0;
   }
   .sidebar .el-menu:not(.el-menu--collapse) {
-    width: 200px;
+    width: 140px;
   }
   .sidebar .fa {
     margin-right: 5px;
@@ -87,5 +82,7 @@
     text-align: center;
     font-size: 18px;
     vertical-align: middle;
+  }
+  .sidebar >>> .el-menu-item {
   }
 </style>

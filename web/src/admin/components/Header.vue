@@ -8,7 +8,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
-          <el-dropdown-item command="logout">退出</el-dropdown-item>
+          <el-dropdown-item divided command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>

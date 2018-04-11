@@ -2,10 +2,12 @@
   <el-container class="main-container" direction="vertical">
     <qnr-header>后台管理系统</qnr-header>
     <el-container class="sub-container">
-        <qnr-sidebar :menu="menuItems"></qnr-sidebar>
-        <el-main>
-          <transition name="move" mode="out-in"><router-view></router-view></transition>
-        </el-main>
+      <qnr-sidebar :menu="menuItems"></qnr-sidebar>
+      <el-main>
+        <transition name="move" mode="out-in">
+          <router-view></router-view>
+        </transition>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -62,7 +64,6 @@
 </script>
 <style scoped>
   .main-container {
-    /*min-width: 1024px;*/
     height: 100%;
   }
   .sub-container {

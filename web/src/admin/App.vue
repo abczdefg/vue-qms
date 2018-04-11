@@ -40,4 +40,7 @@ table {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #66b1ff;
 }
+* {
+  box-sizing: border-box;
+}
 </style>

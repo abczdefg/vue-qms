@@ -1,11 +1,5 @@
 <template>
   <div class="table">
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="createUser">添加用户</el-button>
@@ -165,7 +159,4 @@ export default {
 }
 </script>
 <style scoped>
-  .crumbs {
-    margin-bottom: 24px;
-  }
 </style>

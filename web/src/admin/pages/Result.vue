@@ -58,7 +58,7 @@ export default {
     let questionnaireId = this.$route.params.id;
     this.getQuestionnaire(questionnaireId);
     this.getResultsByQuestionnaireId(questionnaireId);
-    this.$store.dispatch('hideSidebar');
+    // this.$store.dispatch('hideSidebar');
   },
   beforeDestroy() {
     this.$store.dispatch('showSidebar');
