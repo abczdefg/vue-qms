@@ -4,6 +4,7 @@
       <el-form-item>
         <el-button type="danger" icon="el-icon-back" @click="backToQuestionnaireList">返回</el-button>
         <el-button type="primary" icon="el-icon-tickets" @click="detailVisible = true">问卷详情</el-button>
+        <el-button type="primary" @click="queryIpVisible = true">查询IP归属地</el-button>
         <el-button type="success" icon="el-icon-download" @click="downloadExcel">导出excel</el-button>
       </el-form-item>
     </el-form>
@@ -11,7 +12,7 @@
       <el-table-column header-align="center" type="index" width="40"></el-table-column>
       <el-table-column v-for="(item, i) in columns" :key="`${item.prop}_${i}`" header-align="center" :prop="item.prop" :label="item.label" :title="item.title" :width="item.width" :renderHeader="renderHeader"></el-table-column>
     </el-table>
-    <el-dialog title="问卷详情" :visible.sync="detailVisible">
+    <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible">
       <div class="questionnaire-title">ID：{{questionnaireData.id}}</div>
       <div class="questionnaire-title">标题：{{questionnaireData.title}}</div>
       <div class="questionnaire-introduction">介绍：{{questionnaireData.introduction}}</div>
@@ -23,6 +24,16 @@
             <component :is="`qnr-${item.type}-content`" :data="item"></component>
           </li>
         </ul>
+      </div>
+    </el-dialog>
+    <el-dialog title="IP查询" :visible.sync="queryIpVisible">
+      <el-form :model="queryIpForm" ref="queryIpForm" :rules="queryIpRules" label-position="left" label-width="120px">
+        <el-form-item label="IP地址" prop="ip">
+          <el-input v-model="queryIpForm.ip"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="queryIp">查询</el-button>
       </div>
     </el-dialog>
   </div>
@@ -51,7 +62,17 @@ export default {
     return {
       questionnaireData: {},
       resultData: [],
-      detailVisible: false
+      detailVisible: false,
+      queryIpVisible: false,
+      queryIpForm: {
+        ip: ''
+      },
+      queryIpRules: {
+        ip: [
+          { required: true, message: '请填写IP地址', trigger: 'blur' },
+          { pattern: /^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/, message: 'IP地址格式有误', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -217,6 +238,22 @@ export default {
         URL.revokeObjectURL(blob); //用URL.revokeObjectURL()来释放这个object URL
         document.body.removeChild(link);
       }, 100);
+    },
+    queryIp() {
+      const ip = this.queryIpForm.ip;
+      const getResultByJsonp = () => {
+        const link = `http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=${ip}`
+        const script = document.createElement('script');
+        script.src = link;
+        document.body.appendChild(script);
+        script.onload = () => {
+          document.body.removeChild(script);
+          if(remote_ip_info) {
+            this.$alert(`${ip}的归属地：${remote_ip_info.country} ${remote_ip_info.province} ${remote_ip_info.city} ${remote_ip_info.district}`);
+          }
+        }
+      }
+      this.$refs['queryIpForm'].validate().then(valid => getResultByJsonp()).catch(err => err);
     }
   }
 }
@@ -230,7 +267,7 @@ export default {
 .question-list .question-number {
   margin-right: 5px;
 }
-.result-container >>> .el-dialog__body {
+.detail-dialog >>> .el-dialog__body {
   height: 58vh;
   overflow-y: auto;
 }

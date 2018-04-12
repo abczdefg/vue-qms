@@ -143,7 +143,7 @@ export default {
             err => this.$message.error(`添加用户失败：${err.message}`)
           )
         }
-      ).then(err => err);
+      ).catch(err => err);
     },
     handleUserCommand(arg) {
       let [command, id] = arg.split(':');
