@@ -1,7 +1,7 @@
 <template>
   <div class="question-page-container">
     <template v-for="(question, index) in pageData">
-      <compoent :is="`qnr-${question.type}`" :ref="`question`" :question="question" :index="index + 1" v-model="currentValue[index]"></compoent>
+      <compoent :is="`qnr-${question.type}`" :ref="`question`" :question="question" v-model="currentValue[index]"></compoent>
     </template>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
       this.currentValue = newVal;
     },
     currentValue(newVal) {
-      this.$emit('on-change', newVal);
+      this.$emit('change', newVal);
       this.$emit('input', newVal);
     }
   },

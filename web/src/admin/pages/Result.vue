@@ -20,7 +20,6 @@
       <div class="questionnaire-question-container">
         <ul>
           <li class="question-list" v-for="(item, i) in questionnaireData.question">
-            <div class="question-number">{{i + 1}}.</div>
             <component :is="`qnr-${item.type}-content`" :data="item"></component>
           </li>
         </ul>
@@ -155,7 +154,7 @@ export default {
   methods: {
     getQuestionnaire(id) {
       getQuestionnaire({id}).then(
-        res => this.questionnaireData = res.data
+        res => this.questionnaireData = this.addIndex(res.data)
       ).catch(
         err => this.$message.error(`获取问卷失败：${err.message}`)
       )
@@ -166,6 +165,10 @@ export default {
       ).catch(
         err => this.$message.error(`获取问卷结果失败：${err.message}`)
       )
+    },
+    addIndex(data) {
+      data.question.map((v, i) => v.index = i + 1);
+      return data;
     },
     renderHeader: function(h, { column, $index }) {
       let { question } = this.questionnaireData;
@@ -263,9 +266,6 @@ export default {
   margin: 20px 0;
   display: flex;
   flex-direction: row;
-}
-.question-list .question-number {
-  margin-right: 5px;
 }
 .detail-dialog >>> .el-dialog__body {
   height: 58vh;

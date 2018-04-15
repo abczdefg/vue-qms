@@ -1,5 +1,5 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <group gutter="0" label-align="left" slot="content">
         <datetime title="点击选择" :min-year="1949" :max-year="(new Date()).getFullYear()-1" :default-selected-value="defaultSelectedValue" v-model="currentValue"></datetime>
     </group>
@@ -15,10 +15,6 @@ export default {
     Datetime
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     defaultSelectedValue: {
       type: String,
       default: '1990-01-01'
@@ -45,7 +41,7 @@ export default {
       this.currentValue = newVal;
     },
     currentValue(newVal) {
-      this.$emit('on-change', newVal);
+      this.$emit('change', newVal);
       this.$emit('input', newVal);
     }
   },

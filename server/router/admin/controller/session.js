@@ -35,12 +35,8 @@ module.exports = () => {
     }
   });
   router.delete('/session', (req, res) => {
-    if(services.Session.checkSession(req.session)) {
-      services.Session.deleteSession(req.session);
-      res.status(200).send({ code: 200, data: {}, message: 'Logout Success' });
-    } else {
-      res.status(401).send({ code: 401, message: 'Unauthorized' });
-    }
+    services.Session.deleteSession(req.session);
+    res.status(200).send({ code: 200, data: {}, message: 'Logout Success' });
   });
   return router;
 };

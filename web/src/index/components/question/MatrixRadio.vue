@@ -1,16 +1,16 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <template slot="content">
       <div class="matrix-title matrix-row">
         <div class="matrix-choice matrix-cell" v-for="(choiceItem, choiceIndex) in question.choice">{{choiceItem.content}}</div>
       </div>
       <div class="matrix-content">
         <div class="matrix-subquestion" v-for="(subquestionItem, subquestionIndex) in question.subquestion">
-          <div class="matrix-subquestion-title matrix-row">{{index}}-{{subquestionIndex + 1}} {{subquestionItem.content}}</div>
+          <div class="matrix-subquestion-title matrix-row">{{question.index}}-{{subquestionIndex + 1}} {{subquestionItem.content}}</div>
           <div class="matrix-row">
             <div class="matrix-choice matrix-cell" v-for="(choiceItem, choiceIndex) in question.choice">
               <div class="matrix-radio" :class="choiceItem.cls">
-                <input :name="`matrix_${index}_${subquestionIndex}`" type="radio" :value="choiceItem.content" v-model="currentValue[subquestionIndex]"/>
+                <input :name="`matrix_${question.index}_${subquestionIndex + 1}`" type="radio" :value="choiceItem.content" v-model="currentValue[subquestionIndex]"/>
                 <span class="matrix-choice-label">{{choiceItem.content}}</span>
               </div>
             </div>
@@ -27,10 +27,6 @@ export default {
     BaseQuestion
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     question: {
       type: Object,
       default() {
@@ -55,7 +51,7 @@ export default {
       this.currentValue = newVal;
     },
     currentValue(newVal) {
-      this.$emit('on-change', newVal);
+      this.$emit('change', newVal);
       this.$emit('input', newVal);
     }
   },

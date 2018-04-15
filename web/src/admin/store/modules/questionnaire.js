@@ -3,13 +3,13 @@ const state = {
 }
 
 const actions = {
-  updateEditStatus({commit}, isEditing) {
-    commit('updateEditStatus', isEditing);
+  setEditStatus({commit}, isEditing) {
+    commit('setEditStatus', isEditing);
   }
 }
 
 const mutations = {
-  updateEditStatus(state, isEditing) {
+  setEditStatus(state, isEditing) {
     state.isEditing = isEditing;
   }
 }

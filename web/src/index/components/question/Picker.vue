@@ -1,5 +1,5 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <group gutter="0" label-align="left" slot="content">
       <popup-picker :class="{'hide-value': !hasChangedFlag}" ref="picker" title="点击选择" :data="question.list" @on-change="valueChange" v-model="currentValue"></popup-picker>
     </group>
@@ -15,10 +15,6 @@ export default {
     PopupPicker
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     question: {
       type: Object,
       default() {
@@ -51,7 +47,7 @@ export default {
     },
     currentValue(newVal) {
       if(this.hasChangedFlag) {
-        this.$emit('on-change', newVal);
+        this.$emit('change', newVal);
         this.$emit('input', newVal);
       }
     }

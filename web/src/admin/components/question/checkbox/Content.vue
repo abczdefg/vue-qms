@@ -1,6 +1,6 @@
 <template>
   <div class="question-content">
-    <div class="question-title">{{data.title}}</div>
+    <div class="question-title"><span v-if="data.index > 0">{{data.index}}. </span>{{data.title}}</div>
     <div class="question-detail">
       <div class="question-checkbox-item" v-for="item in data.choice">
         <el-checkbox :label="item.content"></el-checkbox>

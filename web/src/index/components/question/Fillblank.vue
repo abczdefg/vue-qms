@@ -1,5 +1,5 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <template slot="content">
       <div class="fillblank-content">
         <template v-for="(item, i) in content">
@@ -18,10 +18,6 @@ export default {
     BaseQuestion
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     question: {
       type: Object,
       default() {
@@ -45,7 +41,7 @@ export default {
       this.currentValue = newVal;
     },
     currentValue(newVal) {
-      this.$emit('on-change', newVal);
+      this.$emit('change', newVal);
       this.$emit('input', newVal);
     }
   },

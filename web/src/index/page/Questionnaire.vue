@@ -30,7 +30,6 @@
 <script>
 import { XHeader, ViewBox, XButton } from 'vux'
 import { Picker } from 'vux'
-// import { QnrRadio, QnrCheckbox, QnrDatetime, QnrPicker, QnrAddress, QnrMatrixRadio, QnrFillblank } from '@index/components/question'
 import QnrPage from '@index/components/question/QuestionPage.vue'
 import { getQuestionnaireById, addResult } from '@index/api'
 export default {
@@ -72,6 +71,7 @@ export default {
     getQuestionnaireById(id) {
       getQuestionnaireById({id}).then(
         ({ data }) => {
+          data = this.addIndex(data);
           data.page = [data.question];
           this.questionnaireData = data;
 
@@ -109,6 +109,10 @@ export default {
           this.$vux.toast.text(`获取问卷失败：${message}`, 'bottom');
         }
       )
+    },
+    addIndex(data) {
+      data.question.map((v, i) => v.index = i + 1);
+      return data;
     },
     createModel() {
       return this.questionnaireData.page.map((pageItem, i) => {

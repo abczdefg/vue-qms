@@ -1,5 +1,5 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <group gutter="0" label-align="left" slot="content">
       <radio label-position="left" :options="options" v-model="currentValue"></radio>
     </group>
@@ -16,10 +16,6 @@ export default {
     Radio
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     question: {
       type: Object,
       default() {
@@ -40,7 +36,7 @@ export default {
       this.currentValue = newVal;
     },
     currentValue(newVal) {
-      this.$emit('on-change', newVal);
+      this.$emit('change', newVal);
       this.$emit('input', newVal);
     }
   },

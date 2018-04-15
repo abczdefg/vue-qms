@@ -24,7 +24,7 @@
               v-for="(item, index) in questionnaireForm.question"
               :is="`qnr-${item.type}`"
               :class="{draggable:!disableDraggable}"
-              :key="index"
+              :key="item.index"
               :data="item"
               v-on:update:data="data=>updateQuestion(index, data)"
               @delete="deleteQuestion(index)"
@@ -141,10 +141,14 @@ export default {
     },
     getQuestionnaire(id) {
       getQuestionnaire({id}).then(
-        res => this.questionnaireForm = res.data
+        res => this.questionnaireForm = this.addIndex(res.data)
       ).catch(
         err => this.$message.error(`获取问卷失败：${err.message}`)
       )
+    },
+    addIndex(data) {
+      data.question.map((v, i) => v.index = i + 1);
+      return data;
     },
     saveQuestionnaire(formName) {
       if(this.checkEditing()) {

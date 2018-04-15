@@ -23,11 +23,11 @@ export default {
     }
   },
   destroyed() {
-    this.$store.dispatch('updateEditStatus', false);
+    this.$store.dispatch('setEditStatus', false);
   },
   watch: {
     isEditing(newVal, oldVal) {
-      this.$store.dispatch('updateEditStatus', newVal);
+      this.$store.dispatch('setEditStatus', newVal);
     }
   },
   methods: {

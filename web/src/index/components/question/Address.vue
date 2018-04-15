@@ -1,5 +1,5 @@
 <template>
-  <base-question :index="index" :title="question.title" :detail="question.detail">
+  <base-question :index="question.index" :title="question.title" :detail="question.detail">
     <group gutter="0" label-align="left" slot="content">
         <x-address title="点击选择" :list="addressData" v-model="currentValue"></x-address>
     </group>
@@ -15,10 +15,6 @@ export default {
     XAddress
   },
   props: {
-    index: {
-      type: Number,
-      required: true
-    },
     question: {
       type: Object,
       default() {
@@ -48,7 +44,7 @@ export default {
       if(this.isSame(newVal, oldVal)) {
         return;
       }
-      this.$emit('on-change', this.valueToName(newVal));
+      this.$emit('change', this.valueToName(newVal));
       this.$emit('input', this.valueToName(newVal));
     }
   },
