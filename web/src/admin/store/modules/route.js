@@ -1,26 +1,25 @@
 import { asyncRouter } from '@admin/router'
-export default {
-	updateEditStatus(state, isEditing) {
-		state.isEditing = isEditing;
-	},
-  login(state, userData) {
-    state.userData = userData;
-  },
-  logout(state) {
-    state.userData = null;
-  },
+
+const state = {
+  routes: []
+}
+
+const actions = {
+  generateRoutes({commit}, role) {
+    commit('generateRoutes', role);
+  }
+}
+
+const mutations = {
   generateRoutes(state, privilege) {
     state.routes = filterRoutes(asyncRouter, privilege);
-  },
-  toggleSidebar(state) {
-    state.showSidebar = !state.showSidebar;
-  },
-  showSidebar(state) {
-    state.showSidebar = true;
-  },
-  hideSidebar(state) {
-    state.showSidebar = false;
   }
+}
+
+export default {
+  state,
+  actions,
+  mutations
 }
 
 function filterRoutes(routes, privilege = []) {

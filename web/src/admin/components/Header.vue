@@ -55,7 +55,6 @@
         }
       };
       return {
-        name: 'John Doe',
         updatePasswordVisible: false,
         passwordForm: {
           oldPassword: '',
@@ -77,8 +76,8 @@
     },
     computed: {
       username() {
-        let userData = this.$store.state.userData;
-        return userData.username || this.name;
+        let userData = this.$store.state.user.info;
+        return userData && userData.username || '';
       }
     },
     methods: {
@@ -107,18 +106,17 @@
         this.updatePasswordVisible = false;
       },
       logout() {
-        logout().then(
+        this.$store.dispatch('logout').then(
           res => {
             this.$message.success('退出成功');
-            this.$store.dispatch('logout');
             this.$router.replace('/login');
           }
-        ).catch(err => err);
+        ).catch(err => console.log(err));
       },
       submitUpdatePassword() {
         this.$refs['passwordForm'].validate().then(
           valid => {
-            this.passwordForm.id = this.$store.state.userData.id;
+            this.passwordForm.id = this.$store.state.user.userData.id;
             updateUserPassword(this.passwordForm).then(
               res => {
                 this.hidePasswordEditor();

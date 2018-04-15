@@ -53,7 +53,7 @@
             return result;
           });
         }
-        return convertMenu(filterMenu(this.$store.state.routes));
+        return convertMenu(filterMenu(this.$store.state.route.routes));
       }
     },
     data() {

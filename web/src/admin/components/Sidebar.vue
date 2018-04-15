@@ -49,7 +49,7 @@
         return secIndex === -1 ? path : path.slice(0, secIndex);
       },
       showSidebar() {
-        return this.$store.state.showSidebar;
+        return this.$store.state.sidebar.showSidebar;
       }
     }
   }

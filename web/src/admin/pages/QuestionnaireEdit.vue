@@ -109,12 +109,12 @@ export default {
   },
   computed: {
     disableDraggable() {
-      return this.$store.state.isEditing;
+      return this.$store.state.questionnaire.isEditing;
     }
   },
   methods: {
     checkEditing() {
-      if(this.$store.state.isEditing) {
+      if(this.$store.state.questionnaire.isEditing) {
         this.$message.error('存在编辑中的问题');
         return true;
       }

@@ -150,23 +150,20 @@ export default {
         if(this.currentPage < this.questionnaireData.page.length - 1) {
           this.currentPage++;
         } else {
-          (async () => {
-            try {
-              this.handleSubmitData();
-              console.log(this.submitData)
-              // await addResult(this.submitData);
-              // this.$vux.toast.show({
-              //   text: '问卷提交成功'
-              // });
-              // this.currentPage++;
-            } catch(e) {
-              console.dir(e)
-              this.$vux.toast.show({
-                text: '问卷提交失败',
-                type: 'cancel'
-              });
-            }
-          })();
+          this.handleSubmitData();
+          console.log(this.submitData)
+          addResult(this.submitData).then(res => {
+            this.$vux.toast.show({
+              text: '问卷提交成功'
+            });
+            this.currentPage++;
+          }).catch(e => {
+            console.dir(e)
+            this.$vux.toast.show({
+              text: '问卷提交失败',
+              type: 'cancel'
+            });
+          });
         }
       }
     },

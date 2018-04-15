@@ -9,11 +9,11 @@ router.beforeEach((to, from, next) => {
   // 2. 判断路由是否生成（相当于权限控制）
 
   // loading = Loading.service({ fullscreen: true });
-  let userData = store.state.userData;
+  let userData = store.state.user.info;
   if(userData) {
-    if(store.state.routes.length === 0) {
+    if(store.state.route.routes.length === 0) {
       store.dispatch('generateRoutes', userData.privilege).then(res => {
-        router.addRoutes(store.state.routes);
+        router.addRoutes(store.state.route.routes);
         next({...to});
       });
     } else {

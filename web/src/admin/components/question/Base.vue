@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     showEditor() {
-      if(this.$store.state.isEditing) {
+      if(this.$store.state.questionnaire.isEditing) {
         this.$message.error('存在编辑中的问题');
         return;
       }
@@ -42,18 +42,13 @@ export default {
       this.isEditing = false;
     },
     saveEditor() {
-      (async () => {
-        let result;
-        try {
-          result = await this.$parent.$refs.editorData.validate();
-        } catch(e) {
-          result = e;
-        }
-        if(result) {
+      this.$parent.$refs.editorData.validate().then(valid => {
+        console.log(valid)
+        if(valid) {
           this.hideEditor();
           this.$parent.saveEditor();
         }
-      })();
+      }).catch(err => console.log(err));
     }
   }
 }

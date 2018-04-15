@@ -98,3 +98,5 @@ new webpack.DefinePlugin({
       }, 100);
     }
     ```
+
+* 使用`devServer`中的`proxy`可以实现dev中跨域，此时请求路径以`/`开头

@@ -11,7 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-
+        '*': {
+            target: 'http://localhost:8084',
+            changeOrigin: true,
+            secure: false
+        }
     },
 
     // Various Dev Server settings
@@ -41,6 +45,7 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
+    host: '0.0.0.0'
   },
 
   build: {
