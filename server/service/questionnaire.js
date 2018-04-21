@@ -2,7 +2,7 @@ const sequelize = require('../utils/db.js');
 const utils = require('../utils');
 const models = require('../model');
 module.exports.getQuestionnaires = async () => {
-  return models.Questionnaire.findAll({
+  let questionnaires = await models.Questionnaire.findAll({
     where: {
       delete_time: null
     },
@@ -10,9 +10,10 @@ module.exports.getQuestionnaires = async () => {
       include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
     }
   });
+  return questionnaires;
 };
-module.exports.getPublishedQuestionnaires = () => {
-  return models.Questionnaire.findAll({
+module.exports.getPublishedQuestionnaires = async () => {
+  let questionnaires = await models.Questionnaire.findAll({
     where: {
       publish: true,
       delete_time: null
@@ -21,6 +22,7 @@ module.exports.getPublishedQuestionnaires = () => {
       include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
     }
   });
+  return questionnaires;
 };
 module.exports.getQuestionnaireById = async (id) => {
   let questionnaire = await models.Questionnaire.findOne({
@@ -32,6 +34,12 @@ module.exports.getQuestionnaireById = async (id) => {
       include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
     }
   });
+  if(questionnaire === null) {
+    let err = new Error(`Questionnaire: ${id} is not found.`);
+    err.status = 404;
+    throw err;
+  }
+
   let question = await models.Question.findAll({
     where: {
       questionnaire_id: id
@@ -55,6 +63,7 @@ module.exports.addQuestionnaire = async (data) => {
   await models.Question.bulkCreate(question, {
     validate: true
   });
+  return true;
 };
 module.exports.updateQuestionnaire = async (data) => {
   // 更新问卷数据
@@ -84,6 +93,7 @@ module.exports.updateQuestionnaire = async (data) => {
   await models.Question.bulkCreate(question, {
     updateOnDuplicate: true
   });
+  return true;
 };
 
 module.exports.publishQuestionnaire = async ({id, publish}) => {

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
+const expressAsyncErrors = require('express-async-errors');
 const server = express();
 // 解析请求数据
 server.use(bodyParser.urlencoded({
@@ -34,14 +35,14 @@ server.use('/admin', express.static(path.join(__dirname, '../dist'), {
 server.use('/api', require('./router/web/index')());
 server.use('/api/admin', require('./router/admin/index')());
 
-// catch 404 and forward to error handler
+// 没定义的api统一设为404
 server.use((req, res, next) => {
-  let err = new Error('Not Found');
+  let err = new Error(`Api: ${req.url} is not defined.`);
   err.status = 404;
   next(err);
 });
 
-// error handler
+// 错误处理
 server.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -49,13 +50,14 @@ server.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  console.log(err.Error)
+  console.log(err);
   res.send({
     message: err.message || 'Unknown Error',
     code: err.status || 500
   });
 });
 
+process.on('unhandledRejection', err => console.error('unhandledRejection:', err));
 
 module.exports = server;
 

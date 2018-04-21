@@ -6,94 +6,54 @@ module.exports = () => {
   let router = express.Router();
   router.all('/questionnaires/*', hasPrivilege('questionnaire'));
   router.get('/questionnaires', async (req, res) => {
-    try {
-      let ret = await services.Questionnaire.getQuestionnaires();
-      res.status(200).send({
-        code: 200,
-        message: 'success',
-        data: ret
-      });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    let ret = await services.Questionnaire.getQuestionnaires();
+    res.status(200).send({
+      code: 200,
+      message: 'success',
+      data: ret
+    });
   });
   router.get('/questionnaires/count', async (req, res) => {
-    try {
-      let total = await services.Questionnaire.getQuestionnairesCount();
-      res.status(200).send({
-        code: 200,
-        message: 'success',
-        data: {
-          total
-        }
-      });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    let total = await services.Questionnaire.getQuestionnairesCount();
+    res.status(200).send({
+      code: 200,
+      message: 'success',
+      data: {
+        total
+      }
+    });
   });
   router.get('/questionnaires/:id', async (req, res) => {
-    try {
-      let ret = await services.Questionnaire.getQuestionnaireById(req.params.id);
-      res.status(200).send({
-        code: 200,
-        message: 'success',
-        data: ret
-      });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    let ret = await services.Questionnaire.getQuestionnaireById(req.params.id);
+    res.status(200).send({
+      code: 200,
+      message: 'success',
+      data: ret
+    });
   });
   router.post('/questionnaires', async (req, res, next) => {
-    try {
-      await services.Questionnaire.addQuestionnaire(req.body);
-      res.status(200).send({ code: 200, message: 'success' });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    await services.Questionnaire.addQuestionnaire(req.body);
+    res.status(200).send({ code: 200, message: 'success' });
   });
   router.put('/questionnaires/:id', async (req, res) => {
-    try {
-      await services.Questionnaire.updateQuestionnaire(req.body);
-      res.status(200).send({ code: 200, message: 'success' });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    await services.Questionnaire.updateQuestionnaire(req.body);
+    res.status(200).send({ code: 200, message: 'success' });
   });
   router.delete('/questionnaires/:id', async (req, res) => {
-    try {
-      await services.Questionnaire.deleteQuestionnaireById(req.params.id);
-      res.status(200).send({ code: 200, message: 'success' });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    await services.Questionnaire.deleteQuestionnaireById(req.params.id);
+    res.status(200).send({ code: 200, message: 'success' });
   });
   router.put('/questionnaires/:id/publish', async (req, res) => {
-    try {
-      await services.Questionnaire.publishQuestionnaire(req.body);
-      res.status(200).send({ code: 200, message: 'success' });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    await services.Questionnaire.publishQuestionnaire(req.body);
+    res.status(200).send({ code: 200, message: 'success' });
   });
   router.get('/questionnaires/:id/results', async (req, res) => {
-    try {
-      let results = await services.Result.getResultsByQuestionnaireId(req.params.id);
-      res.status(200).send({
-        code: 200,
-        message: 'success',
-        data: results
-      });
-    } catch(e) {
-      console.error(e);
-      res.status(500).send({ code: 500, message: 'database error' });
-    }
+    let results = await services.Result.getResultsByQuestionnaireId(req.params.id);
+    res.status(200).send({
+      code: 200,
+      message: 'success',
+      data: results
+    });
   });
   return router;
 };

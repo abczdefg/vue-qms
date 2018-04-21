@@ -6,7 +6,9 @@ module.exports = () => {
   router.all('*', function(req, res, next) {
     if(req.method.toUpperCase() !== 'OPTIONS') {
       if (!services.Session.checkSession(req.session) && req.url !== '/session') {
-        res.status(401).send({ code: 401, message: 'Unauthorized' });
+        let err = new Error('Unauthorized');
+        err.status = 401;
+        throw err;
       } else {
         next();
       }

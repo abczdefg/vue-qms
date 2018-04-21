@@ -12,7 +12,9 @@ module.exports.getUserByName = async (username) => {
     }
   });
   if(user === null) {
-    return Promise.resolve(user);
+    let err = new Error(`User: ${id} is not found.`);
+    err.status = 404;
+    throw err;
   }
   user = utils.toPlain(user);
   let userRole = await models.UserRole.findOne({
@@ -67,14 +69,12 @@ module.exports.getUsers = async () => {
       }
     }]
   });
-  return utils.toPlain(users).map(item => {
-    return {
-      id: item.id,
-      username: item.username,
-      create_time: item.create_time,
-      role: item.role[0].name,
-    };
-  });
+  return utils.toPlain(users).map(item => ({
+    id: item.id,
+    username: item.username,
+    create_time: item.create_time,
+    role: item.role[0].name,
+  }));
 }
 module.exports.addUser = async ({username, password, role}) => {
   let user = await models.User.create({

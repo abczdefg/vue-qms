@@ -44,8 +44,7 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false,
-    host: '0.0.0.0'
+    cssSourceMap: false
   },
 
   build: {
