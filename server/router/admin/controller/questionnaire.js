@@ -1,10 +1,11 @@
 const express = require('express');
 const services = require('../../../service');
-let { hasPrivilege } = services.Rbac;
+const middlewares = require('../../../middleware');
+const { checkPrivilege } = middlewares.Authorization;
+const router = express.Router();
 
 module.exports = () => {
-  let router = express.Router();
-  router.all('/questionnaires/*', hasPrivilege('questionnaire'));
+  router.all('/questionnaires/*', checkPrivilege('questionnaire'));
   router.get('/questionnaires', async (req, res) => {
     let ret = await services.Questionnaire.getQuestionnaires();
     res.status(200).send({

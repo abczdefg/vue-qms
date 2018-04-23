@@ -1,9 +1,9 @@
 const express = require('express');
 const services = require('../../../service');
 const utils = require('../../../utils');
+const router = express.Router();
 
 module.exports = () => {
-  let router = express.Router();
   router.get('/results', async (req, res, next) => {
     let results = await services.Result.getResults();
     res.status(200).send({

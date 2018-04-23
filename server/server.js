@@ -3,10 +3,10 @@ const path = require('path');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
+const middlewares = require('./middleware');
 const expressAsyncErrors = require('express-async-errors');
 const server = express();
+
 // 解析请求数据
 server.use(bodyParser.urlencoded({
   extended: true
@@ -14,16 +14,9 @@ server.use(bodyParser.urlencoded({
 server.use(bodyParser.json());
 // gzip压缩
 server.use(compression());
-// 设置cookie，session
-server.use(cookieParser('cookie_secret'));
-server.use(cookieSession({
-  name: 'sid',
-  keys: ['key_1', 'key_2'],
-  maxAge: 60 * 60 * 1000,
-  httpOnly: true
-}));
 
-// server.set('view engine', 'jade');
+// 设置session作为登录验证
+server.use(middlewares.Authorization.init());
 
 //静态文件
 server.use('/', express.static(path.join(__dirname, '../dist')));
@@ -44,20 +37,22 @@ server.use((req, res, next) => {
 
 // 错误处理
 server.use((err, req, res, next) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  console.log(err);
-  res.send({
-    message: err.message || 'Unknown Error',
-    code: err.status || 500
+  let code = err.status || 500;
+  let message = err.message || 'Unknown Error';
+  if(req.app.get('env') === 'development') {
+    console.log(err);
+  }
+  res.status(code).send({
+    message,
+    code
   });
 });
 
-process.on('unhandledRejection', err => console.error('unhandledRejection:', err));
+process.on('unhandledRejection', err => {
+  if(req.app.get('env') === 'development') {
+    console.error('unhandledRejection:', err)
+  }
+});
 
 module.exports = server;
 

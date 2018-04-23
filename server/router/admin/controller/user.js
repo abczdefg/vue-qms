@@ -1,9 +1,11 @@
 const express = require('express');
 const services = require('../../../service');
-let router = express.Router();
-let { hasPrivilege } = services.Rbac;
+const middlewares = require('../../../middleware');
+const { checkPrivilege } = middlewares.Authorization;
+const router = express.Router();
+
 module.exports = () => {
-  router.get('/users', hasPrivilege('user'), async (req, res) => {
+  router.get('/users', checkPrivilege('user'), async (req, res) => {
     let users = await services.User.getUsers();
     res.status(200).send({
       code: 200,
@@ -21,7 +23,7 @@ module.exports = () => {
       }
     });
   });
-  router.post('/users', hasPrivilege('user'), async (req, res, next) => {
+  router.post('/users', checkPrivilege('user'), async (req, res, next) => {
     let { username, password, role } = req.body;
     let user = await services.User.getUserByName(username);
     if(user !== null) {
@@ -38,7 +40,7 @@ module.exports = () => {
     oldPassword = services.Md5.md5(oldPassword);
     newPassword = services.Md5.md5(newPassword);
     // 判断是否当前用户
-    if(id !== services.Session.getUserIdFromSession(req.session)) {
+    if(id !== req.session.id) {
       return res.status(500).send({ code: 500, message: 'Unmatched user.' });
     }
     // 检查密码是否正确
@@ -49,7 +51,7 @@ module.exports = () => {
     await services.User.updateUserPassword({id, password: newPassword});
     res.status(200).send({ code: 200, message: 'success' });
   });
-  router.delete('/users/:id', hasPrivilege('user'), async (req, res, next) => {
+  router.delete('/users/:id', checkPrivilege('user'), async (req, res, next) => {
     await services.User.deleteUserById(req.params.id);
     res.status(200).send({ code: 200, message: 'success' });
   });

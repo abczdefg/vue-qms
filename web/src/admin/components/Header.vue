@@ -116,7 +116,7 @@
       submitUpdatePassword() {
         this.$refs['passwordForm'].validate().then(
           valid => {
-            this.passwordForm.id = this.$store.state.user.userData.id;
+            this.passwordForm.id = this.$store.state.user.info.id;
             updateUserPassword(this.passwordForm).then(
               res => {
                 this.hidePasswordEditor();

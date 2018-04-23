@@ -1,7 +1,8 @@
 const express = require('express');
 const services = require('../../../service');
+const router = express.Router();
+
 module.exports = () => {
-  let router = express.Router();
   router.post('/session', async (req, res) => {
     let username = req.body.username;
     let password = services.Md5.md5(req.body.password);
