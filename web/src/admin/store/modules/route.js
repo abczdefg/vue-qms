@@ -25,7 +25,8 @@ export default {
 function filterRoutes(routes, privilege = []) {
   return routes.filter(route => {
     if(Array.isArray(route.children)) {
-      route.children = filterRoutes(route.children, privilege);
+      let children = filterRoutes(route.children, privilege);
+      route.children = (children.length > 0) ? children : null;
       return true;
     }
     if(!route.meta || !route.meta.privilege || privilege.includes(route.meta.privilege)) {

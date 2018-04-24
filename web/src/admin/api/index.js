@@ -10,6 +10,11 @@ export const logout = params => {
   .then(res => Promise.resolve(res.data))
   .catch(res => Promise.reject(res))
 }
+export const checkLogin = params => {
+  return ajax.get(`/session`, params)
+  .then(res => Promise.resolve(res.data))
+  .catch(err => Promise.reject(err))
+}
 export const getQuestionnaires = params => {
   return ajax.get(`/questionnaires`, params)
   .then(res => Promise.resolve(res.data))

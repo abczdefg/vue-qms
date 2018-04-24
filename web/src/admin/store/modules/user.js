@@ -1,4 +1,4 @@
-import { login, logout } from '@admin/api';
+import { login, logout, checkLogin } from '@admin/api';
 
 const state = {
   info: sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user'))
@@ -9,10 +9,19 @@ const getters = {
 const actions = {
   login({commit}, user) {
     return login(user).then(res => {
-      let { message, code, data } = res;
-      sessionStorage.setItem('user', JSON.stringify(data));
+      let { data } = res;
       commit('login', data);
       return Promise.resolve(data);
+    });
+  },
+  checkLogin({commit}) {
+    return checkLogin().then(res => {
+      let { data } = res;
+      commit('login', data);
+      return Promise.resolve(data);
+    }).catch(err => {
+      commit('logout');
+      return Promise.reject(err);
     });
   },
   logout({commit}) {
@@ -25,9 +34,11 @@ const actions = {
 
 const mutations = {
   login(state, info) {
+    sessionStorage.setItem('user', JSON.stringify(info));
     state.info = info;
   },
   logout(state) {
+    sessionStorage.removeItem('user');
     state.info = null;
   }
 }

@@ -4,33 +4,50 @@ import store from '@admin/store'
 import { Message, Loading } from 'element-ui'
 
 let loading;
-router.beforeEach((to, from, next) => {
-  // 1. 判断登录
-  // 2. 判断路由是否生成（相当于权限控制）
-
-  // loading = Loading.service({ fullscreen: true });
-  let userData = store.state.user.info;
-  if(userData) {
-    if(store.state.route.routes.length === 0) {
-      store.dispatch('generateRoutes', userData.privilege).then(res => {
-        router.addRoutes(store.state.route.routes);
-        next({...to});
-      });
-    } else {
-      next();
-    }
-  } else {
-    if(defaultRouter.some(v => v.path === to.path)) {
-      next();
-    } else {
-      Message.error('请先登录');
-      next({name: 'login'});
-    }
+router.beforeEach(async (to, from, next) => {
+  // 1. 判断当前页面是否需要登录权限
+  // 2. 若已登录且需要权限，生成router
+  if(!needLogin(defaultRouter, to)) {
+    return next();
   }
+  let userData = await checkLoginStatus();
+  if(userData === false) {
+    Message.error('请先登录');
+    next({name: 'login'});
+    // router.go(0);
+    return;
+  }
+  if(!checkAsyncRouter()) {
+    let route = await generateRouter(userData.privilege);
+    router.addRoutes(store.state.route.routes);
+    return next({...to});
+  }
+  return next();
 });
-
 router.afterEach(() => {
   Vue.nextTick(() => {
     // loading.close();
   });
-})
+});
+
+function needLogin(noAuthRoute, to) {
+  return !noAuthRoute.some(v => v.path === to.path);
+}
+
+async function checkLoginStatus() {
+  let userData;
+  try {
+    userData = await store.dispatch('checkLogin');
+  } catch(e) {
+    userData = false;
+  }
+  return userData;
+}
+
+function checkAsyncRouter() {
+  return store.state.route.routes.length !== 0;
+}
+
+function generateRouter(privilege) {
+  return store.dispatch('generateRoutes', privilege);
+}

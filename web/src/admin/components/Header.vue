@@ -110,6 +110,7 @@
           res => {
             this.$message.success('退出成功');
             this.$router.replace('/login');
+            // return this.$router.go(0); // 重置vue-router
           }
         ).catch(err => console.log(err));
       },

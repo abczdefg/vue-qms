@@ -15,22 +15,21 @@ class Authorization {
     return cookieSession(options);
   }
   checkAuthorization(req, res, next) {
-    const { session, url, method } = req;
-    const checkSession = (session) => {
-      return session.isPopulated;
-    };
-    if(req.method.toUpperCase() !== 'OPTIONS') {
-      if (!checkSession(session) && url !== '/session') {
-        let err = new Error('Unauthorized');
-        err.status = 401;
-        throw err;
-      } else {
-        this.updateSession(session);
-        next();
-      }
-    } else {
-      next();
+    const { session, url } = req;
+    const method = req.method.toUpperCase();
+    if(url === '/session' && method !== 'DELETE') {
+      return next();
     }
+    if(method === 'OPTIONS') {
+      return next();
+    }
+    if(this.checkSession(session)) {
+      this.updateSession(session);
+      return next();
+    }
+    let err = new Error('Unauthorized');
+    err.status = 401;
+    throw err;
   }
   checkPrivilege(resource) {
     return (req, res, next) => {
@@ -43,8 +42,11 @@ class Authorization {
       }
     };
   }
-  addSession(session, {id, role, privilege}) {
-    Object.assign(session, {id, role, privilege});
+  checkSession(session) {
+    return session.isPopulated;
+  };
+  addSession(session, {id, username, role, privilege}) {
+    Object.assign(session, {id, username, role, privilege});
   }
   updateSession(session) {
     session.now = (new Date()).getTime();

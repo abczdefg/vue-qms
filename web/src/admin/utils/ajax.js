@@ -1,3 +1,4 @@
+import Vue from 'Vue'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@admin/store'
@@ -18,6 +19,7 @@ instance.interceptors.response.use(
         Message.error('登录过时，请重新登录');
         store.dispatch('logout');
         router.replace({name: 'login'});
+        // return router.go(0);
     }
     return Promise.reject(error.response.data);
   }
