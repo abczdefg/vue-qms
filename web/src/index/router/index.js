@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import List from '@index/page/List.vue'
-import Questionnaire from '@index/page/Questionnaire.vue'
+const List = () => import(/* webpackChunkName: "index-list" */ '@index/pages/List.vue')
+const Questionnaire = () => import(/* webpackChunkName: "index-questionnaire" */ '@index/pages/Questionnaire.vue')
 
 Vue.use(Router)
 

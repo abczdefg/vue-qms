@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@admin/pages/Login.vue'
-import NotFound from '@admin/pages/404.vue'
-import Main from '@admin/components/Main.vue'
-import Home from '@admin/pages/Home.vue'
-import User from '@admin/pages/User.vue'
-import Questionnaire from '@admin/pages/Questionnaire.vue'
-import QuestionnaireEdit from '@admin/pages/QuestionnaireEdit.vue'
-import Result from '@admin/pages/Result.vue'
+const Login = () => import(/* webpackChunkName: "admin-login" */ '@admin/pages/Login.vue')
+const NotFound = () => import(/* webpackChunkName: "admin-login" */ '@admin/pages/404.vue')
+const Main = () => import(/* webpackChunkName: "admin-main" */ '@admin/components/Main.vue')
+const Home = () => import(/* webpackChunkName: "admin-home" */ '@admin/pages/Home.vue')
+const User = () => import(/* webpackChunkName: "admin-user" */ '@admin/pages/User.vue')
+const Questionnaire = () => import(/* webpackChunkName: "admin-questionnaire" */ '@admin/pages/Questionnaire.vue')
+const QuestionnaireEdit = () => import(/* webpackChunkName: "admin-questionnaire" */ '@admin/pages/QuestionnaireEdit.vue')
+const Result = () => import(/* webpackChunkName: "admin-questionnaire" */ '@admin/pages/Result.vue')
 
 Vue.use(Router)
 

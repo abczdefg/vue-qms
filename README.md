@@ -100,3 +100,8 @@ new webpack.DefinePlugin({
     ```
 
 * 使用`devServer`中的`proxy`可以实现dev中跨域，此时请求路径以`/`开头
+
+* 组件异步加载：
+  1. `resolve => require(['../components/home.vue'], resolve);`
+  2. `() => import('../components/home.vue');`
+  3. `resolve => require.ensure([], () => resolve(require('../components/home.vue')), 'chunkName')`
