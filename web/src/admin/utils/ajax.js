@@ -1,6 +1,6 @@
 import Vue from 'Vue'
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, Loading } from 'element-ui'
 import store from '@admin/store'
 import router from '@admin/router'
 

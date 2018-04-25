@@ -7,6 +7,12 @@
     * `axios`的http拦截
     * 跨域cookie需要身份认证withCredentials，后台设置withCredentials，但此时不能使用`Access-Control-Allow-Origin: *`
 
+* 动态加载路由：
+    1. 判断当前页面是否需要登录权限：通过路由白名单（默认路由）判断
+    2. 判断是否登录：两次获取userData，先判断vuex是否存在数据，再去请求后台
+    3. 若已登录且需要权限，生成router并使用`addRoutes`
+    4. 调用`next`
+
 * 关于vue组件
     * 用`render`函数渲染出来的是子组件
     * `<component>`可当做元组件（动态组件），使用is参数动态加载需要的组件

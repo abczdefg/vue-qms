@@ -17,7 +17,7 @@ class Authorization {
   checkAuthorization(req, res, next) {
     const { session, url } = req;
     const method = req.method.toUpperCase();
-    if(url === '/session' && method !== 'DELETE') {
+    if(url === '/session') {
       return next();
     }
     if(method === 'OPTIONS') {

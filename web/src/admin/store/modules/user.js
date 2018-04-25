@@ -1,4 +1,7 @@
+import Vue from 'Vue'
+import router from '@admin/router'
 import { login, logout, checkLogin } from '@admin/api';
+import { Loading } from 'element-ui';
 
 const state = {
   info: sessionStorage.getItem('user') && JSON.parse(sessionStorage.getItem('user'))
@@ -26,7 +29,16 @@ const actions = {
   },
   logout({commit}) {
     return logout().then(res => {
+      const duration = 200;
       commit('logout');
+      Loading.service({
+        fullscreen: true,
+        background: '#ffffff'
+      })
+      setTimeout(() => {
+        router.replace('/login');
+        router.go(0); // 重置vue-router
+      }, duration);
       sessionStorage.removeItem('user');
     });
   }
