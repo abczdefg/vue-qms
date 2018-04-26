@@ -2,16 +2,19 @@
   <div class="result-container">
     <el-form>
       <el-form-item>
-        <el-button type="danger" icon="el-icon-back" @click="backToQuestionnaireList">返回</el-button>
         <el-button type="primary" icon="el-icon-tickets" @click="detailVisible = true">问卷详情</el-button>
         <el-button type="primary" @click="queryIpVisible = true">查询IP归属地</el-button>
         <el-button type="success" icon="el-icon-download" @click="downloadExcel">导出excel</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="results" border style="width:100%" max-height="400">
+    <el-table class="result-table" :data="pageData" border style="width:100%">
       <el-table-column header-align="center" type="index" width="40"></el-table-column>
       <el-table-column v-for="(item, i) in columns" :key="`${item.prop}_${i}`" header-align="center" :prop="item.prop" :label="item.label" :title="item.title" :width="item.width" :renderHeader="renderHeader"></el-table-column>
     </el-table>
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="results.length">
+      </el-pagination>
+    </div>
     <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible">
       <div class="questionnaire-title">ID：{{questionnaireData.id}}</div>
       <div class="questionnaire-title">标题：{{questionnaireData.title}}</div>
@@ -71,7 +74,12 @@ export default {
           { required: true, message: '请填写IP地址', trigger: 'blur' },
           { pattern: /^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/, message: 'IP地址格式有误', trigger: 'blur' }
         ]
-      }
+      },
+      pageinationData: {
+        page: 1,
+        limit: 10,
+        sizeList: [10, 20, 30, 50]
+      },
     }
   },
   created() {
@@ -84,6 +92,11 @@ export default {
     this.$store.dispatch('showSidebar');
   },
   computed: {
+    pageData() {
+      const page = this.pageinationData.page;
+      const limit = this.pageinationData.limit;
+      return this.results.slice((page - 1) * limit, page * limit);
+    },
     results() {
       const convertResultData = (data) => {
         return data.length === 0 ? [] : data.map(item => {
@@ -195,9 +208,6 @@ export default {
         return column.label;
       }
     },
-    backToQuestionnaireList() {
-      this.$router.push({name: 'questionnaire'})
-    },
     downloadExcel() {
       let header = this.xlsxHeader;
       let body = this.xlsxBody;
@@ -257,7 +267,13 @@ export default {
         }
       }
       this.$refs['queryIpForm'].validate().then(valid => getResultByJsonp()).catch(err => err);
-    }
+    },
+    handleSizeChange(val) {
+      this.pageinationData.limit = val
+    },
+    handlePageChange(val) {
+      this.pageinationData.page = val
+    },
   }
 }
 </script>
@@ -270,5 +286,8 @@ export default {
 .detail-dialog >>> .el-dialog__body {
   height: 58vh;
   overflow-y: auto;
+}
+.result-table {
+  margin-bottom: 22px;
 }
 </style>
