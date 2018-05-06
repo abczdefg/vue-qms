@@ -21,7 +21,7 @@
           <el-button size="small" @click="bulkVisible=true">批量添加</el-button>
         </el-form-item>
       </el-form>
-      <el-dialog title="批量添加" :visible.sync="bulkVisible">
+      <el-dialog title="批量添加" :visible.sync="bulkVisible" top="0">
         <el-form label-width="0">
           <el-form-item>
             <el-input type="textarea" v-model="bulkChoice" :rows="10" resize="none" placeholder="批量输入选项，每行作为一个选项"></el-input>

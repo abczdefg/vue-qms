@@ -22,7 +22,7 @@ body,
 /* css reset：border-collapse导致element表格下方会出现滚动条 */
 table {
   border-spacing: 0;
-  border-collapse:separate;
+  border-collapse: separate;
 }
 /* 滚动条样式 */
 ::-webkit-scrollbar-track-piece {
@@ -42,5 +42,15 @@ table {
 }
 * {
   box-sizing: border-box;
+}
+/* dialog */
+.el-dialog {
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.el-dialog__body {
+  max-height: 58vh;
+  overflow-y: auto;
 }
 </style>

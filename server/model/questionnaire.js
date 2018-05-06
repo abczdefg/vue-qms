@@ -17,8 +17,14 @@ let Questionnaire = sequelize.define('questionnaire', {
     allowNull: false
   },
   random: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false
+    type: Sequelize.STRING(255),
+    allowNull: false,
+    get() {
+      return JSON.parse(this.getDataValue('random'));
+    },
+    set(val) {
+      this.setDataValue('random', JSON.stringify(val));
+    }
   },
   publish: {
     type: Sequelize.BOOLEAN,

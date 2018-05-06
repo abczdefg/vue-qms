@@ -6,7 +6,7 @@
       </li>
     </ul>
     <div class="questionnaire-form-container">
-      <el-form class="questionnaire-form" :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
+      <el-form class="questionnaire-form questionnaire-form-row" :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
         <el-form-item class="questionnaire-title" prop="title">
           <el-input v-model="questionnaireForm.title" placeholder="请输入问卷标题"></el-input>
         </el-form-item>
@@ -21,7 +21,7 @@
           </div>
           <draggable class="questionnaire-question-list" :class="{dragging: dragging}" v-model="questionnaireForm.question" :options="dragQuestionOptions" @start="dragStart" @end="dragEnd">
             <component
-              v-for="(item, index) in questionnaireForm.question"
+              v-for="(item, index) in addQuestionIndex(questionnaireForm).question"
               :is="`qnr-${item.type}`"
               :class="{draggable:!disableDraggable}"
               :key="item.index"
@@ -32,21 +32,29 @@
             </component>
           </draggable>
         </div>
-        <!-- <el-form-item class="questionnaire-random" prop="random" label-width="80px" label="随机化">
-          <el-switch v-model="questionnaireForm.random" :active-value="true" :inactive-value="false"></el-switch>
-        </el-form-item> -->
       </el-form>
-      <div class="questionnaire-button">
+      <el-row class="questionnaire-random questionnaire-form-row">
+        <span>随机列表：</span>
+        <span>{{questionnaireForm.random}}</span>
+        <el-button icon="el-icon-setting" size="mini" :circle="true" @click="randomVisible=true"></el-button>
+      </el-row>
+      <el-row class="questionnaire-button questionnaire-form-row">
         <el-button type="primary" size="small" @click="saveQuestionnaire('questionnaireForm')">保存问卷</el-button>
         <el-button type="danger" size="small" @click="cancelQuestionnaire">取消编辑</el-button>
-      </div>
+      </el-row>
     </div>
+    <el-dialog class="random-dialog" title="随机列表" :visible.sync="randomVisible" top="0" width="75%">
+      <qnr-random-table :options="randomTable" :column="10" v-model="questionnaireForm.random"></qnr-random-table>
+      <template slot="footer">{{questionnaireForm.random}}</template>
+    </el-dialog>
   </div>
 </template>
 <script>
 import Draggable from 'vuedraggable'
+import { addQuestionIndex } from '@/utils';
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '@admin/api';
 import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank, questionManager } from '@admin/components/question/index.js';
+import QnrRandomTable from '@admin/components/questionnaire/QnrRandomTable.vue'
 export default {
   components: {
     QnrRadio,
@@ -54,6 +62,7 @@ export default {
     QnrMatrixRadio,
     QnrPicker,
     QnrFillblank,
+    QnrRandomTable,
     Draggable
   },
   data() {
@@ -62,7 +71,7 @@ export default {
         title: '',
         introduction: '',
         question: [],
-        random: false
+        random: []
       },
       questionnaireRules: {
         title: [
@@ -87,7 +96,8 @@ export default {
           name: 'question',
           pull: 'clone'
         }
-      }
+      },
+      randomVisible: false
     }
   },
   created() {
@@ -110,6 +120,9 @@ export default {
   computed: {
     disableDraggable() {
       return this.$store.state.questionnaire.isEditing;
+    },
+    randomTable() {
+      return this.questionnaireForm.question.map(v => ({title:v.title}))
     }
   },
   methods: {
@@ -141,15 +154,15 @@ export default {
     },
     getQuestionnaire(id) {
       getQuestionnaire({id}).then(
-        res => this.questionnaireForm = this.addIndex(res.data)
+        res => {
+          let data = res.data;
+          this.questionnaireForm = data;
+        }
       ).catch(
         err => this.$message.error(`获取问卷失败：${err.message}`)
       )
     },
-    addIndex(data) {
-      data.question.map((v, i) => v.index = i + 1);
-      return data;
-    },
+    addQuestionIndex: addQuestionIndex,
     saveQuestionnaire(formName) {
       if(this.checkEditing()) {
         return;
@@ -249,11 +262,16 @@ export default {
   display: flex;
   flex-direction: column;
 }
+.questionnaire-form-row {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.questionnaire-form-row:last-child {
+  border-bottom: 0;
+}
 .questionnaire-form {
   flex: 1;
   overflow-y: auto;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
 }
 .questionnaire-title input::-ms-input-placeholder {
   text-align: center;
@@ -305,8 +323,14 @@ export default {
   display: inline-block;
   vertical-align: middle;
 }
+.questionnaire-random {
+  font-size: 14px;
+  color: #606266;
+}
 .questionnaire-button {
-  padding: 10px;
   box-sizing: initial;
+}
+.random-dialog >>> .el-dialog__footer {
+  text-align: left;
 }
 </style>

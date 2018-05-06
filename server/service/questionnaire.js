@@ -7,7 +7,7 @@ module.exports.getQuestionnaires = async () => {
       delete_time: null
     },
     attributes: {
-      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
+      include: ['id', 'title', 'introduction', 'publish', 'create_time', 'update_time']
     }
   });
   return questionnaires;
@@ -28,10 +28,11 @@ module.exports.getQuestionnaireById = async (id) => {
   let questionnaire = await models.Questionnaire.findOne({
     where: {
       id,
+      publish: true,
       delete_time: null
     },
     attributes: {
-      include: ['id', 'title', 'introduction', 'publish', 'random', 'create_time', 'update_time']
+      include: ['id', 'title', 'introduction', 'random']
     }
   });
   if(questionnaire === null) {

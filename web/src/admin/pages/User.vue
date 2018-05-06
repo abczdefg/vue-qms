@@ -19,7 +19,7 @@
         </el-dropdown>
       </el-table-column>
     </el-table>
-    <el-dialog title="创建用户" :visible.sync="editorVisible">
+    <el-dialog title="创建用户" :visible.sync="editorVisible" top="0">
       <el-form :model="userForm" ref="userForm" :rules="userRules" label-position="left" label-width="120px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username"></el-input>

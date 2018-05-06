@@ -14,7 +14,7 @@
           <div class="page-introduction">
             <p>{{pageText}}</p>
           </div>
-          <qnr-page ref="questionPage" :page-data="questionnaireData.page[currentPage]" v-model="recordData[currentPage]"></qnr-page>
+          <qnr-page ref="questionPage" :page-data="questionnaireData.page[currentPage]" v-model="questionModel[currentPage]"></qnr-page>
           <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
         </div>
       </template>
@@ -40,7 +40,7 @@ export default {
     QnrPage,
     Picker
   },
-  mounted() {
+  created() {
     this.getQuestionnaireById(this.$route.params.id);
   },
   computed: {
@@ -62,7 +62,7 @@ export default {
       time: {},
       indexPage: true,
       currentPage: 0,
-      recordData: '',
+      questionModel: '',
       questionnaireData: null,
       submitData: null,
     };
@@ -73,6 +73,7 @@ export default {
         ({ data }) => {
           data = this.addIndex(data);
           data.page = [data.question];
+          data.random = [data.random];
           this.questionnaireData = data;
 
           /////////////////
@@ -99,7 +100,7 @@ export default {
           //   ]
           // ]
           /////////////////
-          this.recordData = this.createModel();
+          this.questionModel = this.createModel();
         }
       ).catch(
         ({ code, message }) => {
@@ -113,6 +114,32 @@ export default {
     addIndex(data) {
       data.question.map((v, i) => v.index = i + 1);
       return data;
+    },
+    randomize(data) {
+      // 每一页单独循环？
+      // 随机化，添加index和originalIndex属性
+      let shuffle = (arr, start = 0, end = arr.length - 1) => {
+        if(start < 0 || end >= arr.length) {
+          throw new Error('Invalid start of end.');
+        }
+        for(let i = end; i >= start; i--) {
+          let j = Math.floor(Math.random() * (end - start + 1)) + start;
+          let temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+          temp.originalIndex = temp.index;
+          temp.index = temp.index;
+        }
+      }
+      let recordIndex = (obj, originalIndex, index) => {
+        obj.index = index;
+        obj.originalIndex = originalIndex;
+        return obj;
+      };
+      let addIndex = (arr) => {
+        arr.forEach(v => v.index = i + 1);
+      };
+      addIndex(data.question);
     },
     createModel() {
       return this.questionnaireData.page.map((pageItem, i) => {
@@ -130,10 +157,10 @@ export default {
               value = [];
               break;
             case 'matrix-radio':
-              value = new Array(questionItem.subquestion.length).fill(null);
+              value = Array(questionItem.subquestion.length).fill(null);
               break;
             case 'fillblank':
-              value = new Array(questionItem.blank.length).fill(null);
+              value = Array(questionItem.blank.length).fill(null);
               break;
             default:
               break;
@@ -176,14 +203,11 @@ export default {
         start_time: this.time.startTime,
         end_time: (new Date()).getTime(),
         questionnaire_id: this.$route.params.id,
-        answer: Array.prototype.concat.apply([], this.recordData).map(item => item.value)
+        answer: Array.prototype.concat.apply([], this.questionModel).map(item => item.value)
       };
     },
     scrollToTop() {
       this.$refs.viewBox.scrollTo(0);
-    },
-    convertRoman(num) {
-
     }
   }
 }

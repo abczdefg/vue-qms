@@ -111,3 +111,6 @@ new webpack.DefinePlugin({
   1. `resolve => require(['../components/home.vue'], resolve);`
   2. `() => import('../components/home.vue');`
   3. `resolve => require.ensure([], () => resolve(require('../components/home.vue')), 'chunkName')`
+
+* `watch`中变异（非替换）数组时，newVal与oldVal相等
+  > 注意：在变异 (不是替换) 对象或数组时，旧值将与新值相同，因为它们的引用指向同一个对象/数组。Vue 不会保留变异之前值的副本。`

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../utils/db');
+const moment = require('moment');
 let Question = sequelize.define('question', {
   id: {
     type: Sequelize.INTEGER,

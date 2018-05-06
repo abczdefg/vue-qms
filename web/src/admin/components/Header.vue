@@ -12,7 +12,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-dialog title="修改密码" :visible.sync="updatePasswordVisible">
+    <el-dialog title="修改密码" :visible.sync="updatePasswordVisible" top="0">
       <el-form :model="passwordForm" ref="passwordForm" :rules="passwordRules" label-position="left" label-width="120px">
         <el-form-item label="旧密码" prop="oldPassword">
           <el-input v-model="passwordForm.oldPassword"></el-input>

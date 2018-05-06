@@ -45,7 +45,7 @@ export default {
   methods: {
     validate() {
       let question = this.$refs.question;
-      for(let [i, val] of Object.entries(this.currentValue)) {
+      for(let [i, val] of this.currentValue.entries()) {
         let result = question[i].validate();
         if(result !== true) {
           this.$vux.toast.text(result);

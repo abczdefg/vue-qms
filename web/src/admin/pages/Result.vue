@@ -15,20 +15,20 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="results.length">
       </el-pagination>
     </div>
-    <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible">
+    <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible" top="0">
       <div class="questionnaire-title">ID：{{questionnaireData.id}}</div>
       <div class="questionnaire-title">标题：{{questionnaireData.title}}</div>
       <div class="questionnaire-introduction">介绍：{{questionnaireData.introduction}}</div>
       <div class="questionnaire-update-time">最后更新时间：{{questionnaireData.update_time}}</div>
       <div class="questionnaire-question-container">
         <ul>
-          <li class="question-list" v-for="(item, i) in questionnaireData.question">
+          <li class="question-list" v-for="(item, i) in addQuestionIndex(questionnaireData).question">
             <component :is="`qnr-${item.type}-content`" :data="item"></component>
           </li>
         </ul>
       </div>
     </el-dialog>
-    <el-dialog title="IP查询" :visible.sync="queryIpVisible">
+    <el-dialog title="IP查询" :visible.sync="queryIpVisible" top="0">
       <el-form :model="queryIpForm" ref="queryIpForm" :rules="queryIpRules" label-position="left" label-width="120px">
         <el-form-item label="IP地址" prop="ip">
           <el-input v-model="queryIpForm.ip"></el-input>
@@ -45,6 +45,7 @@
 
 <script>
 import { formatDate } from '@admin/utils/date';
+import { addQuestionIndex } from '@/utils';
 import { getQuestionnaire, getResultsByQuestionnaireId } from '@admin/api';
 import QnrRadioContent from '@admin/components/question/radio/Content.vue';
 import QnrFillblankContent from '@admin/components/question/fillblank/Content.vue';
@@ -167,7 +168,7 @@ export default {
   methods: {
     getQuestionnaire(id) {
       getQuestionnaire({id}).then(
-        res => this.questionnaireData = this.addIndex(res.data)
+        res => this.questionnaireData = res.data
       ).catch(
         err => this.$message.error(`获取问卷失败：${err.message}`)
       )
@@ -179,10 +180,7 @@ export default {
         err => this.$message.error(`获取问卷结果失败：${err.message}`)
       )
     },
-    addIndex(data) {
-      data.question.map((v, i) => v.index = i + 1);
-      return data;
-    },
+    addQuestionIndex: addQuestionIndex,
     renderHeader: function(h, { column, $index }) {
       let { question } = this.questionnaireData;
       if(/^answer_(\d+)/.test(column.property)) {
@@ -282,10 +280,6 @@ export default {
   margin: 20px 0;
   display: flex;
   flex-direction: row;
-}
-.detail-dialog >>> .el-dialog__body {
-  height: 58vh;
-  overflow-y: auto;
 }
 .result-table {
   margin-bottom: 22px;
