@@ -73,7 +73,7 @@ export default {
       for(let i = 0 , len = this.question.subquestion.length; i < len; i++) {
         // i根据sub的长度遍历
         if(this.currentValue[i] === null || this.currentValue[i] === undefined) {
-          return `题目${this.index}-${i + 1}未完成`;
+          return `题目${this.question.index}-${i + 1}未完成`;
         }
       }
       return true;

@@ -12,7 +12,10 @@ module.exports = () => {
     });
   });
   router.get('/questionnaires/:id', async (req, res) => {
-    let ret = await services.Questionnaire.getQuestionnaireById(req.params.id);
+    let ret = await services.Questionnaire.getQuestionnaireById({
+      id: req.params.id,
+      publish: true
+    });
     res.status(200).send({
       code: 200,
       message: 'success',

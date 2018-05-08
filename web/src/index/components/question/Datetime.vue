@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     validate() {
-      return this.value !== '' ? true : `题目${this.index}未完成`;
+      return this.value !== '' ? true : `题目${this.question.index}未完成`;
     }
   }
 }

@@ -78,7 +78,7 @@ export default {
       return true;
     },
     validate() {
-      return this.value.length > 0 ? true : `题目${this.index}未完成`;
+      return this.value.length > 0 ? true : `题目${this.question.index}未完成`;
     }
   }
 }

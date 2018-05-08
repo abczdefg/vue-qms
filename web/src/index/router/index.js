@@ -16,7 +16,8 @@ export default new Router({
     {
       path: '/detail/:id',
       name: 'Questionnaire',
-      component: Questionnaire
+      component: Questionnaire,
+      props: true
     },
     {
       path: '*',

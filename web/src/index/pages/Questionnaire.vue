@@ -11,9 +11,9 @@
       </template>
       <template v-else-if="!indexPage && currentPage < questionnaireData.page.length">
         <div class="page-content">
-          <div class="page-introduction">
+          <!-- <div class="page-introduction">
             <p>{{pageText}}</p>
-          </div>
+          </div> -->
           <qnr-page ref="questionPage" :page-data="questionnaireData.page[currentPage]" v-model="questionModel[currentPage]"></qnr-page>
           <x-button class="page-button" type="default" :plain="true" @click.native="nextPage">{{ (currentPage < questionnaireData.page.length - 1) ? '下一页' : '提交问卷' }}</x-button>
         </div>
@@ -40,8 +40,9 @@ export default {
     QnrPage,
     Picker
   },
+  props: ['id'],
   created() {
-    this.getQuestionnaireById(this.$route.params.id);
+    this.getQuestionnaireById(this.id);
   },
   computed: {
     pageText() {
@@ -63,17 +64,15 @@ export default {
       indexPage: true,
       currentPage: 0,
       questionModel: '',
-      questionnaireData: null,
-      submitData: null,
+      questionnaireData: null
     };
   },
   methods: {
     getQuestionnaireById(id) {
       getQuestionnaireById({id}).then(
         ({ data }) => {
-          data = this.addIndex(data);
+          data = this.randomize(data);
           data.page = [data.question];
-          data.random = [data.random];
           this.questionnaireData = data;
 
           /////////////////
@@ -104,42 +103,30 @@ export default {
         }
       ).catch(
         ({ code, message }) => {
-          if(code === 500) {
-            return this.$router.replace({name: 'List'});
-          }
           this.$vux.toast.text(`获取问卷失败：${message}`, 'bottom');
+          return this.$router.replace({name: 'List'});
         }
       )
     },
-    addIndex(data) {
-      data.question.map((v, i) => v.index = i + 1);
-      return data;
-    },
     randomize(data) {
-      // 每一页单独循环？
       // 随机化，添加index和originalIndex属性
-      let shuffle = (arr, start = 0, end = arr.length - 1) => {
-        if(start < 0 || end >= arr.length) {
-          throw new Error('Invalid start of end.');
-        }
+
+      // addOriginalIndex
+      data.question.forEach((v, i) => v.originalIndex = i + 1);
+      // 洗牌算法打乱顺序
+      data.random.forEach((v, i) => {
+        let [start, end] = v.split('-').map(v => parseInt(v, 10) - 1);
+        // range shuffle
         for(let i = end; i >= start; i--) {
-          let j = Math.floor(Math.random() * (end - start + 1)) + start;
-          let temp = arr[i];
-          arr[i] = arr[j];
-          arr[j] = temp;
-          temp.originalIndex = temp.index;
-          temp.index = temp.index;
+          let j = Math.floor(Math.random() * (i - start + 1)) + start;
+          let temp = data.question[i];
+          data.question[i] = data.question[j];
+          data.question[j] = temp;
         }
-      }
-      let recordIndex = (obj, originalIndex, index) => {
-        obj.index = index;
-        obj.originalIndex = originalIndex;
-        return obj;
-      };
-      let addIndex = (arr) => {
-        arr.forEach(v => v.index = i + 1);
-      };
-      addIndex(data.question);
+      });
+      // addIndex
+      data.question.forEach((v, i) => v.index = i + 1);
+      return data;
     },
     createModel() {
       return this.questionnaireData.page.map((pageItem, i) => {
@@ -181,9 +168,8 @@ export default {
         if(this.currentPage < this.questionnaireData.page.length - 1) {
           this.currentPage++;
         } else {
-          this.handleSubmitData();
-          console.log(this.submitData)
-          addResult(this.submitData).then(res => {
+          let submitData = this.getSubmitData();
+          addResult(submitData).then(res => {
             this.$vux.toast.show({
               text: '问卷提交成功'
             });
@@ -198,13 +184,24 @@ export default {
         }
       }
     },
-    handleSubmitData() {
-      this.submitData = {
+    getSubmitData() {
+      let getModelData = (question, model) => {
+        let modelData = [];
+        question.forEach(val => {
+          let { originalIndex } = val;
+          modelData.push(model[originalIndex - 1]);
+        });
+        return modelData;
+      };
+      let plainModel = Array.prototype.concat.apply([], this.questionModel);
+      let plainQuestion = Array.prototype.concat.apply([], this.questionnaireData.page);
+      let submitData = {
         start_time: this.time.startTime,
         end_time: (new Date()).getTime(),
-        questionnaire_id: this.$route.params.id,
-        answer: Array.prototype.concat.apply([], this.questionModel).map(item => item.value)
+        questionnaire_id: this.id,
+        answer: getModelData(plainQuestion, plainModel)
       };
+      return submitData;
     },
     scrollToTop() {
       this.$refs.viewBox.scrollTo(0);

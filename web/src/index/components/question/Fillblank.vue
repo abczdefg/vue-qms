@@ -66,7 +66,7 @@ export default {
       for(let i = 0; i < this.question.blank.length; i++) {
         // i根据blank的长度遍历
         if(this.currentValue[i] === null || this.currentValue[i] === undefined) {
-          return `题目${this.index}未完成`;
+          return `题目${this.question.index}未完成`;
         }
       }
       return true;

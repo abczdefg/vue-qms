@@ -24,11 +24,11 @@ module.exports.getPublishedQuestionnaires = async () => {
   });
   return questionnaires;
 };
-module.exports.getQuestionnaireById = async (id) => {
+module.exports.getQuestionnaireById = async (options = {}) => {
+  let { id } = options;
   let questionnaire = await models.Questionnaire.findOne({
     where: {
-      id,
-      publish: true,
+      ...options,
       delete_time: null
     },
     attributes: {
@@ -43,11 +43,12 @@ module.exports.getQuestionnaireById = async (id) => {
 
   let question = await models.Question.findAll({
     where: {
-      questionnaire_id: id
+      questionnaire_id: id,
+      delete_time: null
     },
     order: [['display_order', 'ASC']],
     attributes: {
-      include: ['id', 'questionnaire_id', 'title', 'type', 'display_order', 'extra']
+      include: ['id', 'title', 'type', 'extra']
     }
   });
   questionnaire = utils.toPlain(questionnaire);
