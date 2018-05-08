@@ -65,6 +65,7 @@ export default {
     QnrRandomTable,
     Draggable
   },
+  props: ['id'],
   data() {
     return {
       questionnaireForm: {
@@ -101,15 +102,13 @@ export default {
     }
   },
   created() {
-    if(this.$route.params.action === 'edit') {
-      this.getQuestionnaire(this.$route.params.id);
+    if(this.isEditPage) {
+      this.getQuestionnaire(this.id);
     }
   },
   mounted() {
-    // this.$store.dispatch('hideSidebar');
   },
   beforeDestroy() {
-    this.$store.dispatch('showSidebar');
   },
   watch: {
     disableDraggable(val) {
@@ -118,6 +117,9 @@ export default {
     }
   },
   computed: {
+    isEditPage() {
+      return typeof this.id !== 'undefined';
+    },
     disableDraggable() {
       return this.$store.state.questionnaire.isEditing;
     },
@@ -159,7 +161,10 @@ export default {
           this.questionnaireForm = data;
         }
       ).catch(
-        err => this.$message.error(`获取问卷失败：${err.message}`)
+        err => {
+          this.$message.error(`获取问卷失败：${err.message}`);
+          return this.$router.replace({name: "questionnaire"});
+        }
       )
     },
     addQuestionIndex: addQuestionIndex,
@@ -169,11 +174,11 @@ export default {
       }
       this.$refs[formName].validate().then(
         valid => {
-          this.questionnaireForm.id = this.$route.params.id;
-          if(this.$route.params.action === 'edit') {
+          this.questionnaireForm.id = this.id;
+          if(this.isEditPage) {
             this.questionnaireForm.update_time = new Date();
             this.editQuestionnaire();
-          } else if(this.$route.params.action === 'add') {
+          } else {
             this.questionnaireForm.publish = false;
             this.questionnaireForm.create_time = new Date();
             this.questionnaireForm.update_time = new Date();

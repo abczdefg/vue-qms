@@ -9,7 +9,12 @@
     </el-form>
     <el-table class="result-table" :data="pageData" border style="width:100%">
       <el-table-column header-align="center" type="index" width="40"></el-table-column>
-      <el-table-column v-for="(item, i) in columns" :key="`${item.prop}_${i}`" header-align="center" :prop="item.prop" :label="item.label" :title="item.title" :width="item.width" :renderHeader="renderHeader"></el-table-column>
+      <el-table-column v-for="(item, i) in columns" :key="`${item.prop}_${i}`" header-align="center" :prop="item.prop" :label="item.label" :title="item.title" :width="item.width" :renderHeader="renderHeader">
+        <template slot-scope="scope">
+          <el-button type="text" @click="getIpResult(scope.row.ip)" v-if="item.prop === 'ip'">{{scope.row.ip}}</el-button>
+          <template v-else>{{scope.row[item.prop]}}</template>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="results.length">
@@ -61,6 +66,7 @@ export default {
     QnrPickerContent,
     QnrFillblankContent,
   },
+  props: ['id'],
   data() {
     return {
       questionnaireData: {},
@@ -84,10 +90,8 @@ export default {
     }
   },
   created() {
-    let questionnaireId = this.$route.params.id;
-    this.getQuestionnaire(questionnaireId);
-    this.getResultsByQuestionnaireId(questionnaireId);
-    // this.$store.dispatch('hideSidebar');
+    this.getQuestionnaire(this.id);
+    this.getResultsByQuestionnaireId(this.id);
   },
   beforeDestroy() {
     this.$store.dispatch('showSidebar');
@@ -252,19 +256,21 @@ export default {
     },
     queryIp() {
       const ip = this.queryIpForm.ip;
-      const getResultByJsonp = () => {
-        const link = `http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=${ip}`
-        const script = document.createElement('script');
-        script.src = link;
-        document.body.appendChild(script);
-        script.onload = () => {
-          document.body.removeChild(script);
-          if(remote_ip_info) {
-            this.$alert(`${ip}的归属地：${remote_ip_info.country} ${remote_ip_info.province} ${remote_ip_info.city} ${remote_ip_info.district}`);
-          }
+      this.$refs['queryIpForm'].validate().then(valid => this.getIpResult(ip)).catch(err => err);
+    },
+    getIpResult(ip) {
+      const link = `http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=${ip}`
+      const script = document.createElement('script');
+      script.src = link;
+      document.body.appendChild(script);
+      script.onload = () => {
+        document.body.removeChild(script);
+        if(typeof remote_ip_info !== 'undefined' && remote_ip_info.ret === 1) {
+          this.$alert(`${ip}的归属地：${remote_ip_info.country} ${remote_ip_info.province} ${remote_ip_info.city} ${remote_ip_info.district}`);
+        } else {
+          this.$alert(`查找${ip}的归属地失败`);
         }
       }
-      this.$refs['queryIpForm'].validate().then(valid => getResultByJsonp()).catch(err => err);
     },
     handleSizeChange(val) {
       this.pageinationData.limit = val

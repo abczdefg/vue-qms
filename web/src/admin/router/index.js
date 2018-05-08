@@ -51,16 +51,18 @@ export const asyncRouter = [{
       privilege: 'questionnaire'
     }
   }, {
-    path: 'detail/:action',
+    path: 'detail/add',
     name: 'questionnaireAdd',
     component: QuestionnaireEdit,
+    props: true,
     meta: {
       privilege: 'questionnaire'
     }
   }, {
-    path: ':id(\\d+)/detail/:action',
+    path: ':id(\\d+)/detail/edit',
     name: 'questionnaireEdit',
     component: QuestionnaireEdit,
+    props: true,
     meta: {
       privilege: 'questionnaire'
     }
@@ -68,6 +70,7 @@ export const asyncRouter = [{
     path: ':id(\\d+)/result',
     name: 'Result',
     component: Result,
+    props: true,
     meta: {
       privilege: 'questionnaire'
     }
