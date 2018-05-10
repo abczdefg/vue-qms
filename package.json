@@ -8,12 +8,13 @@
     "dev": "webpack-dev-server --inline --progress --config web/build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "node web/build/build.js",
-    "server": "supervisor bin/www"
+    "server": "node bin/www"
   },
   "dependencies": {
     "axios": "^0.15.3",
     "body-parser": "^1.16.1",
     "compression": "^1.7.1",
+    "config": "^1.30.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.1",
     "element-ui": "^2.0.10",
