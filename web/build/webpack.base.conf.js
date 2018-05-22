@@ -1,34 +1,27 @@
 'use strict'
 const path = require('path')
+const config = require('./config')
 const utils = require('./utils')
-const config = require('../config')
-const vueLoaderConfig = require('./vue-loader.conf')
 const vuxLoader = require('vux-loader')
-
-function resolve (dir) {
-  return path.join(__dirname, '..', dir)
-}
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const isProductionMode = process.env.NODE_ENV === 'production'
 
 const webpackConfig = {
-  context: path.resolve(__dirname, '../'),
+  context: utils.resolve('./'),
   entry: {
     index: './src/index/main.js',
     admin: './src/admin/main.js'
   },
   output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    path: config.build.assetsRoot
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
-      '@index': resolve('src/index'),
-      '@admin': resolve('src/admin')
+      '@': utils.resolve('src'),
+      '@index': utils.resolve('src/index'),
+      '@admin': utils.resolve('src/admin')
     }
   },
   module: {
@@ -36,12 +29,62 @@ const webpackConfig = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: vueLoaderConfig
+        options: {
+          cssSourceMap: false,
+          cacheBusting: true,
+          extract: true,
+          usePostCSS: true,
+          transformToRequire: {
+            // 资源 URL 转换为 webpack 模块请求
+            video: ['src', 'poster'],
+            source: 'src',
+            img: 'src',
+            image: 'xlink:href'
+          }
+        }
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: isProductionMode
+              ? MiniCssExtractPlugin.loader
+              : 'vue-style-loader',
+            options: {
+              publicPath: '../../' // rehandle path of resource in import css
+            }
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'postcss-loader'
+          }
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: isProductionMode
+              ? MiniCssExtractPlugin.loader
+              : 'vue-style-loader',
+            options: {
+              publicPath: '../../'
+            }
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'less-loader'
+          }
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -69,28 +112,21 @@ const webpackConfig = {
       }
     ]
   },
-  node: {
-    // prevent webpack from injecting useless setImmediate polyfill because Vue
-    // source contains it (although only uses it if it's native).
-    setImmediate: false,
-    // prevent webpack from injecting mocks to Node native modules
-    // that does not make sense for the client
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty'
-  }
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: utils.assetsPath('css/[name].[hash].css')
+    })
+  ]
 }
 module.exports = vuxLoader.merge(webpackConfig, {
   plugins: [{
     name: 'vux-ui'
   }, {
     name: 'less-theme',
-    path: 'web/src/index/assets/less/theme.less'
+    path: utils.resolve('src/index/assets/less/theme.less')
   }, {
     name: 'duplicate-style'
   }, {
     name: 'progress-bar'
-  }],
+  }]
 });

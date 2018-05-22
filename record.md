@@ -25,24 +25,6 @@
     * `document.execCommand("insertText")`插入内容
     * [参考文章](http://www.zhangxinxu.com/wordpress/2016/01/contenteditable-plaintext-only/)
 
-* 利用 webpack 给生产环境和发布环境配置不同的接口地址，就可以在js中读取process.env.BASE_URL
-```
-new webpack.DefinePlugin({
-  'process.env': require('../config/dev.env'),
-  'BASE_URL': '"http://localhost:8080"'
-})
-```
-变量中有2个引号，官方解释如下
-> - 如果这个值是一个字符串，它会被当作一个代码片段来使用。
-- 如果这个值不是字符串，它会被转化为字符串(包括函数)。
-- 如果这个值是一个对象，它所有的 key 会被同样的方式定义。
-- 如果在一个 key 前面加了 typeof,它会被定义为 typeof 调用。
-* `webpack 3`自带`uglifyjs`出现问题，通过手动安装解决
-
-* `webpack`中使用`alias`，可以在`alias`前加上`~`符号，视作依赖。比如用于`background: url('~@/assets/logo.png')`
-
-* 在entry中添加vendors，提取公共依赖，切换页面时可以从缓存读取
-
 * 使用`selection`和`range`操作文本选中区域和光标
 
 * reset.css将表格设为`border-collapse: collaspe;`，导致element-ui的表格出现横向滚动条，设置为`border-collapse: separate;`可解决
@@ -111,4 +93,46 @@ new webpack.DefinePlugin({
   3. `resolve => require.ensure([], () => resolve(require('../components/home.vue')), 'chunkName')`
 
 * `watch`中变异（非替换）数组时，newVal与oldVal相等
-  > 注意：在变异 (不是替换) 对象或数组时，旧值将与新值相同，因为它们的引用指向同一个对象/数组。Vue 不会保留变异之前值的副本。`
+  > 注意：在变异 (不是替换) 对象或数组时，旧值将与新值相同，因为它们的引用指向同一个对象/数组。Vue 不会保留变异之前值的副本。
+
+* 利用 webpack 给生产环境和发布环境配置不同的接口地址，就可以在js中读取process.env.BASE_URL
+  ```
+  new webpack.DefinePlugin({
+    'process.env': require('../config/dev.env'),
+    'BASE_URL': '"http://localhost:8080"'
+  })
+  ```
+
+变量中有2个引号，官方解释如下
+>- 如果这个值是一个字符串，它会被当作一个代码片段来使用。
+- 如果这个值不是字符串，它会被转化为字符串(包括函数)。
+- 如果这个值是一个对象，它所有的 key 会被同样的方式定义。
+- 如果在一个 key 前面加了 typeof,它会被定义为 typeof 调用。
+- `webpack 3`自带`uglifyjs`出现问题，通过手动安装解决
+
+* `webpack`中使用`alias`，可以在`alias`前加上`~`符号，视作依赖。比如用于`background: url('~@/assets/logo.png')`
+
+* 在entry中添加vendors，提取公共依赖，切换页面时可以从缓存读取
+
+* 使用`cross-env`设置环境变量
+  `cross-env NODE_ENV=development webpack-dev-server --progress --config web/build/webpack.dev.conf.js`
+  此时`process.env.NODE_ENV = 'development'`
+
+* 升级webpack4
+  1. 模块拆分 `CommonsChunkPlugin` => `optimize.splitChunks`
+  2. CSS文件提取 `extract-text-webpack-plugin` => `mini-css-extract-plugin`
+  3. JS压缩 `uglifyjs-webpack-plugin` => `optimization.minimize`
+  4. 作用域提升 `ModuleConcatenationPlugin` => `optimization.concatenateModules`
+  5. 编译出错时跳过输出 `NoEmitOnErrorsPlugin` => `optimization.noEmitOnErrors`
+  6. HMR时会显示模块的相对路径 `NamedModulesPlugin` => `optimization.namedModules`
+  7. CSS中resource的路径在Extract CSS后可能不对（根据`output.publicPath`输出），可通过添加额外的`publicPath`解决。`mini-css-extract-plugin`可配置如下
+    ```
+    use: [
+      {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          publicPath: '../../' // rehandle path of resource in import css
+        }
+      }
+    ]
+    ```
