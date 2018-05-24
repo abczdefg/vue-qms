@@ -36,8 +36,8 @@ const actions = {
         background: '#ffffff'
       })
       setTimeout(() => {
-        router.replace('/login');
-        router.go(0); // 重置vue-router
+        // 重置vue-router
+        router.replace('/login', () => router.go(0));
       }, duration);
       sessionStorage.removeItem('user');
     });
