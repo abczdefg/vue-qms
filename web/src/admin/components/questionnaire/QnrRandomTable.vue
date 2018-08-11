@@ -231,7 +231,7 @@
 .random-cell.start:before,
 .random-cell.end:before {
   position: absolute;
-  top: -5px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   font-size: 12px;
