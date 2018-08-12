@@ -168,11 +168,24 @@ export default {
       )
     },
     addQuestionIndex: addQuestionIndex,
+    validateQuestionnaire(formName) {
+      return new Promise((resolve, reject) => {
+        // 存在编辑的问题
+        if(this.checkEditing()) {
+          return reject();
+        }
+        // 题目数为0
+        if(this.questionnaireForm.question.length === 0) {
+          this.$message.error('至少要有一个题目');
+          return reject();
+        }
+        this.$refs[formName].validate()
+        .then(valid => resolve(valid))
+        .catch(err => err);
+      });
+    },
     saveQuestionnaire(formName) {
-      if(this.checkEditing()) {
-        return;
-      }
-      this.$refs[formName].validate().then(
+      this.validateQuestionnaire(formName).then(
         valid => {
           this.questionnaireForm.id = this.id;
           if(this.isEditPage) {
