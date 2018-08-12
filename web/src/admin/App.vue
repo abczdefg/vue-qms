@@ -17,7 +17,7 @@ html,
 body,
 #app {
   height: 100%;
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
 }
 /* css reset：border-collapse导致element表格下方会出现滚动条 */
 table {
@@ -52,5 +52,9 @@ table {
 .el-dialog__body {
   max-height: 58vh;
   overflow-y: auto;
+}
+/* table */
+.el-table {
+  margin-bottom: 22px;
 }
 </style>

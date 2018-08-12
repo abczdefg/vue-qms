@@ -19,6 +19,10 @@
         </el-dropdown>
       </el-table-column>
     </el-table>
+    <div class="pagination-container">
+      <el-pagination background @size-change="pageinationData.limit = val" @current-change="pageinationData.page = val" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="userData.length">
+      </el-pagination>
+    </div>
     <el-dialog title="创建用户" :visible.sync="editorVisible" top="0">
       <el-form :model="userForm" ref="userForm" :rules="userRules" label-position="left" label-width="120px">
         <el-form-item label="用户名" prop="username">
@@ -89,8 +93,20 @@ export default {
           { required: true, message: '请选择用户组', trigger: 'blur' }
         ]
       },
-      editorVisible: false
+      editorVisible: false,
+      pageinationData: {
+        page: 1,
+        limit: 10,
+        sizeList: [10, 20, 30, 50]
+      },
     }
+  },
+  computed: {
+    pageData() {
+      const page = this.pageinationData.page;
+      const limit = this.pageinationData.limit;
+      return this.userData.slice((page - 1) * limit, page * limit);
+    },
   },
   mounted() {
     this.getUserData();

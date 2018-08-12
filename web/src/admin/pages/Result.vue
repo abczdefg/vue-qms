@@ -17,7 +17,7 @@
       </el-table-column>
     </el-table>
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="results.length">
+      <el-pagination background @size-change="pageinationData.limit = val" @current-change="pageinationData.page = val" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="results.length">
       </el-pagination>
     </div>
     <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible" top="0">
@@ -272,12 +272,6 @@ export default {
         }
       }
     },
-    handleSizeChange(val) {
-      this.pageinationData.limit = val
-    },
-    handlePageChange(val) {
-      this.pageinationData.page = val
-    },
   }
 }
 </script>
@@ -286,8 +280,5 @@ export default {
   margin: 20px 0;
   display: flex;
   flex-direction: row;
-}
-.result-table {
-  margin-bottom: 22px;
 }
 </style>

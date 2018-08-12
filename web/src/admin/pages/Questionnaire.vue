@@ -30,6 +30,10 @@
         </el-dropdown>
       </el-table-column>
     </el-table>
+    <div class="pagination-container">
+      <el-pagination background @size-change="pageinationData.limit = val" @current-change="pageinationData.page = val" :current-page="pageinationData.page" :page-sizes="pageinationData.sizeList" :page-size="pageinationData.limit" layout="total, sizes, prev, pager, next, jumper" :total="questionnaireData.length">
+      </el-pagination>
+    </div>
   </div>
 </div>
 
@@ -44,11 +48,23 @@ export default {
         user: '',
         region: ''
       },
-      questionnaireData: []
+      questionnaireData: [],
+      pageinationData: {
+        page: 1,
+        limit: 10,
+        sizeList: [10, 20, 30, 50]
+      },
     }
   },
   mounted() {
     this.getQuestionnaires ();
+  },
+  computed: {
+    pageData() {
+      const page = this.pageinationData.page;
+      const limit = this.pageinationData.limit;
+      return this.questionnaireData.slice((page - 1) * limit, page * limit);
+    },
   },
   methods: {
     getQuestionnaires () {
@@ -120,7 +136,7 @@ export default {
         default:
           break;
       }
-    }
+    },
   }
 }
 </script>
