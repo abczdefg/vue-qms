@@ -1,10 +1,6 @@
 // THIS FILE IS ONLY FOR IDE ENTRY CHECKING NOT FOR REAL USAGE
 
-import QnrRadio from '@admin/components/question/Radio.vue'
-import QnrCheckbox from '@admin/components/question/Checkbox.vue'
-import QnrMatrixRadio from '@admin/components/question/MatrixRadio.vue'
-import QnrPicker from '@admin/components/question/Picker.vue'
-import QnrFillblank from '@admin/components/question/Fillblank.vue'
+import QnrQuestion from '@admin/components/question/Base.vue'
 export const questionManager = {
   "radio": {
     "title": "单选题",
@@ -61,9 +57,5 @@ export const questionManager = {
 }
 
 export {
-  QnrRadio,
-  QnrCheckbox,
-  QnrMatrixRadio,
-  QnrPicker,
-  QnrFillblank,
+  QnrQuestion
 }

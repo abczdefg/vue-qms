@@ -1,30 +1,19 @@
 <template>
-  <qnr-base>
-    <template slot="content">
-      <qnr-content :data="data"></qnr-content>
-    </template>
-    <template slot="editor">
-      <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
-        <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
-          <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
-        </el-form-item>
-        <el-form-item ref="title-item" class="content-input" :rules="contentRules" prop="content" label="内容">
-          <div class="fillblank">
-            <div class="fillblank-content" contenteditable="true" @keydown="handleKeydown" @blur="handleBlur" @paste="handlePaste" v-html="editorData.content"></div>
-          </div>
-        </el-form-item>
-      </el-form>
-    </template>
-  </qnr-base>
+  <div class="question-editor">
+    <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
+      <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
+        <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
+      </el-form-item>
+      <el-form-item ref="title-item" class="content-input" :rules="contentRules" prop="content" label="内容">
+        <div class="fillblank">
+          <div class="fillblank-content" contenteditable="true" v-html="editorData.content"></div>
+        </div>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <script>
-import QnrBase from '@admin/components/question/Base.vue'
-import QnrContent from '@admin/components/question/fillblank/Content.vue'
 export default {
-  components: {
-    QnrBase,
-    QnrContent
-  },
   props: {
     data: {}
   },
@@ -53,12 +42,6 @@ export default {
   methods: {
     resetData() {
       this.editorData = JSON.parse(JSON.stringify(this.data));
-    },
-    saveEditor() {
-      this.$emit('update:data', this.editorData);
-    },
-    validate() {
-      return this.$refs.editorData.validate();
     },
     handleKeydown(e) {
       if (parseInt(e.keyCode, 10) === 13) {
@@ -95,18 +78,20 @@ export default {
       }
       this.editorData.content = html;
       this.editorData.blank = blank;
+    },
+    validate() {
+      return this.$refs.editorData.validate();
+    },
+    getData() {
+      return this.validate()
+        .then(valid => Promise.resolve(this.editorData))
+        .catch(err => Promise.reject('Validate error.'))
     }
   }
 }
 
 </script>
 <style scoped>
-.question-detail .fillblank-content {
-  font-size: 14px;
-  line-height: 16px;
-  margin-bottom: 10px;
-  color: #606266;
-}
 .content-input .editorLabel {
   width: 80px;
 }
@@ -137,5 +122,4 @@ export default {
 .content-input.is-success .fillblank-content {
   border-color: #67c23a;
 }
-
 </style>

@@ -19,17 +19,17 @@
               <i class="el-icon-delete"></i>
             </draggable>
           </div>
-          <draggable class="questionnaire-question-list" :class="{dragging: dragging}" v-model="questionnaireForm.question" :options="dragQuestionOptions" @start="dragStart" @end="dragEnd">
-            <component
+          <draggable :class="{dragging: dragging}" v-model="questionnaireForm.question" :options="dragQuestionOptions" @start="dragStart" @end="dragEnd">
+            <qnr-question
               v-for="(item, index) in addQuestionIndex(questionnaireForm).question"
-              :is="`qnr-${item.type}`"
               :class="{draggable:!disableDraggable}"
               :key="item.index"
               :data="item"
-              v-on:update:data="data=>updateQuestion(index, data)"
-              @delete="deleteQuestion(index)"
+              @update:data="data => updateQuestion(index, data)"
+              @delete:data="data => deleteQuestion(index, data)"
+              :mode="item.mode"
             >
-            </component>
+            </qnr-question>
           </draggable>
         </div>
       </el-form>
@@ -53,17 +53,12 @@
 import Draggable from 'vuedraggable'
 import { addQuestionIndex } from '@/utils';
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '@admin/api';
-import { QnrRadio, QnrCheckbox, QnrMatrixRadio, QnrPicker, QnrFillblank, questionManager } from '@admin/components/question/index.js';
+import { QnrQuestion, questionManager } from '@admin/components/question/index.js';
 import QnrRandomTable from '@admin/components/questionnaire/QnrRandomTable.vue'
 export default {
   components: {
-    QnrRadio,
-    QnrCheckbox,
-    QnrMatrixRadio,
-    QnrPicker,
-    QnrFillblank,
-    QnrRandomTable,
-    Draggable
+    Draggable,
+    QnrQuestion
   },
   props: ['id'],
   data() {
@@ -136,17 +131,25 @@ export default {
       return false;
     },
     updateQuestion(index, data) {
+      delete data.mode;
       this.questionnaireForm.question.splice(index, 1, data);
     },
     addQuestion(type) {
       if(this.checkEditing()) {
         return;
       }
-      this.questionnaireForm.question.push(questionManager[type]);
+      let newQuestion = questionManager[type];
+      newQuestion.mode = 'add';
+      this.questionnaireForm.question.push(newQuestion);
       // this.questionnaireForm.question.push({ type });
       this.$nextTick(() => this.scrollToBottom());
     },
     deleteQuestion(index) {
+      const question = this.questionnaireForm.question[index];
+      if(question.mode === 'add') {
+        this.questionnaireForm.question.splice(index, 1);
+        return;
+      }
       if(this.checkEditing()) {
         return;
       }
