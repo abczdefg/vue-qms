@@ -1,7 +1,7 @@
 <template>
   <div class="questionnaire-detail-container">
     <ul class="question-type-container">
-      <li class="question-type-item" v-for="(item, type) in questionManager" :key="type" @click="addQuestion(type)">
+      <li class="question-type-item" v-for="item in allQuestionType" :key="item.type" @click="addQuestion(item.type)">
         <el-button plain class="question-type-button">{{item.title}}</el-button>
       </li>
     </ul>
@@ -53,7 +53,7 @@
 import Draggable from 'vuedraggable'
 import { addQuestionIndex } from '@/utils';
 import { getQuestionnaire, updateQuestionnaire, addQuestionnaire } from '@admin/api';
-import { QnrQuestion, questionManager } from '@admin/components/question/index.js';
+import { QnrQuestion } from '@admin/components/question/index.js';
 import QnrRandomTable from '@admin/components/questionnaire/QnrRandomTable.vue'
 export default {
   components: {
@@ -77,7 +77,7 @@ export default {
           { required: true, message: '请输入问卷介绍', trigger: 'blur' }
         ]
       },
-      questionManager: questionManager,
+      allQuestionType: QnrQuestion.getAllType(),
       dragging: false,
       dragDeleteOptions: {
         disabled: this.disableDraggable,
@@ -138,10 +138,7 @@ export default {
       if(this.checkEditing()) {
         return;
       }
-      let newQuestion = questionManager[type];
-      newQuestion.mode = 'add';
-      this.questionnaireForm.question.push(newQuestion);
-      // this.questionnaireForm.question.push({ type });
+      this.questionnaireForm.question.push({ type, mode: 'add' });
       this.$nextTick(() => this.scrollToBottom());
     },
     deleteQuestion(index) {

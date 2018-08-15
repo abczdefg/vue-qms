@@ -22,22 +22,10 @@
   </div>
 </template>
 <script>
+import BaseContent from '../BaseContent'
 export default {
-  props: {
-    data: {}
-  },
-  data() {
-    return {
-
-    }
-  },
-  mounted() {
-  },
-  methods: {
-
-  }
+  extends: BaseContent
 }
-
 </script>
 <style scoped>
 .question-title {

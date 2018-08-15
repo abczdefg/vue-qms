@@ -1,6 +1,6 @@
 <template>
   <div class="question-editor">
-    <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
+    <el-form :model="editorData" :ref="formName" label-position="left" label-width="80px">
       <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
         <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
       </el-form-item>
@@ -31,10 +31,9 @@
   </div>
 </template>
 <script>
+import BaseEditor from '../BaseEditor'
 export default {
-  props: {
-    data: {}
-  },
+  extends: BaseEditor,
   watch: {
     editorData: {
       handler(val) {
@@ -55,13 +54,7 @@ export default {
       bulkVisible: false
     }
   },
-  mounted() {
-    this.resetData();
-  },
   methods: {
-    resetData() {
-      this.editorData = JSON.parse(JSON.stringify(this.data));
-    },
     addChoice() {
       this.editorData.list[0].push('');
     },
@@ -75,14 +68,6 @@ export default {
       let list = this.bulkChoice.split(/\r?\n/);
       this.$set(this.editorData.list, 0, list);
       this.bulkVisible = false;
-    },
-    validate() {
-      return this.$refs.editorData.validate();
-    },
-    getData() {
-      return this.validate()
-        .then(valid => Promise.resolve(this.editorData))
-        .catch(err => Promise.reject('Validate error.'))
     }
   }
 }

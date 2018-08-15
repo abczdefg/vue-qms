@@ -1,7 +1,7 @@
 <template>
   <div class="question-editor">
-    <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
-      <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
+    <el-form :model="editorData" :ref="formName" label-position="left" label-width="80px">
+      <el-form-item class="question-input" :rule0s="questionRules" prop="title" label="题目">
         <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
       </el-form-item>
       <el-form-item class="choice-input" v-for="(item, i) in editorData.choice" :key="i" :rules="choiceRules" :prop="'choice[' + i + '].content'" :label="'选项'+(i+1)">
@@ -15,27 +15,19 @@
   </div>
 </template>
 <script>
+import BaseEditor from '../BaseEditor'
 export default {
-  props: {
-    data: {}
-  },
+  extends: BaseEditor,
   data() {
     return {
       rules: {
         minChoice: 1
       },
       questionRules: { required: true, message: '题目内容不能为空', trigger: 'blur' },
-      choiceRules: { required: true, message: '选项内容不能为空', trigger: 'blur' },
-      editorData: {}
+      choiceRules: { required: true, message: '选项内容不能为空', trigger: 'blur' }
     }
   },
-  mounted() {
-    this.resetData();
-  },
   methods: {
-    resetData: function() {
-      this.editorData = JSON.parse(JSON.stringify(this.data));
-    },
     addChoice() {
       this.editorData.choice.push({
         content: ""
@@ -49,14 +41,6 @@ export default {
       } else {
         choice.splice(index, 1);
       }
-    },
-    validate() {
-      return this.$refs.editorData.validate();
-    },
-    getData() {
-      return this.validate()
-        .then(valid => Promise.resolve(this.editorData))
-        .catch(err => Promise.reject('Validate error.'))
     }
   }
 }

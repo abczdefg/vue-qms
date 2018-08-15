@@ -3,7 +3,7 @@
     <div class="question-container" v-if="!isEditorOpen">
       <component
         :is="`${data.type}-content`"
-        :data="data">
+      >
       </component>
       <div class="question-control">
         <el-button class="question-control-btn" type="white" icon="el-icon-edit" size="mini" @click="showEditor">编辑</el-button>
@@ -14,7 +14,6 @@
       <componenet
         ref="editor"
         :is="`${data.type}-editor`"
-        :data="data"
       >
       </componenet>
       <el-button type="primary" size="small" @click="saveEditor">保存</el-button>
@@ -23,28 +22,60 @@
   </div>
 </template>
 <script>
-import RadioContent from '@admin/components/question/radio/Content.vue'
-import RadioEditor from '@admin/components/question/radio/Editor.vue'
-import CheckboxContent from '@admin/components/question/checkbox/Content.vue'
-import CheckboxEditor from '@admin/components/question/checkbox/Editor.vue'
-import fillblankContent from '@admin/components/question/fillblank/Content.vue'
-import fillblankEditor from '@admin/components/question/fillblank/Editor.vue'
-import MatrixRadioContent from '@admin/components/question/matrix-radio/Content.vue'
-import MatrixRadioEditor from '@admin/components/question/matrix-radio/Editor.vue'
-import PickerContent from '@admin/components/question/picker/Content.vue'
-import PickerEditor from '@admin/components/question/picker/Editor.vue'
+import Radio from '@admin/components/question/radio'
+import Checkbox from '@admin/components/question/checkbox'
+import Fillblank from '@admin/components/question/fillblank'
+import MatrixRadio from '@admin/components/question/matrix-radio'
+import Picker from '@admin/components/question/picker'
+const {
+  Content: RadioContent,
+  Editor: RadioEditor,
+  defaultValue: RadioDefault,
+} = Radio;
+const {
+  Content: CheckboxContent,
+  Editor: CheckboxEditor,
+  defaultValue: CheckboxDefault,
+} = Checkbox;
+const {
+  Content: FillblankContent,
+  Editor: FillblankEditor,
+  defaultValue: FillblankDefault,
+} = Fillblank;
+const {
+  Content: MatrixRadioContent,
+  Editor: MatrixRadioEditor,
+  defaultValue: MatrixRadioDefault,
+} = MatrixRadio;
+const {
+  Content: PickerContent,
+  Editor: PickerEditor,
+  defaultValue: PickerDefault,
+} = Picker;
+const defaultValue = ((questions) => {
+  let result = {};
+  for(let item of questions) {
+    result[item.type] = item;
+  }
+  return result;
+})([RadioDefault, CheckboxDefault, FillblankDefault, MatrixRadioDefault, PickerDefault]);
 export default {
   components: {
     RadioContent,
     RadioEditor,
     CheckboxContent,
     CheckboxEditor,
-    fillblankContent,
-    fillblankEditor,
+    FillblankContent,
+    FillblankEditor,
     MatrixRadioContent,
     MatrixRadioEditor,
     PickerContent,
     PickerEditor
+  },
+  provide() {
+    return {
+      data: this.data
+    }
   },
   props: {
     mode: {
@@ -100,9 +131,18 @@ export default {
     deleteHandler() {
       this.$emit('delete:data', this.data);
     }
+  },
+  getDefault(type) {
+    return defaultValue[type];
+  },
+  getAllDefault() {
+    return defaultValue;
+  },
+  getAllType() {
+    return Object.values(defaultValue)
+      .map(({title, type}) => ({title, type}));
   }
 }
-
 </script>
 <style scoped>
 .questionnaire-question-container {

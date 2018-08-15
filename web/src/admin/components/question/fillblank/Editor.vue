@@ -1,6 +1,6 @@
 <template>
   <div class="question-editor">
-    <el-form :model="editorData" ref="editorData" label-position="left" label-width="80px">
+    <el-form :model="editorData" :ref="formName" label-position="left" label-width="80px">
       <el-form-item class="question-input" :rules="questionRules" prop="title" label="题目">
         <el-input v-model="editorData.title" placeholder="请输入题目"></el-input>
       </el-form-item>
@@ -13,10 +13,9 @@
   </div>
 </template>
 <script>
+import BaseEditor from '../BaseEditor'
 export default {
-  props: {
-    data: {}
-  },
+  extends: BaseEditor,
   data() {
     let contentValidator = (rule, value, callback) => {
       if (value === '') {
@@ -32,17 +31,10 @@ export default {
     return {
       questionRules: { required: true, message: '题目不能为空', trigger: 'blur' },
       contentRules: { required: true, validator: contentValidator, trigger: 'blur' },
-      editorData: {},
       lastEditRange: ''
     }
   },
-  mounted() {
-    this.resetData();
-  },
   methods: {
-    resetData() {
-      this.editorData = JSON.parse(JSON.stringify(this.data));
-    },
     handleKeydown(e) {
       if (parseInt(e.keyCode, 10) === 13) {
         e.preventDefault();
@@ -78,14 +70,6 @@ export default {
       }
       this.editorData.content = html;
       this.editorData.blank = blank;
-    },
-    validate() {
-      return this.$refs.editorData.validate();
-    },
-    getData() {
-      return this.validate()
-        .then(valid => Promise.resolve(this.editorData))
-        .catch(err => Promise.reject('Validate error.'))
     }
   }
 }
