@@ -114,7 +114,7 @@ const webpackConfig = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[hash].css')
+      filename: utils.assetsPath('css/[name].[contenthash].css')
     })
   ]
 }

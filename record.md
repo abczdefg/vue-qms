@@ -108,6 +108,7 @@
 - 如果这个值不是字符串，它会被转化为字符串(包括函数)。
 - 如果这个值是一个对象，它所有的 key 会被同样的方式定义。
 - 如果在一个 key 前面加了 typeof,它会被定义为 typeof 调用。
+
 - `webpack 3`自带`uglifyjs`出现问题，通过手动安装解决
 
 * `webpack`中使用`alias`，可以在`alias`前加上`~`符号，视作依赖。比如用于`background: url('~@/assets/logo.png')`
@@ -136,3 +137,7 @@
       }
     ]
     ```
+
+* webpack增量编译
+  - js文件使用`chunkhash`
+  - css文件(来自`mini-css-extract-plugin`)使用`contenthash`
