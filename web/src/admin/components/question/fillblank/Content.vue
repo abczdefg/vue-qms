@@ -12,10 +12,8 @@ export default {
   extends: BaseContent
 }
 </script>
-<style scoped>
-.question-title,
+<style lang="less" scoped>
 .question-detail {
-  margin-bottom: 10px;
   color: #606266;
   font-size: 14px;
 }

@@ -1,17 +1,17 @@
 <template>
-  <div class="questionnaire-question-container" :class="{editing:isEditorOpen}">
-    <div class="question-container" v-if="!isEditorOpen">
+  <div class="question-item" :class="{editing:isEditorOpen}">
+    <div class="question-item-content" v-if="!isEditorOpen">
       <component
         :is="`${data.type}-content`"
         :data="data"
       >
       </component>
       <div class="question-control">
-        <el-button class="question-control-btn" type="white" icon="el-icon-edit" size="mini" @click="showEditor">编辑</el-button>
-        <el-button class="question-control-btn" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler">删除</el-button>
+        <el-button type="white" icon="el-icon-edit" size="mini" @click="showEditor">编辑</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler">删除</el-button>
       </div>
     </div>
-    <div class="editor-container" v-else>
+    <div class="question-item-editor" v-else>
       <componenet
         ref="editor"
         :is="`${data.type}-editor`"
@@ -141,35 +141,31 @@ export default {
   }
 }
 </script>
-<style scoped>
-.questionnaire-question-container {
+<style lang="less" scoped>
+.question-item {
   position: relative;
   padding: 30px 10px;
   border: 1px solid #ffffff;
   background: #ffffff;
-}
-
-.questionnaire-question-container.editing,
-.questionnaire-question-container:hover {
-  border-color: #e0e0e0;
-  background: #fafafa;
-}
-.questionnaire-question-container.draggable {
-  cursor: move;
-}
-.questionnaire-question-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-.questionnaire-question-container > *:first-child{
-  flex: 1;
-}
-.question-control {
-  visibility: hidden;
-}
-.questionnaire-question-container:hover .question-control {
-  visibility: visible;
+  &.editing,
+  &:hover {
+    border-color: #e0e0e0;
+    background: #fafafa;
+  }
+  &.draggable {
+    cursor: move;
+  }
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    .question-control {
+      visibility: hidden;
+    }
+    &:hover .question-control {
+      visibility: visible;
+    }
+  }
 }
 </style>

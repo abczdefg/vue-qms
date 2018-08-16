@@ -62,15 +62,15 @@
     }
   }
 </script>
-<style scoped>
+<style lang="less" scoped>
   .main-container {
     height: 100%;
-  }
-  .sub-container {
-    overflow: hidden;
-  }
-  .el-main {
-    display: flex;
-    flex-direction: column;
+    .sub-container {
+      overflow: hidden;
+    }
+    .el-main {
+      display: flex;
+      flex-direction: column;
+    }
   }
 </style>

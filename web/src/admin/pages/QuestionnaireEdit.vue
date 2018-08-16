@@ -1,21 +1,21 @@
 <template>
-  <div class="questionnaire-detail-container">
-    <ul class="question-type-container">
+  <div class="questionnaire-detail">
+    <ul class="questionnaire-detail-side question-type">
       <li class="question-type-item" v-for="item in allQuestionType" :key="item.type" @click="addQuestion(item.type)">
-        <el-button plain class="question-type-button">{{item.title}}</el-button>
+        <el-button plain class="question-type-item-button">{{item.title}}</el-button>
       </li>
     </ul>
-    <div class="questionnaire-form-container">
-      <el-form class="questionnaire-form questionnaire-form-row" :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
+    <div class="questionnaire-detail-content">
+      <el-form class="questionnaire-form questionnaire-detail-content-row" :model="questionnaireForm" ref="questionnaireForm" :rules="questionnaireRules" label-position="left" label-width="0">
         <el-form-item class="questionnaire-title" prop="title">
           <el-input v-model="questionnaireForm.title" placeholder="请输入问卷标题"></el-input>
         </el-form-item>
         <el-form-item class="questionnaire-introduction" prop="introduction">
           <el-input type="textarea" :autosize="{minRows:3}" v-model="questionnaireForm.introduction" placeholder="请输入问卷介绍"></el-input>
         </el-form-item>
-        <div class="questionnaire-question-list" :class="{dragging: dragging}">
-          <div class="question-delete-block-container">
-            <draggable id="question-delete-block" class="question-delete-block" :options="dragDeleteOptions">
+        <div class="questionnaire-question" :class="{dragging: dragging}">
+          <div class="delete-block">
+            <draggable id="question-delete-block" class="delete-block__content" :options="dragDeleteOptions">
               <i class="el-icon-delete"></i>
             </draggable>
           </div>
@@ -33,12 +33,12 @@
           </draggable>
         </div>
       </el-form>
-      <el-row class="questionnaire-random questionnaire-form-row">
+      <el-row class="questionnaire-random questionnaire-detail-content-row">
         <span>随机列表：</span>
         <span>{{questionnaireForm.random}}</span>
         <el-button icon="el-icon-setting" size="mini" :circle="true" @click="randomVisible=true"></el-button>
       </el-row>
-      <el-row class="questionnaire-button questionnaire-form-row">
+      <el-row class="questionnaire-button questionnaire-detail-content-row">
         <el-button type="primary" size="small" @click="saveQuestionnaire('questionnaireForm')">保存问卷</el-button>
         <el-button type="danger" size="small" @click="cancelQuestionnaire">取消编辑</el-button>
       </el-row>
@@ -58,7 +58,8 @@ import QnrRandomTable from '@admin/components/questionnaire/QnrRandomTable.vue'
 export default {
   components: {
     Draggable,
-    QnrQuestion
+    QnrQuestion,
+    QnrRandomTable
   },
   props: ['id'],
   data() {
@@ -251,8 +252,8 @@ export default {
 }
 
 </script>
-<style scoped>
-.questionnaire-detail-container {
+<style lang="less" scoped>
+.questionnaire-detail {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -261,94 +262,88 @@ export default {
   border-radius: 4px;
   flex-direction: row;
   overflow-y: hidden;
-}
-.question-type-container {
-  width: 150px;
-  padding: 10px;
-  border-right: 1px solid #e0e0e0;
-  text-align: center;
-}
-.question-type-container .question-type-item {
-  margin-bottom: 10px;
-}
-.question-type-container .question-type-button {
-  width: 100%;
-  padding: 10px;
-}
-.questionnaire-form-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.questionnaire-form-row {
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-.questionnaire-form-row:last-child {
-  border-bottom: 0;
-}
-.questionnaire-form {
-  flex: 1;
-  overflow-y: auto;
-}
-.questionnaire-title input::-ms-input-placeholder {
-  text-align: center;
-}
-
-.questionnaire-title input::-webkit-input-placeholder {
-  text-align: center;
-}
-
-.questionnaire-title input {
-  text-align: center;
-}
-
-.questionnaire-question-list {
-  margin-bottom: 22px;
-}
-
-.questionnaire-question-list .question-delete-block-container {
-  position: fixed;
-  top: 0px;
-  left: -1px;
-  width: 65px;
-  height: 100%;
-  padding-top: 60px;
-  z-index: 9999;
-  display: none;
-}
-.questionnaire-question-list.dragging .question-delete-block-container {
-  display: block;
-}
-
-.questionnaire-question-list .question-delete-block {
-  height: 100%;
-  background-color: #f44336;
-  color: #ffffff;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.questionnaire-question-list .question-delete-block > * {
-  /*display: none;*/
-}
-
-.questionnaire-question-list .question-delete-block i {
-  display: inline-block;
-  vertical-align: middle;
-}
-.questionnaire-random {
-  font-size: 14px;
-  color: #606266;
-}
-.questionnaire-button {
-  box-sizing: initial;
-}
-.random-dialog >>> .el-dialog__footer {
-  text-align: left;
+  &-side {
+    width: 150px;
+    padding: 10px;
+    border-right: 1px solid #e0e0e0;
+    text-align: center;
+  }
+  .question-type {
+    &-item {
+      margin-bottom: 10px;
+      &-button {
+        width: 100%;
+        padding: 10px;
+      }
+    }
+  }
+  &-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    &-row {
+      padding: 10px;
+      border-bottom: 1px solid #e0e0e0;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+    .questionnaire-form {
+      flex: 1;
+      overflow-y: auto;
+    }
+    .questionnaire-title {
+      input {
+        text-align: center;
+        &::-ms-input-placeholder,
+        &::-webkit-input-placeholder {
+          text-align: center;
+        }
+      }
+    }
+    .questionnaire-question {
+      .delete-block {
+        position: fixed;
+        top: 0px;
+        left: -1px;
+        width: 65px;
+        height: 100%;
+        padding-top: 60px;
+        z-index: 9999;
+        display: none;
+      }
+      &.dragging .delete-block {
+        display: block;
+        &__content {
+          height: 100%;
+          background-color: #f44336;
+          color: #ffffff;
+          text-align: center;
+          vertical-align: middle;
+          font-size: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          i {
+            display: inline-block;
+            vertical-align: middle;
+          }
+          .sortable-ghost {
+            display: none;
+          }
+        }
+      }
+    }
+    .questionnaire-random {
+      font-size: 14px;
+      color: #606266;
+    }
+    .questionnaire-button {
+      box-sizing: initial;
+    }
+  }
+  .random-dialog /deep/ .el-dialog__footer {
+    text-align: left;
+  }
 }
 </style>

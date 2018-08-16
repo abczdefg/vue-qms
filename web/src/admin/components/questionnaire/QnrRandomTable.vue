@@ -202,48 +202,48 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .random-table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-}
-.random-cell {
-  position: relative;
-  width: 12.5%;
-  height: 40px;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #e0e0e0;
-}
-.random-cell:hover {
-  cursor: pointer;
-}
-.random-cell.selected {
-  background-color: #f56c6c;
-  color: #ffffff;
-}
-.random-cell.start,
-.random-cell.end {
-  background-color: #409eff;
-  color: #ffffff;
-}
-.random-cell.start:before,
-.random-cell.end:before {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-}
-.random-cell.start:before {
-  content: 'start';
-}
-.random-cell.end:before {
-  content: 'end';
-}
-.random-cell.middle {
-  background-color: #67c23a;
-  color: #ffffff;
+  .random-cell {
+    position: relative;
+    width: 12.5%;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #e0e0e0;
+    &:hover {
+      cursor: pointer;
+    }
+    &.selected {
+      background-color: #f56c6c;
+      color: #ffffff;
+    }
+    &.start,
+    &.end {
+      background-color: #409eff;
+      color: #ffffff;
+    }
+    &.start:before,
+    &.end:before {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+    }
+    &.start:before {
+      content: 'start';
+    }
+    &.end:before {
+      content: 'end';
+    }
+    &.middle {
+      background-color: #67c23a;
+      color: #ffffff;
+    }
+  }
 }
 </style>

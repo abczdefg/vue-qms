@@ -14,22 +14,11 @@ export default {
   extends: BaseContent
 }
 </script>
-<style scoped>
-.question-title {
-  margin-bottom: 10px;
-  color: #606266;
-  font-size: 14px;
-}
-.question-detail {
-  margin-bottom: 10px;
-}
+<style lang="less" scoped>
 .question-radio-item {
   margin-bottom: 10px;
-}
-.question-radio-item:last-child {
-  margin-bottom: 0;
-}
-.choice-input .el-input {
-  width: 60%;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 </style>

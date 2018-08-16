@@ -27,37 +27,25 @@ export default {
   extends: BaseContent
 }
 </script>
-<style scoped>
-.question-title {
-  margin-bottom: 10px;
-  color: #606266;
-  font-size: 14px;
-}
-.question-detail {
-  margin-bottom: 10px;
-}
-table.matrix-radio-table {
+<style lang="less" scoped>
+.matrix-radio-table {
+  @border-width: 1px;
+  @border-color: #dcdfe6;
   font-size: 11px;
   color: #333333;
-  border-width: 1px;
-  border-color: #dcdfe6;
+  border-width: @border-width;
+  border-color: @border-color;
   border-collapse: collapse;
   font-size: 14px;
   vertical-align: middle;
   text-align: center;
-}
-
-table.matrix-radio-table th {
-  border-width: 1px;
-  padding: 14px;
-  border-style: solid;
-  border-color: #dcdfe6;
-  font-weight: normal;
-}
-table.matrix-radio-table td {
-  border-width: 1px;
-  padding: 14px;
-  border-style: solid;
-  border-color: #dcdfe6;
+  th,
+  td {
+    border-width: @border-width;
+    padding: 14px;
+    border-style: solid;
+    border-color: @border-color;
+    font-weight: normal;
+  }
 }
 </style>

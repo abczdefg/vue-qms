@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="home">
     <el-carousel class="index-slider" height="300px">
       <el-carousel-item v-for="(item, i) in sliders" :key="i">
         <h3>{{ item.text }}</h3>
@@ -96,52 +96,54 @@
   }
 
 </script>
-<style scoped>
-.index-slider {
-  background: url('~@admin/assets/index_sliders_bg.jpg') no-repeat center center;
-  background-size: cover;
-}
-.index-slider h3 {
-  color: #ffffff;
-  font-size: 24px;
-  line-height: 300px;
-  text-align: center;
-}
-.panel-group {
-  margin-top: 18px;
-}
-.card-panel-col {
-  margin-bottom: 32px;
-}
-.card-panel {
-  height: 90px;
-  font-size: 12px;
-  position: relative;
-  overflow: hidden;
-  color: #666666;
-  background: #ffffff;
-  border: 1px solid #cccccc;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-.card-panel-icon-wrapper {
-  transition: all 0.38s ease-out;
-}
-.card-panel-icon {
-  font-size: 48px;
-}
-.card-panel-description {
-  font-weight: bold;
-}
-.card-panel-text {
-  line-height: 18px;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-.card-panel-num {
-  font-size: 20px;
+<style lang="less" scoped>
+.home {
+  .index-slider {
+    background: url('~@admin/assets/index_sliders_bg.jpg') no-repeat center center;
+    background-size: cover;
+    h3 {
+      color: #ffffff;
+      font-size: 24px;
+      line-height: 300px;
+      text-align: center;
+    }
+  }
+  .panel-group {
+    margin-top: 18px;
+  }
+  .card-panel-col {
+    margin-bottom: 32px;
+  }
+  .card-panel {
+    height: 90px;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+    color: #666666;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    &-icon-wrapper {
+      transition: all 0.38s ease-out;
+    }
+    &-icon {
+      font-size: 48px;
+    }
+    &-description {
+      font-weight: bold;
+    }
+    &-text {
+      line-height: 18px;
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    &-num {
+      font-size: 20px;
+    }
+  }
 }
 </style>

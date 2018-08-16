@@ -55,34 +55,32 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .sidebar {
     border-right: solid 1px #e6e6e6;
-  }
-  .sidebar .sidebar-toggle {
-    padding: 0 20px;
-    height: 56px;
-    line-height: 56px;
-    font-size: 14px;
-    text-align: center;
-    cursor: pointer;
-  }
-  .sidebar .sidebar-toggle:hover {
-    background-color: #ecf5ff;
-  }
-  .sidebar >>> .el-menu {
-    border-right: 0;
-  }
-  .sidebar .el-menu:not(.el-menu--collapse) {
-    width: 140px;
-  }
-  .sidebar .fa {
-    margin-right: 5px;
-    width: 24px;
-    text-align: center;
-    font-size: 18px;
-    vertical-align: middle;
-  }
-  .sidebar >>> .el-menu-item {
+    .sidebar-toggle {
+      padding: 0 20px;
+      height: 56px;
+      line-height: 56px;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      &:hover {
+        background-color: #ecf5ff;
+      }
+    }
+    .el-menu {
+      border-right: 0;
+      &:not(.el-menu--collapse) {
+        width: 140px;
+      }
+    }
+    .fa {
+      margin-right: 5px;
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+      vertical-align: middle;
+    }
   }
 </style>

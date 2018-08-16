@@ -21,11 +21,11 @@
       </el-pagination>
     </div>
     <el-dialog class="detail-dialog" title="问卷详情" :visible.sync="detailVisible" top="0">
-      <div class="questionnaire-title">ID：{{questionnaireData.id}}</div>
-      <div class="questionnaire-title">标题：{{questionnaireData.title}}</div>
-      <div class="questionnaire-introduction">介绍：{{questionnaireData.introduction}}</div>
-      <div class="questionnaire-update-time">最后更新时间：{{questionnaireData.update_time}}</div>
-      <div class="questionnaire-question-container">
+      <div class="detail-dialog__row questionnaire-id">ID：{{questionnaireData.id}}</div>
+      <div class="detail-dialog__row questionnaire-title">标题：{{questionnaireData.title}}</div>
+      <div class="detail-dialog__row questionnaire-introduction">介绍：{{questionnaireData.introduction}}</div>
+      <div class="detail-dialog__row questionnaire-update-time">最后更新时间：{{questionnaireData.update_time}}</div>
+      <div class="detail-dialog__row questionnaire-question-container">
         <ul>
           <li class="question-list" v-for="(item, i) in addQuestionIndex(questionnaireData).question">
             <component :is="`qnr-${item.type}-content`" :data="item"></component>
@@ -275,10 +275,15 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
 .question-list {
   margin: 20px 0;
   display: flex;
   flex-direction: row;
+}
+.detail-dialog {
+  &__row + &__row {
+    margin-top: 10px;
+  }
 }
 </style>

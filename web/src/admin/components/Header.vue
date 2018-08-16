@@ -131,34 +131,34 @@
     }
   }
 </script>
-<style scoped>
+<style lang="less" scoped>
   .header {
     background-color: #409EFF;
     color: #ffffff;
     vertical-align: middle;
-  }
-  .header .sidebar-toggle,
-  .header .logo {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 60px;
-  }
-  .header .sidebar-toggle {
-    cursor: pointer;
-  }
-  .user-info {
-    float: right;
-    vertical-align: top;
-  }
-  .user-info .el-dropdown-link {
-    padding-left: 50px;
-    line-height: 60px;
-    color: #ffffff;
-    cursor: pointer;
-    vertical-align: middle;
-    display: inline-block;
-    background: url("~@admin/assets/user.png") no-repeat;
-    background-size: 40px 40px;
-    background-position: 5px center;
+    .sidebar-toggle,
+    .logo {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 60px;
+    }
+    .sidebar-toggle {
+      cursor: pointer;
+    }
+    .user-info {
+      float: right;
+      vertical-align: top;
+      .el-dropdown-link {
+        padding-left: 50px;
+        line-height: 60px;
+        color: #ffffff;
+        cursor: pointer;
+        vertical-align: middle;
+        display: inline-block;
+        background: url("~@admin/assets/user.png") no-repeat;
+        background-size: 40px 40px;
+        background-position: 5px center;
+      }
+    }
   }
 </style>

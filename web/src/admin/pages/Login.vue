@@ -1,6 +1,6 @@
 <template>
-  <el-form :model="loginForm" :rules="loginRule" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-    <h3 class="title">问卷管理系统</h3>
+  <el-form :model="loginForm" :rules="loginRule" ref="loginForm" label-position="left" label-width="0px" class="login-container">
+    <h3 class="login-title">问卷管理系统</h3>
     <el-form-item prop="account">
       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
@@ -59,7 +59,7 @@
 
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .login-container {
     position: absolute;
     top: 50%;
@@ -74,12 +74,12 @@
     box-shadow: 0 0 25px #cac6c6;
     background: #fff;
     background-clip: padding-box;
-  }
-  .title {
-    margin: 0px auto 40px auto;
-    text-align: center;
-  }
-  .login-button {
-    width: 100%;
+    .login-title {
+      margin: 0px auto 40px auto;
+      text-align: center;
+    }
+    .login-button {
+      width: 100%;
+    }
   }
 </style>

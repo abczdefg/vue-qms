@@ -15,12 +15,4 @@ export default {
 }
 </script>
 <style scoped>
-.question-title {
-  margin-bottom: 10px;
-  color: #606266;
-  font-size: 14px;
-}
-.question-detail {
-  margin-bottom: 10px;
-}
 </style>
