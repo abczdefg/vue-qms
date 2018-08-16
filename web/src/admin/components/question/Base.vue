@@ -3,6 +3,7 @@
     <div class="question-container" v-if="!isEditorOpen">
       <component
         :is="`${data.type}-content`"
+        :data="data"
       >
       </component>
       <div class="question-control">
@@ -14,6 +15,7 @@
       <componenet
         ref="editor"
         :is="`${data.type}-editor`"
+        :data="data"
       >
       </componenet>
       <el-button type="primary" size="small" @click="saveEditor">保存</el-button>
@@ -71,11 +73,6 @@ export default {
     MatrixRadioEditor,
     PickerContent,
     PickerEditor
-  },
-  provide() {
-    return {
-      data: this.data
-    }
   },
   props: {
     mode: {

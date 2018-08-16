@@ -1,12 +1,13 @@
+import { deepCopy } from '@/utils';
 export default {
-  inject: ['data'],
+  props: ['data'],
   created() {
     const { mode, type } = this.data;
     this.defaultValue = require(`@admin/components/question/${type}/default.js`).default;
     if(mode === 'add') {
       this.editorData = this.defaultValue;
     } else {
-      this.editorData = JSON.parse(JSON.stringify(this.data));
+      this.editorData = deepCopy(this.data);
     }
   },
   data() {
