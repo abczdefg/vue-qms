@@ -20,10 +20,11 @@ let Questionnaire = sequelize.define('questionnaire', {
     type: Sequelize.STRING(255),
     allowNull: false,
     get() {
-      return JSON.parse(this.getDataValue('random'));
+      const random = this.getDataValue('random');
+      return random && JSON.parse(random);
     },
     set(val) {
-      this.setDataValue('random', JSON.stringify(val));
+      this.setDataValue('random', val && JSON.stringify(val));
     }
   },
   publish: {
